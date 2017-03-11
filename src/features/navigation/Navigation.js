@@ -24,7 +24,7 @@ class NavbarComponent extends Component {
           this.setState({
             isLoggedIn: true,
           });
-          // browserHistory.push('/nextRoute');
+          browserHistory.push('/nextRoute');
         }
       });
   }
@@ -54,7 +54,7 @@ class NavbarComponent extends Component {
         <Navbar inverse fixedTop collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Eat Genius</Link>
+              <Link to="/">Trailmatch</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
