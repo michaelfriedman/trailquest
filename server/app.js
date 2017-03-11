@@ -20,8 +20,8 @@ app.use(morgan('dev'));
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 app.use(cookieParser());
 app.use(bodyParser.json());
-// app.use(token);
-// app.use(users);
+app.use(token);
+app.use(users);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));

@@ -26,6 +26,7 @@
     "axios": "^0.15.3",
     "bcrypt-as-promised": "^1.1.0",
     "body-parser": "^1.17.1",
+    "boom": "^4.2.0",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.2",
@@ -36,9 +37,11 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
+    "react-dropzone": "^3.11.1",
     "react-router": "^3.0.2",
     "react-router-bootstrap": "^0.23.1",
-    "styled-jsx": "^0.5.7"
+    "styled-jsx": "^0.5.7",
+    "superagent": "^3.5.0"
   },
   "scripts": {
     "start-prod": "env PORT=3000 nodemon server/bin/www",
