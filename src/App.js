@@ -4,20 +4,18 @@ import Navigation from './features/navigation/Navigation';
 import home from './pages/home';
 import registration from './pages/registration';
 import login from './pages/login';
+import profile from './pages/profile';
 import './App.css';
 
-class App extends Component {
-  render() {
+export default () => {
     return (
       <Router history={browserHistory}>
         <Route path="/" component={Navigation}>
           <IndexRoute component={home} />
           <Route path="/registration" component={registration} />
           <Route path="/login" component={login} />
+          <Route path="profile" component={profile} />
         </Route>
       </Router>
     );
   }
-}
-
-export default App;

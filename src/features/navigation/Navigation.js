@@ -54,7 +54,7 @@ class NavbarComponent extends Component {
         <Navbar inverse fixedTop collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Trailmatch</Link>
+              <Link to="/">TrailQuest</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
