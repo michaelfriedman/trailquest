@@ -111,7 +111,12 @@ class SignUpForm extends Component {
   }
 
   canBeSubmitted() {
-    const errors = validate(this.state.first_name, this.state.last_name, this.state.email, this.state.password, this.state.password_confirm);
+    const errors = validate(
+      this.state.first_name,
+      this.state.last_name,
+      this.state.email, this.state.password,
+      this.state.password_confirm,
+    );
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     return !isDisabled;
   }
@@ -157,91 +162,237 @@ class SignUpForm extends Component {
   }
 
   render() {
-    const errors = validate(this.state.first_name, this.state.last_name, this.state.email, this.state.password, this.state.password_confirm);
+    const errors = validate(
+      this.state.first_name,
+      this.state.last_name,
+      this.state.email,
+      this.state.password,
+      this.state.password_confirm,
+    );
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     return (
       <div className="container">
-        <div className="row centered-form">
-          <Col xs={12} sm={8} md={4} smOffset={2} mdOffset={4}>
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Sign up for Eat Genius!</h3>
-              </div>
-              <div className="panel-body">
-                <Form onSubmit={this.handleSubmit} role="form">
-                  <Row>
-                    <Col xs={6} md={6}>
-                      <FormGroup validationState={this.getValidationState()} className="form-group">
-                        <ControlLabel>First Name:</ControlLabel>
-                        <FormControl className={errors.first_name ? 'error form-control input-sm' : 'form-control input-sm'} type="text" placeholder="First Name" value={this.state.first_name} onChange={this.handleChange} name="first_name" />
-                        <FormControl.Feedback />
-                      </FormGroup>
-                    </Col>
-                    <Col xs={6} sm={6} md={6}>
-                      <FormGroup validationState={this.getLastNameValidationState()} className="form-group">
-                        <ControlLabel>Last Name:</ControlLabel>
-                        <FormControl className={errors.last_name ? 'error form-control input-sm' : 'form-control input-sm'} type="text" placeholder="Last Name" value={this.state.last_name} onChange={this.handleChange} name="last_name" />
-                        <FormControl.Feedback />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <FormGroup validationState={this.getEmailValidationState()} className="form-group">
-                    <ControlLabel>Email:</ControlLabel>
-                    <FormControl className={errors.email ? 'error form-control input-sm' : 'form-control input-sm'} type="text" placeholder="Enter email" value={this.state.email} onChange={this.handleChange} name="email" />
-                    <FormControl.Feedback />
-                  </FormGroup>
-                  <Row>
-                    <Col xs={6} sm={6} md={6}>
-                      <FormGroup validationState={this.getPasswordValidationState()} className="form-group">
-                        <ControlLabel>Password:</ControlLabel>
-                        <FormControl className={errors.password ? 'error form-control input-sm' : 'form-control input-sm'} type="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChange} name="password" />
-                      </FormGroup>
-                    </Col>
-                    <Col xs={6} md={6}>
-                      <ControlLabel>Confirm:</ControlLabel>
-                      <FormGroup validationState={this.getPasswordConfirmValidationState()} className="form-group">
-                        <FormControl className={errors.password_confirm ? 'error form-control input-sm' : 'form-control input-sm'} type="password" placeholder="Confirm Password" value={this.state.password_confirm} onChange={this.handleChange} name="password_confirm" />
-                        <FormControl.Feedback />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="row main">
+          <div className="main-login main-center">
+            <h5>Register Account</h5>
+            <Form onSubmit={this.handleSubmit}>
 
-                    <div>
-                      <Dropzone
-                        multiple={false}
-                        accept="image/jpg,image/jpeg,image/png" onDrop={this.onImageDrop.bind(this)}
-                      >
-                        <p>Drop a profile photo or click to select a photo to upload.</p>
-                      </Dropzone>
-                      <div>
-                        <div className="FileUpload">
-                          ...
-                        </div>
-                        <div>
-                          { this.state.uploadedFileCloudinaryUrl === ''
-                            ? null
-                              : <div>
-                                <p>{this.state.uploadedFile.name}</p>
-                                <img
-                                  className="img-thumbnail" style={{ marginBottom: '2%' }} src={this.state.uploadedFileCloudinaryUrl}
-                                  role="presentation"
-                                />
-                              </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
+              <FormGroup validationState={this.getValidationState()}>
+                <ControlLabel htmlFor="first_name" className="cols-sm-2 control-label">
+                  First Name
+                </ControlLabel>
+                <Col s={10}>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-user fa" aria-hidden="true" />
+                    </span>
+                    <FormControl type="text" className={errors.first_name ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.first_name} name="first_name" placeholder="Enter your first name" />
+                    <FormControl.Feedback />
                   </div>
-                  <Button disabled={isDisabled} type="submit" value="Register" className="btn btn-info btn-block">Register</Button>
-                </Form>
-              </div>
-            </div>
-          </Col>
+                </Col>
+              </FormGroup>
+
+              <FormGroup validationState={this.getLastNameValidationState()}>
+                <ControlLabel
+                  htmlFor="last_name"
+                  className="cols-sm-2 control-label"
+                >
+                  Last Name
+                </ControlLabel>
+                <Col s={10}>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-user fa" aria-hidden="true" />
+                    </span>
+                    <FormControl type="text" className={errors.last_name ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.last_name} name="last_name" placeholder="Enter your last name" />
+                    <FormControl.Feedback />
+                  </div>
+                </Col>
+              </FormGroup>
+
+
+              <FormGroup validationState={this.getEmailValidationState()}>
+                <ControlLabel htmlFor="email" className="cols-sm-2 control-label">
+                  Email
+                </ControlLabel>
+                <Col s={10}>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-envelope fa" aria-hidden="true" />
+                    </span>
+                    <FormControl type="email" className={errors.email ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.email} name="email" placeholder="Enter your email" />
+                    <FormControl.Feedback />
+                  </div>
+                </Col>
+              </FormGroup>
+
+              <FormGroup validationState={this.getPasswordValidationState()}>
+                <ControlLabel htmlFor="password" className="cols-sm-2 control-label">
+                  Password
+                </ControlLabel>
+                <Col s={10}>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-lock fa-lg" aria-hidden="true" />
+                    </span>
+                    <FormControl type="text" className={errors.password ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password} name="password" placeholder="Enter your password" />
+                    <FormControl.Feedback />
+                  </div>
+                </Col>
+              </FormGroup>
+
+              <FormGroup validationState={this.getPasswordConfirmValidationState()}>
+                <ControlLabel htmlFor="password_confirm" className="cols-sm-2 control-label">
+                  Confirm Password
+                </ControlLabel>
+                <Col s={10}>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-lock fa-lg" aria-hidden="true" />
+                    </span>
+                    <FormControl type="text" className={errors.password_confirm ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password_confirm} name="password_confirm" placeholder="Confirm your password" />
+                    <FormControl.Feedback />
+                  </div>
+                </Col>
+              </FormGroup>
+
+              <FormGroup>
+                <Button
+                  disabled={isDisabled}
+                  bsStyle="success"
+                  type="submit"
+                  className="btn btn-primary btn-lg btn-block login-button"
+                >
+                  Register
+                </Button>
+              </FormGroup>
+
+            </Form>
+          </div>
         </div>
+        <style jx>{`
+          #playground-container {
+            height: 500px;
+            overflow: hidden !important;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          body, html {
+            height: 100%;
+           background-repeat: no-repeat;
+           background: url(http://res.cloudinary.com/dk5dqve4y/image/upload/v1489325876/bg2_cqdndj.jpg);
+           font-family: 'Oxygen', sans-serif;
+          background-size: cover;
+          overflow-y: hidden;
+          }
+
+
+
+          .main{
+           	margin:15px;
+          }
+
+          h1.title {
+          	font-size: 50px;
+          	font-family: 'Passion One', cursive;
+          	font-weight: 400;
+          }
+
+          hr{
+          	width: 10%;
+          	color: #fff;
+          }
+
+          .form-group{
+          	margin-bottom: 15px;
+          }
+
+          label{
+          	margin-bottom: 15px;
+          }
+
+          input,
+          input::-webkit-input-placeholder {
+              font-size: 11px;
+              padding-top: 3px;
+          }
+
+          .main-login{
+           	background-color: #fff;
+              /* shadows and rounded borders */
+              -moz-border-radius: 2px;
+              -webkit-border-radius: 2px;
+              border-radius: 2px;
+              -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+              -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+
+          }
+          .form-control {
+              height: auto!important;
+          padding: 8px 12px !important;
+          }
+          .input-group {
+              -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.21)!important;
+              -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.21)!important;
+              box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.21)!important;
+          }
+          #button {
+              border: 1px solid #ccc;
+              margin-top: 28px;
+              padding: 6px 12px;
+              color: #666;
+              text-shadow: 0 1px #fff;
+              cursor: pointer;
+              -moz-border-radius: 3px 3px;
+              -webkit-border-radius: 3px 3px;
+              border-radius: 3px 3px;
+              -moz-box-shadow: 0 1px #fff inset, 0 1px #ddd;
+              -webkit-box-shadow: 0 1px #fff inset, 0 1px #ddd;
+              box-shadow: 0 1px #fff inset, 0 1px #ddd;
+              background: #f5f5f5;
+              background: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+              background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #eeeeee));
+              background: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+              background: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+              background: -ms-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+              background: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+              filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#eeeeee', GradientType=0);
+          }
+
+          .main-center{
+           	margin-top: 30px;
+           	margin: 0 auto;
+           	max-width: 400px;
+              padding: 10px 40px;
+          	background: grey;
+          	    color: #FFF;
+              text-shadow: none;
+          	-webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
+          -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
+          box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
+
+          }
+          span.input-group-addon i {
+              color: #009edf;
+              font-size: 17px;
+          }
+
+          .login-button{
+          	margin-top: 5px;
+          }
+
+          .login-register{
+          	font-size: 11px;
+          	text-align: center;
+        }
+
+        `}</style>
       </div>
+
+
     );
   }
-}
+  }
 
 export default SignUpForm;
