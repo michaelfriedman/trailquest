@@ -9,6 +9,7 @@ const app = express();
 const path = require('path');
 const token = require('./routes/token');
 const users = require('./routes/users');
+const trails = require('./routes/trails');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(token);
 app.use(users);
+app.use(trails);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));

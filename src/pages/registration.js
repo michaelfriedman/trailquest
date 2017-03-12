@@ -277,13 +277,12 @@ class SignUpForm extends Component {
             -webkit-overflow-scrolling: touch;
           }
 
-          body, html {
-            height: 100%;
-           background-repeat: no-repeat;
-           background: url(http://res.cloudinary.com/dk5dqve4y/image/upload/v1489325876/bg2_cqdndj.jpg);
-           font-family: 'Oxygen', sans-serif;
-          background-size: cover;
-          overflow-y: hidden;
+          body {
+            background: url(http://res.cloudinary.com/dk5dqve4y/image/upload/q_10/v1489332103/AdobeStock_64992714_bq41qm.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
           }
 
 
