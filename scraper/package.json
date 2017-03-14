@@ -1,0 +1,15 @@
+{
+  "name": "scraper",
+  "version": "0.1.0",
+  "description": "Scrreen scraper for Washington Trails Association website.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Friedman <contact@michaeldavidfriedman.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "tinyreq": "^3.2.0"
+  }
+}
