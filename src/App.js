@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import Navigation from './features/navigation/Navigation';
-import home from './pages/home';
-import registration from './pages/registration';
-import login from './pages/login';
-import profile from './pages/profile';
+import Home from './pages/Home';
+import Registration from './pages/Registration';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import Search from './pages/Search';
 import './App.css';
 
-export default () => {
-    return (
-      <Router history={browserHistory}>
-        <Route path="/" component={Navigation}>
-          <IndexRoute component={home} />
-          <Route path="/registration" component={registration} />
-          <Route path="/login" component={login} />
-          <Route path="profile" component={profile} />
-        </Route>
-      </Router>
-    );
-  }
+export default () => (
+  <Router history={browserHistory}>
+    <Route path="/" component={Navigation}>
+      <IndexRoute component={Home} />
+      <Route path="registration" component={Registration} />
+      <Route path="login" component={Login} />
+      <Route path="profile" component={Profile} />
+      <Route path="search" component={Search} />
+    </Route>
+  </Router>
+);

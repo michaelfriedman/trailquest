@@ -24,7 +24,7 @@ class NavbarComponent extends Component {
           this.setState({
             isLoggedIn: true,
           });
-          browserHistory.push('/nextRoute');
+          // browserHistory.push('/profile');
         }
       });
   }
@@ -96,7 +96,7 @@ class NavbarComponent extends Component {
         {React.cloneElement(
           this.props.children, {
             userId: this.state.userId,
-            updateUser: this.updateUser,
+            updateUser: this.state.updateUser,
             isLoggedIn: this.state.isLoggedIn,
             updateLoggedIn: this.updateLoggedIn,
           })}
