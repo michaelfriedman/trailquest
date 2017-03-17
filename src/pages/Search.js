@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormControl } from 'react-bootstrap';
+import { ButtonToolbar, ButtonGroup, Button, Form, FormControl } from 'react-bootstrap';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ class Search extends Component {
     super(props);
     this.state = {
       searchTerm: '',
-      data: '',
+      data: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,10 +23,12 @@ class Search extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { searchTerm } = this.state;
+  }
+  componentDidMount() {
     axios.get('/trails')
       .then(response => {
         this.setState({
-          data: response,
+          data: response.data,
         });
       });
   }
@@ -36,7 +38,21 @@ class Search extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormControl onChange={this.handleChange} type="text" name="searchTerm" />
           <Button type="submit">Submit</Button>
+          <ButtonToolbar>
+            <ButtonGroup>
+              <Button>Left</Button>
+              <Button>Middle</Button>
+              <Button>Right</Button>
+            </ButtonGroup>
+          </ButtonToolbar>
         </Form>
+        <ul>
+          {
+            this.state.data.map(item => <li>{item.name}
+              {item.distance} {item.region}
+            </li>)
+          }
+        </ul>
       </div>
     );
   }
