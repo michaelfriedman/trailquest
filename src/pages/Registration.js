@@ -302,7 +302,7 @@ class Registration extends Component {
             </Form>
           </div>
         </div>
-        <style jx>{`
+        <style jsx>{`
           #playground-container {
             height: 500px;
             overflow: hidden !important;

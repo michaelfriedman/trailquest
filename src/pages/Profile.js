@@ -11,6 +11,7 @@ class Profile extends Component {
       joinedOn: '',
       email: '',
       userId: '',
+      list: ''
     };
   }
   componentDidMount() {
@@ -30,6 +31,8 @@ class Profile extends Component {
       <div>
         {this.state.name}
         {this.state.email}
+        {this.state.profileUrl}
+        {this.state.joinedOn}
       </div>
     );
   }

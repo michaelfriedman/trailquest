@@ -15,18 +15,18 @@ const auth = (req, res, next) => {
   });
 };
 
-// router.get('/trails', (_req, res, next) => {
-//   knex('trails')
-//     .orderBy('name')
-//     .then((rows) => {
-//       const trails = rows;
-//
-//       res.send(trails);
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// });
+router.get('/trails', (_req, res, next) => {
+  knex('trails')
+    .orderBy('name')
+    .then((rows) => {
+      const trails = rows;
+
+      res.send(trails);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
 
 router.get('/trails/:id', (req, res, next) => {
   const id = Number.parseInt(req.params.id);
