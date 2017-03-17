@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
-import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import { Col, Row, FormGroup, FormControl, ControlLabel, Form, Button, validationState } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import Dropzone from 'react-dropzone';
+
 
 const CLOUDINARY_UPLOAD_PRESET = 'torqfs7z';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dk5dqve4y/upload';
@@ -20,7 +21,7 @@ function validate(first_name, last_name, email, password, password_confirm) {
   };
 }
 
-class SignUpForm extends Component {
+class Registration extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,83 +43,11 @@ class SignUpForm extends Component {
     this.onImageDrop = this.onImageDrop.bind(this);
   }
 
-  handleChange({ target }) {
-    if (target.name) {
-      this.setState({
-        [target.name]: target.value,
-      });
-    }
-  }
-
   onImageDrop(files) {
     this.setState({
       uploadedFile: files[0],
     });
     this.handleImageUpload(files[0]);
-  }
-  handleImageUpload(file) {
-    const upload = request.post(CLOUDINARY_UPLOAD_URL)
-                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-                        .field('file', file);
-
-    upload.end((err, response) => {
-      if (err) {
-        console.error(err);
-      }
-
-      if (response.body.secure_url !== '') {
-        this.setState({
-          uploadedFileCloudinaryUrl: response.body.secure_url,
-        });
-      }
-    });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    if (!this.canBeSubmitted()) {
-      event.preventDefault();
-      return;
-    }
-
-    const { first_name, last_name, email, password, uploadedFileCloudinaryUrl } = this.state;
-    const user = {
-      first_name,
-      last_name,
-      email,
-      password,
-      profile_photo_url: uploadedFileCloudinaryUrl,
-    };
-
-    axios.post('/users', user)
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          browserHistory.push('/profile');
-          this.props.updateLoggedIn(true);
-        }
-      })
-        .catch((error) => {
-          console.log(error);
-        });
-    this.setState({
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      password_confirm: '',
-    });
-  }
-
-  canBeSubmitted() {
-    const errors = validate(
-      this.state.first_name,
-      this.state.last_name,
-      this.state.email, this.state.password,
-      this.state.password_confirm,
-    );
-    const isDisabled = Object.keys(errors).some(x => errors[x]);
-    return !isDisabled;
   }
 
   getValidationState() {
@@ -158,6 +87,81 @@ class SignUpForm extends Component {
     if (this.state.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) return 'success';
     else {
       return 'error';
+    }
+  }
+
+  canBeSubmitted() {
+    const errors = validate(
+      this.state.first_name,
+      this.state.last_name,
+      this.state.email, this.state.password,
+      this.state.password_confirm,
+    );
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    if (!this.canBeSubmitted()) {
+      event.preventDefault();
+      return;
+    }
+
+    const { first_name, last_name, email, password, uploadedFileCloudinaryUrl } = this.state;
+    const user = {
+      first_name,
+      last_name,
+      email,
+      password,
+      profile_photo_url: uploadedFileCloudinaryUrl,
+    };
+
+    axios.post('/users', user)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          browserHistory.push('/profile');
+          this.props.updateLoggedIn(true);
+        }
+      })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error);
+        });
+    // this.setState({
+    //   first_name: '',
+    //   last_name: '',
+    //   email: '',
+    //   password: '',
+    //   password_confirm: '',
+    // });
+  }
+
+  handleImageUpload(file) {
+    const upload = request.post(CLOUDINARY_UPLOAD_URL)
+      .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+      .field('file', file);
+
+    upload.end((err, response) => {
+      if (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+
+      if (response.body.secure_url !== '') {
+        this.setState({
+          uploadedFileCloudinaryUrl: response.body.secure_url,
+        });
+      }
+    });
+  }
+
+  handleChange({ target }) {
+    if (target.name) {
+      this.setState({
+        [target.name]: target.value,
+      });
     }
   }
 
@@ -235,7 +239,7 @@ class SignUpForm extends Component {
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
                     </span>
-                    <FormControl type="text" className={errors.password ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password} name="password" placeholder="Enter your password" />
+                    <FormControl type="password" className={errors.password ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password} name="password" placeholder="Enter your password" />
                     <FormControl.Feedback />
                   </div>
                 </Col>
@@ -250,12 +254,40 @@ class SignUpForm extends Component {
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
                     </span>
-                    <FormControl type="text" className={errors.password_confirm ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password_confirm} name="password_confirm" placeholder="Confirm your password" />
+                    <FormControl type="password" className={errors.password_confirm ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.password_confirm} name="password_confirm" placeholder="Confirm your password" />
                     <FormControl.Feedback />
                   </div>
                 </Col>
               </FormGroup>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
 
+                <div>
+                  <Dropzone
+                    multiple={false}
+                    accept="image/jpg,image/jpeg,image/png" onDrop={this.onImageDrop.bind(this)}
+                  >
+                    <p>Drop a profile photo or click to select a photo to upload.</p>
+                  </Dropzone>
+                  <div>
+                    <div className="FileUpload">
+                      ...
+                    </div>
+                    <div>
+                      { this.state.uploadedFileCloudinaryUrl === ''
+                        ? null
+                          : <div>
+                            <p>{this.state.uploadedFile.name}</p>
+                            <img
+                              className="img-thumbnail"
+                              style={{ marginBottom: '2%' }} src={this.state.uploadedFileCloudinaryUrl}
+                              role="presentation"
+                            />
+                          </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
               <FormGroup>
                 <Button
                   disabled={isDisabled}
@@ -288,26 +320,26 @@ class SignUpForm extends Component {
 
 
           .main{
-           	margin:15px;
+           margin:15px;
           }
 
           h1.title {
-          	font-size: 50px;
-          	font-family: 'Passion One', cursive;
-          	font-weight: 400;
+            font-size: 50px;
+            font-family: 'Passion One', cursive;
+            font-weight: 400;
           }
 
           hr{
-          	width: 10%;
-          	color: #fff;
+            width: 10%;
+            color: #fff;
           }
 
           .form-group{
-          	margin-bottom: 15px;
+            margin-bottom: 15px;
           }
 
           label{
-          	margin-bottom: 15px;
+            margin-bottom: 15px;
           }
 
           input,
@@ -317,7 +349,7 @@ class SignUpForm extends Component {
           }
 
           .main-login{
-           	background-color: #fff;
+            background-color: #fff;
               /* shadows and rounded borders */
               -moz-border-radius: 2px;
               -webkit-border-radius: 2px;
@@ -360,31 +392,31 @@ class SignUpForm extends Component {
           }
 
           .main-center{
-           	margin-top: 30px;
-           	margin: 0 auto;
-           	max-width: 400px;
-              padding: 10px 40px;
-          	background: grey;
-          	    color: #FFF;
-              text-shadow: none;
-          	-webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
-          -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
-          box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
-
+           margin-top: 30px;
+           margin: 0 auto;
+           max-width: 400px;
+           padding: 10px 40px;
+           background: grey;
+           color: #FFF;
+           text-shadow: none;
+           -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
+           -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
+           box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.31);
           }
+
           span.input-group-addon i {
               color: #009edf;
               font-size: 17px;
           }
 
           .login-button{
-          	margin-top: 5px;
+            margin-top: 5px;
           }
 
           .login-register{
-          	font-size: 11px;
-          	text-align: center;
-        }
+            font-size: 11px;
+            text-align: center;
+          }
 
         `}</style>
       </div>
@@ -394,4 +426,4 @@ class SignUpForm extends Component {
   }
   }
 
-export default SignUpForm;
+export default Registration;
