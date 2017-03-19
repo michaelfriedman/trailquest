@@ -99,6 +99,7 @@ class NavbarComponent extends Component {
             updateUser: this.state.updateUser,
             isLoggedIn: this.state.isLoggedIn,
             updateLoggedIn: this.updateLoggedIn,
+            result: this.state.result,
           })}
       </div>
     );
