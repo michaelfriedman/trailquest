@@ -6,6 +6,7 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
+
 import './App.css';
 
 export default () => (
