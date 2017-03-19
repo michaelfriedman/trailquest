@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { ButtonToolbar, ButtonGroup, Button, Form, FormControl, Table, Modal, Image } from 'react-bootstrap';
-import { browserHistory } from 'react-router';
-import Text from 'react-format-text';
-import ReactModal from 'react-modal';
+import { ButtonToolbar, ButtonGroup, Button, Form, FormControl, Table, Modal, Image, Panel } from 'react-bootstrap';
 import axios from 'axios';
+import GoogleMapEmbed from '../features/GoogleMaps';
 
 class Search extends Component {
   constructor(props) {
@@ -23,9 +21,13 @@ class Search extends Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const { searchTerm } = this.state;
+  componentDidMount() {
+    axios.get('/trails')
+      .then(response => {
+        this.setState({
+          data: response.data,
+        });
+      });
   }
 
   sortName() {
@@ -45,19 +47,16 @@ class Search extends Component {
     this.setState({ data: updatedList });
   }
 
-  componentDidMount() {
-    axios.get('/trails')
-      .then(response => {
-        this.setState({
-          data: response.data,
-        });
-        console.log(this.state.data);
-      });
+  handleSubmit(event) {
+    event.preventDefault();
+    const { searchTerm } = this.state;
   }
 
   handleOpenModal({ target }) {
     this.setState({ showModal: true });
+    // eslint-disable-next-line array-callback-return
     this.state.data.map(item => {
+      // eslint-disable-next-line eqeqeq, no-unused-expressions
       item.id == target.id
       ? this.setState({
         trailDetail: item,
@@ -85,32 +84,55 @@ class Search extends Component {
           <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
             <Modal.Header closeButton>
               <Modal.Title>{this.state.trailDetail.name}</Modal.Title>
+              <div>
+                <Image
+                  className="pull-right"
+                  responsive
+                  src={this.state.trailDetail.region_image}
+                />
+              </div>
+              <b>{this.state.trailDetail.region}</b>
             </Modal.Header>
             <Modal.Body>
-              <h4>{this.state.trailDetail.region}</h4>
-              <Image responsive src={this.state.trailDetail.region_image} />
-              <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-
               <Image responsive src={this.state.trailDetail.thumbnail} />
               <div>
-                Trail Description:
-                <Text>{this.state.trailDetail.trail_description}</Text>
-                Driving Directions:
-                <p>{this.state.trailDetail.driving_directions}</p>
-                Latitude:
-                <p>{this.state.trailDetail.latitude}</p>
-                Longitude:
-                <p>{this.state.trailDetail.longitude}</p>
-                Elevation Gain:
-                <p>{this.state.trailDetail.elevation_gain}</p>
-                Highest Point:
-                <p>{this.state.trailDetail.highest_point}</p>
+                <Panel header="Trail Stats:">
+                  <Table striped bordered condensed hover responsive>
+                    <thead>
+                      <tr>
+                        <th>Distance</th>
+                        <th>ElevationGain</th>
+                        <th>Highest Point</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Star Rating</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{this.state.trailDetail.distance}</td>
+                        <td>{this.state.trailDetail.elevation_gain}</td>
+                        <td>{this.state.trailDetail.highest_point}</td>
+                        <td>{this.state.trailDetail.latitude}</td>
+                        <td>{this.state.trailDetail.longitude}</td>
+                        <td>{this.state.trailDetail.current_rating}</td>
+                      </tr>
+
+                    </tbody>
+                  </Table>
+                </Panel>
+                <Panel header="Trail Description:">
+                  {this.state.trailDetail.trail_description}
+                </Panel>
+                <Panel header="Driving Directions:">
+                  {this.state.trailDetail.driving_directions}
+                </Panel>
+
+              </div>
+              <div>
                 Fetures:
                 <p>{this.state.trailDetail.features}</p>
-                Distance:
-                <p>{this.state.trailDetail.distance}</p>
-                Star Rating:
-                <p>{this.state.trailDetail.current_rating}</p>
+
               </div>
             </Modal.Body>
             <Modal.Footer>
@@ -118,45 +140,6 @@ class Search extends Component {
             </Modal.Footer>
           </Modal>
         </div>
-        {/* <div>
-          <ReactModal
-            isOpen={this.state.showModal}
-            contentLabel="Trail Detail Modal"
-            onRequestClose={this.handleCloseModal}
-          >
-            <div>
-              <h2>{this.state.trailDetail.name}</h2>
-              <h4>{this.state.trailDetail.region}</h4>
-              <p><Image thumbnail src={this.state.trailDetail.region_image} /></p>
-              <Image responsive src={this.state.trailDetail.thumbnail} />
-              <div>
-                Trail Description:
-                <p>{this.state.trailDetail.trail_description}</p>
-                Driving Directions:
-                <p>{this.state.trailDetail.driving_directions}</p>
-                Latitude:
-                <p>{this.state.trailDetail.latitude}</p>
-                Longitude:
-                <p>{this.state.trailDetail.longitude}</p>
-                Elevation Gain:
-                <p>{this.state.trailDetail.elevation_gain}</p>
-                Highest Point:
-                <p>{this.state.trailDetail.highest_point}</p>
-                Fetures:
-                <p>{this.state.trailDetail.features}</p>
-                Distance:
-                <p>{this.state.trailDetail.distance}</p>
-                Star Rating:
-                <p>{this.state.trailDetail.current_rating}</p>
-
-              </div>
-            </div>
-            <div>
-
-            </div>
-            <Button onClick={this.handleCloseModal}><Glyphicon glyph="remove" /> Close</Button>
-          </ReactModal>
-        </div> */}
         <Form onSubmit={this.handleSubmit}>
           <FormControl onChange={this.handleChange} type="text" name="searchTerm" />
           <Button type="submit">Submit</Button>
@@ -186,7 +169,7 @@ class Search extends Component {
               </th>
               <th><Button onClick={this.sortStars} bsStyle="default">Star Rating</Button></th>
               <th>Features</th>
-              <th></th>
+              <th />
             </tr>
           </thead>
           <tbody>

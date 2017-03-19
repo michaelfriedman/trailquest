@@ -176,7 +176,7 @@ class Login extends Component {
         </div>
         <style jsx>{`
                 body {
-                  background: url(http://res.cloudinary.com/dk5dqve4y/image/upload/q_10/v1489332103/AdobeStock_64992714_bq41qm.jpg) no-repeat center center fixed;
+                  background: url("bg.png") no-repeat center center fixed;
                   -webkit-background-size: cover;
                   -moz-background-size: cover;
                   -o-background-size: cover;

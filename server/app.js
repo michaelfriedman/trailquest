@@ -10,6 +10,7 @@ const path = require('path');
 const token = require('./routes/token');
 const users = require('./routes/users');
 const trails = require('./routes/trails');
+const reviews = require('./routes/reviews');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
@@ -19,11 +20,13 @@ app.disable('x-powered-by');
 app.use(morgan('dev'));
 
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
+app.use(express.static('assets'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(token);
 app.use(users);
 app.use(trails);
+app.use(reviews);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));

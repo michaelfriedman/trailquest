@@ -54,7 +54,7 @@ class NavbarComponent extends Component {
         <Navbar inverse fixedTop collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">TrailQuest</Link>
+              <Link className="lobster" to="/">TrailQuest</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -64,7 +64,7 @@ class NavbarComponent extends Component {
                   this.state.isLoggedIn
                     ? <NavDropdown eventKey={3} title="Menu" id="basic-nav-dropdown">
                       <LinkContainer to={{ pathname: '/profile' }}><MenuItem>Profile</MenuItem></LinkContainer>
-                      <MenuItem>Inbox</MenuItem>
+                      <LinkContainer to={{ pathname: '/search' }}><MenuItem>Search</MenuItem></LinkContainer>
                       <MenuItem>Contribute</MenuItem>
                       <MenuItem divider />
                       <MenuItem>Submit Feedback</MenuItem>
@@ -89,6 +89,10 @@ class NavbarComponent extends Component {
           </Navbar.Collapse>
         </Navbar>
         <style jsx>{`
+          @import url('https://fonts.googleapis.com/css?family=Lobster+Two');
+          .lobster {
+            font-family: 'Lobster Two', cursive;
+          }
           body {
             padding-top: 70px;
           }
