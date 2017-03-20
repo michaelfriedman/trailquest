@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import request from 'superagent';
-import { Col, Row, FormGroup, FormControl, ControlLabel, Form, Button, validationState } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Col, FormGroup, FormControl, ControlLabel, Form, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 
 
 const CLOUDINARY_UPLOAD_PRESET = 'torqfs7z';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dk5dqve4y/upload';
 
+// eslint-disable-next-line camelcase
 function validate(first_name, last_name, email, password, password_confirm) {
   // True means invalid
   return {
@@ -17,13 +17,18 @@ function validate(first_name, last_name, email, password, password_confirm) {
     last_name: last_name.length === 0,
     email: email.length === 0,
     password: password.length < 8,
+    // eslint-disable-next-line camelcase
     password_confirm: password !== password_confirm,
   };
 }
 
+
 class Registration extends Component {
   constructor(props) {
     super(props);
+    Registration.propTypes = {
+      updateLoggedIn: React.PropTypes.func,
+    };
     this.state = {
       first_name: '',
       last_name: '',
@@ -52,19 +57,26 @@ class Registration extends Component {
 
   getValidationState() {
     if (this.state.first_name.length === 0) return;
+    // eslint-disable-next-line camelcase
     const first_nameLength = this.state.first_name.length;
     const isString = typeof this.state.first_name;
+    // eslint-disable-next-line camelcase, consistent-return
     if (first_nameLength >= 1) return 'success';
+    // eslint-disable-next-line consistent-return
     else if (isString !== String) return 'warning';
+    // eslint-disable-next-line no-useless-return
     else if (this.state.first_name === undefined) return;
   }
 
   getLastNameValidationState() {
     if (this.state.last_name.length === 0) return;
+    // eslint-disable-next-line consistent-return
     if (this.state.last_name.length >= 1) return 'success';
+    // eslint-disable-next-line no-useless-return
     else if (this.state.first_name === undefined) return;
   }
 
+  // eslint-disable-next-line consistent-return
   getPasswordValidationState() {
     if (this.state.password.length === 0) return '';
     if (this.state.password.length >= 8 && this.state.password.length <= 64) {
@@ -76,16 +88,21 @@ class Registration extends Component {
 
   getPasswordConfirmValidationState() {
     if (this.state.password.length === 0) return;
+    // eslint-disable-next-line consistent-return
     if (this.state.password === this.state.password_confirm) return 'success';
+    // eslint-disable-next-line no-else-return
     else {
+      // eslint-disable-next-line consistent-return, no-else-return
       return 'error';
     }
   }
 
   getEmailValidationState() {
     if (this.state.email.length === 0) return;
+    // eslint-disable-next-line consistent-return, no-useless-escape
     if (this.state.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) return 'success';
     else {
+      // eslint-disable-next-line consistent-return
       return 'error';
     }
   }
@@ -119,7 +136,6 @@ class Registration extends Component {
 
     axios.post('/users', user)
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           browserHistory.push('/profile');
           this.props.updateLoggedIn(true);
@@ -129,13 +145,6 @@ class Registration extends Component {
           // eslint-disable-next-line no-console
           console.log(error);
         });
-    // this.setState({
-    //   first_name: '',
-    //   last_name: '',
-    //   email: '',
-    //   password: '',
-    //   password_confirm: '',
-    // });
   }
 
   handleImageUpload(file) {
@@ -264,7 +273,9 @@ class Registration extends Component {
                 <div>
                   <Dropzone
                     multiple={false}
-                    accept="image/jpg,image/jpeg,image/png" onDrop={this.onImageDrop.bind(this)}
+                    accept="image/jpg,image/jpeg,image/png"
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onDrop={this.onImageDrop.bind(this)}
                   >
                     <p>Drop a profile photo or click to select a photo to upload.</p>
                   </Dropzone>

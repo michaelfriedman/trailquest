@@ -6,11 +6,12 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const auth = (req, res, next) => {
+  // eslint-disable-next-line consistent-return
   jwt.verify(req.cookies.token, process.env.JWT_KEY, (err, payload) => {
     if (err) {
       return next(err);
     }
-
+    // eslint-disable-next-line no-param-reassign
     req.claim = payload;
 
     next();
@@ -50,6 +51,7 @@ router.post('/users', (req, res, next) => {
       }
       return bcrypt.hash(password, 12);
     })
+    // eslint-disable-next-line camelcase
     .then((hashed_password) => {
       user = { first_name, last_name, email, hashed_password, profile_photo_url };
 
@@ -66,6 +68,7 @@ router.post('/users', (req, res, next) => {
 
       res.cookie('token', token, {
         httpOnly: true,
+        // eslint-disable-next-line no-mixed-operators
         expiresIn: new Date(Date.now() + 3600000 * 24 * 120),
         secure: router.get('env') === 'Production',
       }).send(user);
