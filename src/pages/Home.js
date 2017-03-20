@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Col, Jumbotron, Row, Carousel } from 'react-bootstrap';
+import { Button, Col, Jumbotron, Row, Glyphicon } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export default () => (
   <div>
     <div className="container">
-      <Jumbotron style={{ background: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_600,w_1200/v1489333844/AdobeStock_97796246-squashed_fembui.jpg)' }}>
+      <Jumbotron style={{ background: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_600,w_1200/v1489333844/AdobeStock_97796246-squashed_fembui.jpg)', textAlign: 'center' }}>
         <h1 className="lobster">TrailQuest</h1>
         <p>
           Find your favorite hike and meet new people interested in the same!
@@ -20,6 +20,27 @@ export default () => (
       </Jumbotron>
 
 
+      <hr />
+      <div className="container">
+        <Row style={{ textAlign: 'center' }}>
+          <Col sm={4}>
+            <Glyphicon className="larger" glyph="tree-conifer" />
+            <p className="lobster">Easily find the best trails Washington State has to offer.</p>
+          </Col>
+          <Col sm={4}>
+            <Glyphicon className="larger" glyph="leaf" />
+            <p className="lobster">
+              Meet new people, register for a group hike or create one yourself!
+            </p>
+          </Col>
+          <Col sm={4}>
+            <Glyphicon className="larger" glyph="camera" />
+            <p className="lobster">
+              Share your opinion on trails you've hiked with our community.
+            </p>
+          </Col>
+        </Row>
+      </div>
       <hr />
       <Row>
         <Col lg={12}>
@@ -76,7 +97,6 @@ export default () => (
           </div>
         </Col>
       </Row>
-      <hr />
       <footer>
         <Row>
           <Col lg={12} className="col-lg-12">
@@ -89,6 +109,9 @@ export default () => (
       @import url('https://fonts.googleapis.com/css?family=Lobster+Two');
       .lobster {
         font-family: 'Lobster Two', cursive;
+      }
+       .larger {
+        font-size: 5em;
       }
     `}</style>
   </div>
