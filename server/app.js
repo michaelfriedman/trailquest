@@ -11,8 +11,8 @@ const token = require('./routes/token');
 const users = require('./routes/users');
 const trails = require('./routes/trails');
 const reviews = require('./routes/reviews');
+const events = require('./routes/events');
 const users_events = require('./routes/users_events');
-// const events = require('./routes/events');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
@@ -29,7 +29,7 @@ app.use(token);
 app.use(users);
 app.use(trails);
 app.use(reviews);
-// app.use(events);
+app.use(events);
 app.use(users_events);
 
 app.get('*', (req, res) => {

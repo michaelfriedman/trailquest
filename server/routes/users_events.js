@@ -1,7 +1,6 @@
 const express = require('express');
 const knex = require('../../knex');
 const jwt = require('jsonwebtoken');
-const boom = require('boom');
 const router = express.Router();
 
 const auth = (req, res, next) => {
@@ -23,19 +22,19 @@ router.get('/users_events/user/:userId', (req, res, next) => {
       res.send(response);
     })
     .catch((err) => {
-      next(err)
-    })
-})
+      next(err);
+    });
+});
 
 router.get('/users_events/trail/:trail_id', (req, res, next) => {
   knex('events')
     .where('trail_id', req.params.trail_id)
     .then((response) => {
-      res.send(response)
+      res.send(response);
     })
     .catch((err) => {
-      next(err)
-    })
-})
+      next(err);
+    });
+});
 
-module.exports = router
+module.exports = router;
