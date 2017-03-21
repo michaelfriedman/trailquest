@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { ButtonToolbar, ButtonGroup, Button, Form, FormControl, Table, Modal, Collapse, Well, Image, Panel, FormGroup, ControlLabel, Row } from 'react-bootstrap';
+import { ButtonToolbar, ButtonGroup, Button, Form, FormControl, Table, Modal, Collapse, Well, Image, Panel, FormGroup, ControlLabel, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import Loading from '../features/loading/Loading';
 
 export default class Search extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ export default class Search extends Component {
       reviewDetail: [],
       openWell: false,
       review_body: '',
+      isLoading: true,
+      reviewIsLoading: true,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
@@ -29,6 +32,7 @@ export default class Search extends Component {
       .then(response => {
         this.setState({
           data: response.data,
+          isLoading: false,
         });
       });
     axios.get('/users/id')
@@ -62,10 +66,8 @@ export default class Search extends Component {
 
   handleOpenModal({ target }) {
     this.setState({ showModal: true });
-    // eslint-disable-next-line array-callback-return
 
     this.state.data.map(item => {
-      // eslint-disable-next-line eqeqeq, no-unused-expressions
       item.id == target.id
       ? this.setState({
         trailDetail: item,
@@ -93,7 +95,7 @@ export default class Search extends Component {
     axios.post('/reviews', review)
       .then(res => {
           if (res.status === 200) {
-            this.setState({ open: !this.state.open })
+            this.setState({ open: !this.state.open, review_body: '' })
           }
         })
         .catch((error) => {
@@ -117,6 +119,7 @@ export default class Search extends Component {
   render() {
     return (
       <div className="container">
+
         <div>
           <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
             <Modal.Header closeButton>
@@ -133,39 +136,39 @@ export default class Search extends Component {
             <Modal.Body>
               <Image responsive src={this.state.trailDetail.thumbnail} />
               {
-                this.props.isLoggedIn
-                  ? <div>
-                    <Button onClick={() => this.setState({ open: !this.state.open })}>
-                      click
-                    </Button>
-                    <Collapse in={this.state.open}>
-                      <div>
-                        <Well>
-                          <Row>
-                            <Form onSubmit={this.handleReviewSubmit}>
-                              <FormGroup controlId="formControlsTextarea">
-                                <ControlLabel>Trail Review:</ControlLabel>
-                                <FormControl
-                                  onChange={this.handleChange}
-                                  value={this.state.review_body}
-                                  name="review_body"
-                                  componentClass="textarea"
-                                  placeholder="textarea"
-                                />
-                              </FormGroup>
-                              <Button
-                                type="submit"
-                                className="center-block"
-                                bsStyle="success"
-                              >
-                                Submit
-                              </Button>
-                            </Form>
-                          </Row>
-                        </Well>
-                      </div>
-                    </Collapse>
-                  </div>
+                  this.props.isLoggedIn
+                    ? <div>
+                      <Button onClick={() => this.setState({ open: !this.state.open })}>
+                        Review Trail
+                      </Button>
+                      <Collapse in={this.state.open}>
+                        <div>
+                          <Well>
+                            <Row>
+                              <Form onSubmit={this.handleReviewSubmit}>
+                                <FormGroup controlId="formControlsTextarea">
+                                  <ControlLabel>Trail Review:</ControlLabel>
+                                  <FormControl
+                                    onChange={this.handleChange}
+                                    value={this.state.review_body}
+                                    name="review_body"
+                                    componentClass="textarea"
+                                    placeholder="Write your review."
+                                  />
+                                </FormGroup>
+                                <Button
+                                  type="submit"
+                                  className="center-block"
+                                  bsStyle="success"
+                                >
+                                  Submit
+                                </Button>
+                              </Form>
+                            </Row>
+                          </Well>
+                        </div>
+                      </Collapse>
+                    </div>
                   : null
               }
               <div>
@@ -200,7 +203,11 @@ export default class Search extends Component {
                   {this.state.trailDetail.driving_directions}
                 </Panel>
                 <Panel header="Reviews:">
-                  {this.state.reviewDetail.map(item => <p>{item.review_body}</p>)}
+                  { this.state.reviewIsLoading
+                    ? <Loading />
+                    : this.state.reviewDetail.map(item => <p>{item.review_body}</p>)}
+                  }
+
                 </Panel>
               </div>
               <div>
@@ -217,59 +224,56 @@ export default class Search extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormControl onChange={this.handleChange} type="text" name="searchTerm" />
           <Button type="submit">Submit</Button>
-          <ButtonToolbar>
-            <ButtonGroup>
-              <Button>Left</Button>
-              <Button>Middle</Button>
-              <Button>Right</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
         </Form>
-        <Table striped bordered responsive condensed hover>
-          <thead>
-            <tr>
-              <th>Thumbnail</th>
-              <th><Button bsStyle="default" onClick={this.sortName}>Trail Name</Button></th>
-              <th>Distance</th>
-              <th>Region</th>
-              <th>Elevation Gain</th>
-              <th>
-                <Button
-                  bsStyle="default"
-                  onClick={this.sortHighestPoint}
-                >
-                  Highest Point
-                </Button>
-              </th>
-              <th><Button onClick={this.sortStars} bsStyle="default">Star Rating</Button></th>
-              <th>Features</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.data.map(item =>
-                <tr id={item.id} key={item.id}>
-                  <td>{ item.thumbnail === '' ? null : <Image thumbnail alt="hike thumbnail" src={item.thumbnail} />}</td>
-                  <td>{item.name}</td>
-                  <td>{item.distance}</td>
-                  <td>{item.region}
-                    <div>
-                      <img
-                        alt="region thumbnail"
-                        src={item.region_image}
-                      />
-                    </div>
-                  </td>
-                  <td>{item.elevation_gain === '' ? 'No Data' : `${item.elevation_gain} ft.`}</td>
-                  <td>{item.highest_point === '' ? 'No Data' : `${item.highest_point} ft.`}</td>
-                  <td>{parseFloat(item.current_rating) === 0 ? 'No Data' : parseFloat(item.current_rating)}</td>
-                  <td>{item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</td>
-                  <td><Button id={item.id} onClick={this.handleOpenModal}>Open</Button></td>
-                </tr>)
-            }
-          </tbody>
-        </Table>
+
+        {
+          this.state.isLoading ? <Col style={{display: 'flex', justifyContent: 'center'}}><Loading style={{textAlign: 'center'}} /> </Col>
+          : <Table striped bordered responsive condensed hover>
+            <thead>
+              <tr>
+                <th>Thumbnail</th>
+                <th><Button bsStyle="default" onClick={this.sortName}>Trail Name</Button></th>
+                <th>Distance</th>
+                <th>Region</th>
+                <th>Elevation Gain</th>
+                <th>
+                  <Button
+                    bsStyle="default"
+                    onClick={this.sortHighestPoint}
+                  >
+                    Highest Point
+                  </Button>
+                </th>
+                <th><Button onClick={this.sortStars} bsStyle="default">Star Rating</Button></th>
+                <th>Features</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.data.map(item =>
+                  <tr id={item.id} key={item.id}>
+                    <td>{ item.thumbnail === '' ? null : <Image thumbnail alt="hike thumbnail" src={item.thumbnail} />}</td>
+                    <td>{item.name}</td>
+                    <td>{item.distance}</td>
+                    <td>{item.region}
+                      <div>
+                        <img
+                          alt="region thumbnail"
+                          src={item.region_image}
+                        />
+                      </div>
+                    </td>
+                    <td>{item.elevation_gain === '' ? 'No Data' : `${item.elevation_gain} ft.`}</td>
+                    <td>{item.highest_point === '' ? 'No Data' : `${item.highest_point} ft.`}</td>
+                    <td>{parseFloat(item.current_rating) === 0 ? 'No Data' : parseFloat(item.current_rating)}</td>
+                    <td>{item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</td>
+                    <td><Button id={item.id} onClick={this.handleOpenModal}>Open</Button></td>
+                  </tr>)
+              }
+            </tbody>
+          </Table>
+        }
       </div>
     );
   }

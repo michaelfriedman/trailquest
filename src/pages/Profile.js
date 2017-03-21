@@ -14,6 +14,7 @@ class Profile extends Component {
       userId: '',
       list: '',
       review_body: [],
+      events: [],
     };
   }
   componentDidMount() {
@@ -28,12 +29,25 @@ class Profile extends Component {
         this.setState({ name, profileUrl, joinedOn, email, userId });
         axios.get(`/reviews/user/${this.state.userId}`)
           .then(res => {
-            console.log(res);
             this.setState({
               review_body: res.data
             });
             console.log(this.state.review_body, 'rb')
           });
+        axios.get(`/users_events/user/${this.state.userId}`)
+          .then(res => {
+            const events = [];
+            res.data.map(item => {
+              events.push(item);
+              console.log('item', item)
+              axios.get(`/events/user/${item.id}`)
+                .then(res => {
+                  console.log(res, 'it worked')
+                })
+            })
+            this.setState({ events });
+            console.log('events', this.state.events);
+          })
       });
   }
   render() {
@@ -48,6 +62,8 @@ class Profile extends Component {
 
         <h4>Reviews</h4>
         {this.state.review_body.map(item => <p>{item.review_body}</p>)}
+        <h4>Events</h4>
+        {this.state.events.map(item => <p>{item.user_id}</p>)}
       </div>
         );
         }
