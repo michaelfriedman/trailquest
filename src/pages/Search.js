@@ -74,8 +74,8 @@ export default class Search extends Component {
             .then(res => {
               this.setState({
                 reviewDetail: res.data,
-              })
-            })
+              });
+            });
           this.setState({ open: !this.state.open, review_body: '' });
         }
       })
@@ -252,7 +252,7 @@ export default class Search extends Component {
                         : this.state.reviewDetail.map(item => <p key={item.id}>{item.review_body}</p>)}
                     </Panel>
                     : null
-                  }
+                }
 
 
               </div>
@@ -322,7 +322,7 @@ export default class Search extends Component {
             <tbody>
               {
                 this.state.data.map(item =>
-                  <tr>
+                  <tr key={item.id}>
                     <td>{item.name}<span><Glyphicon id={item.id} onClick={this.handleOpenModal} className="pull-right green" glyph="plus-sign" /></span></td>
                   </tr>
                 )
