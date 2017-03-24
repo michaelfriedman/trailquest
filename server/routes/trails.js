@@ -52,6 +52,25 @@ router.get('/trails/:id', (req, res, next) => {
     });
 });
 
+// Gets all the trails with a given region
+router.get('/trails/region/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  knex('trails')
+    .where('region', id)
+    .then((rows) => {
+      if (!rows) {
+        throw boom.create(404, 'Not found');
+      }
+
+      res.send(rows);
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+
 router.get('/trails/:name', (req, res, next) => {
   const name = req.params.name;
 

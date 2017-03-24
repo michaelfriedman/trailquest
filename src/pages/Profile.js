@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image } from 'react-bootstrap';
+import { Image, Row, Panel, Table } from 'react-bootstrap';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -15,12 +15,13 @@ class Profile extends Component {
       list: '',
       review_body: [],
       events: [],
+      organized_events: [],
+      eventObjArr: [],
     };
   }
   componentDidMount() {
     axios.get('/users/id')
       .then(res => {
-        console.log('user/id', res)
         const name = `${res.data.first_name} ${res.data.last_name}`;
         const email = res.data.email;
         const profileUrl = res.data.profile_photo_url;
@@ -30,43 +31,58 @@ class Profile extends Component {
         axios.get(`/reviews/user/${this.state.userId}`)
           .then(res => {
             this.setState({
-              review_body: res.data
+              review_body: res.data,
             });
-            console.log(this.state.review_body, 'rb')
           });
         axios.get(`/users_events/user/${this.state.userId}`)
           .then(res => {
             const events = [];
+            // eslint-disable-next-line array-callback-return
             res.data.map(item => {
-              events.push(item);
-              console.log('item', item)
-              axios.get(`/events/user/${item.id}`)
-                .then(res => {
-                  console.log(res, 'it worked')
-                })
-            })
+              events.push(item.event_id);
+            });
             this.setState({ events });
-            console.log('events', this.state.events);
-          })
+
+          });
       });
   }
   render() {
     return (
       <div className="container">
-        <Image responsive src={this.state.profileUrl} />
-        <h3>{this.state.name}</h3>
-        <p>Email: {this.state.email}</p>
-        <p>Member Since: {this.state.joinedOn}</p>
-
+        <Row>
+          <div className="container">
+            <Image thumbnail src={this.state.profileUrl} className="pull-right" />
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Member Since</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{this.state.name}</td>
+                  <td>{this.state.email}</td>
+                  <td>{this.state.joinedOn}</td>
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+        </Row>
         <hr />
-
-        <h4>Reviews</h4>
-        {this.state.review_body.map(item => <p>{item.review_body}</p>)}
-        <h4>Events</h4>
-        {this.state.events.map(item => <p>{item.user_id}</p>)}
+        <Panel header="Reviews" bsStyle="primary">
+          {this.state.review_body.map(item => <p key={item.id}>{item.review_body}</p>)}
+        </Panel>
+        <Panel header="Events">
+          {console.log(this.state.eventObjArr)}
+          {this.state.eventObjArr.map(item => {
+            <p>{item}</p>
+          })}
+        </Panel>
       </div>
-        );
-        }
+    );
+  }
 }
 
 export default Profile;

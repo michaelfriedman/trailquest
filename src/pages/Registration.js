@@ -194,7 +194,7 @@ class Registration extends Component {
                 <ControlLabel htmlFor="first_name" className="cols-sm-2 control-label">
                   First Name
                 </ControlLabel>
-                <Col s={10}>
+                <Col>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-user fa" aria-hidden="true" />
@@ -212,7 +212,7 @@ class Registration extends Component {
                 >
                   Last Name
                 </ControlLabel>
-                <Col s={10}>
+                <Col>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-user fa" aria-hidden="true" />
@@ -228,7 +228,7 @@ class Registration extends Component {
                 <ControlLabel htmlFor="email" className="cols-sm-2 control-label">
                   Email
                 </ControlLabel>
-                <Col s={10}>
+                <Col>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-envelope fa" aria-hidden="true" />
@@ -243,7 +243,7 @@ class Registration extends Component {
                 <ControlLabel htmlFor="password" className="cols-sm-2 control-label">
                   Password
                 </ControlLabel>
-                <Col s={10}>
+                <Col>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
@@ -258,7 +258,7 @@ class Registration extends Component {
                 <ControlLabel htmlFor="password_confirm" className="cols-sm-2 control-label">
                   Confirm Password
                 </ControlLabel>
-                <Col s={10}>
+                <Col>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
@@ -291,7 +291,7 @@ class Registration extends Component {
                             <img
                               className="img-thumbnail"
                               style={{ marginBottom: '2%' }} src={this.state.uploadedFileCloudinaryUrl}
-                              role="presentation"
+                              alt="profile preview"
                             />
                           </div>
                       }
