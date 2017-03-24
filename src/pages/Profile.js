@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Panel, Table } from 'react-bootstrap';
+import { Image, Row, Panel, Table, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -42,44 +42,53 @@ class Profile extends Component {
               events.push(item.event_id);
             });
             this.setState({ events });
-
+            const promises = this.state.events.map(item =>
+              axios.get(`/events/event/${item}`))
+            Promise.all(promises).then(res => {
+              const eventObjArr = res.map(item => {
+                return item.data[0];
+              })
+              console.log('eventobjarr', eventObjArr)
+              this.setState({
+                eventObjArr,
+              })
+            })
           });
       });
   }
   render() {
     return (
       <div className="container">
-        <Row>
-          <div className="container">
-            <Image thumbnail src={this.state.profileUrl} className="pull-right" />
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Member Since</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{this.state.name}</td>
-                  <td>{this.state.email}</td>
-                  <td>{this.state.joinedOn}</td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-        </Row>
+        <div className="container">
+          <Col xs={6} md={4}>
+            <Image style={{ border: '1px solid black' }} thumbnail src={this.state.profileUrl} />
+          </Col>
+          <Row>
+            <div>
+              <p>{this.state.name}</p>
+              <p>{this.state.email}</p>
+              <p>{this.state.joinedOn}</p>
+            </div>
+          </Row>
+        </div>
         <hr />
-        <Panel header="Reviews" bsStyle="primary">
-          {this.state.review_body.map(item => <p key={item.id}>{item.review_body}</p>)}
-        </Panel>
-        <Panel header="Events">
-          {console.log(this.state.eventObjArr)}
-          {this.state.eventObjArr.map(item => {
-            <p>{item}</p>
-          })}
-        </Panel>
+        {
+          this.state.review_body.length
+            ? <Panel header="Reviews" bsStyle="primary">
+              {this.state.review_body.map(item => <p key={item.id}>{item.review_body}</p>)}
+            </Panel>
+            : null
+        }
+        {
+          this.state.eventObjArr.length
+            ? <Panel header="Events">
+              {this.state.eventObjArr.map(item => <p key={item.id}>{item.trail_name}</p>
+              )}
+            </Panel>
+            : null
+        }
+        { console.log('evtobjarr', this.state.eventObjArr) }
+
       </div>
     );
   }
