@@ -15,6 +15,19 @@ const auth = (req, res, next) => {
   });
 };
 
+// This gets all the information about one event
+router.get('/events/event/:eventId', (req, res, next) => {
+  const id = req.params.eventId;
+  knex('events')
+    .where('id', id)
+    .then((details) => {
+      res.send(details);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
 // this grabs all the users from one event
 router.get('/events/:eventId', (req, res, next) => {
   const eventId = req.params.eventId;
@@ -32,7 +45,7 @@ router.get('/events/:eventId', (req, res, next) => {
 router.get('/events/user/:userId', (req, res, next) => {
   const userId = req.params.userId;
   knex('events')
-    .where('user_id', userId)
+    .where('organizer_id', userId)
     .then((events) => {
       res.send(events);
     })

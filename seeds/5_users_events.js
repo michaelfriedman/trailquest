@@ -20,5 +20,15 @@ exports.seed = (knex) => knex('users_events').del()
         user_id: 2,
         event_id: 1,
       },
+      {
+        id: 5,
+        user_id: 3,
+        event_id: 1,
+      },
+      {
+        id: 6,
+        user_id: 3,
+        event_id: 3,
+      },
     ]))
   .then(() => knex.raw("SELECT setval('users_events_id_seq', (SELECT MAX(id) FROM users_events));"));

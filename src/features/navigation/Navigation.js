@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import axios from 'axios';
 import { Navbar, MenuItem, Nav, NavItem, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -24,7 +24,6 @@ class NavbarComponent extends Component {
           this.setState({
             isLoggedIn: true,
           });
-          // browserHistory.push('/profile');
         }
       });
   }
@@ -62,14 +61,14 @@ class NavbarComponent extends Component {
             <Nav>
               {
                   this.state.isLoggedIn
-                    ? <NavDropdown eventKey={3} title="Menu" id="basic-nav-dropdown">
+                    ? <NavDropdown title="Menu" id="basic-nav-dropdown">
                       <LinkContainer to={{ pathname: '/profile' }}><MenuItem>Profile</MenuItem></LinkContainer>
                       <LinkContainer to={{ pathname: '/search' }}><MenuItem>Search</MenuItem></LinkContainer>
                       <MenuItem>Contribute</MenuItem>
                       <MenuItem divider />
                       <MenuItem>Submit Feedback</MenuItem>
                     </NavDropdown>
-                  : null
+                :   <LinkContainer to={{ pathname: '/search' }}><NavItem>Search</NavItem></LinkContainer>
               }
             </Nav>
             <Nav pullRight>
@@ -85,6 +84,7 @@ class NavbarComponent extends Component {
                     </LinkContainer>
                   : null
               }
+
             </Nav>
           </Navbar.Collapse>
         </Navbar>
