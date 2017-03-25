@@ -7,7 +7,7 @@ exports.up = knex => knex.schema.createTable('reviews', (table) => {
     .references('users.id')
     .onDelete('CASCADE');
   table.text('review_body').notNullable().defaultTo('');
-  table.timestamp(true, true);
+  table.timestamps(true, true);
 });
 
 exports.down = knex => knex.schema.dropTable('reviews');

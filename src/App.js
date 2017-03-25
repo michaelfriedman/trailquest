@@ -6,6 +6,7 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
+import Events from './pages/Events';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ export default () => (
       <Route path="login" component={Login} />
       <Route path="profile" component={Profile} />
       <Route path="search" component={Search} />
+      <Route path="events" component={Events} />
     </Route>
   </Router>
 );
