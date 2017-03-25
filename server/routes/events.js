@@ -41,6 +41,18 @@ router.get('/events/:eventId', (req, res, next) => {
     });
 });
 
+
+// this grabs all the events that have been created
+router.get('/events/', (req, res, next) => {
+  knex('events')
+    .then((events) => {
+      res.send(events);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
 // this grabs all the events for one user
 router.get('/events/user/:userId', (req, res, next) => {
   const userId = req.params.userId;

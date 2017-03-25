@@ -64,8 +64,10 @@ class NavbarComponent extends Component {
                     ? <NavDropdown title="Menu" id="basic-nav-dropdown">
                       <LinkContainer to={{ pathname: '/profile' }}><MenuItem>Profile</MenuItem></LinkContainer>
                       <LinkContainer to={{ pathname: '/search' }}><MenuItem>Search</MenuItem></LinkContainer>
-                      <MenuItem>Contribute</MenuItem>
-                      <MenuItem divider />
+                      <LinkContainer to={{ pathname: '/events' }}>
+                        <MenuItem>Events</MenuItem>
+                      </LinkContainer>
+                        <MenuItem divider />
                       <MenuItem>Submit Feedback</MenuItem>
                     </NavDropdown>
                 :   <LinkContainer to={{ pathname: '/search' }}><NavItem>Search</NavItem></LinkContainer>

@@ -20,12 +20,9 @@ export default class Search extends Component {
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    this.sortStars = this.sortStars.bind(this);
-    this.sortName = this.sortName.bind(this);
-    this.sortHighestPoint = this.sortHighestPoint.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.isSearched = this.isSearched.bind(this);
   }
 
   componentDidMount() {
@@ -44,16 +41,33 @@ export default class Search extends Component {
       });
   }
 
-  onSearchTermChange({ target }) {
-    this.setState({ searchTerm: target.value });
-  }
-
   handleChange({ target }) {
     if (target.name) {
       this.setState({
         [target.name]: target.value,
       });
+      console.log(target.name, target.value);
     }
+  }
+
+  handleOpenModal({ target }) {
+    this.setState({ showModal: true });
+    // eslint-disable-next-line array-callback-return
+    this.state.data.map(item => {
+      // eslint-disable-next-line radix, no-unused-expressions
+      parseInt(item.id) === parseInt(target.id)
+      ? this.setState({
+        trailDetail: item,
+      })
+      : null;
+    });
+    axios.get(`/reviews/trail/${target.id}`)
+      .then(res => {
+        this.setState({
+          reviewDetail: res.data,
+          reviewIsLoading: false,
+        });
+      });
   }
 
   handleCloseModal() {
@@ -86,69 +100,41 @@ export default class Search extends Component {
   }
 
   handleSelectChange({ target }) {
-    console.log(`/trails/region/${target.value}`);
     axios.get(`/trails/region/${target.value}`)
       .then(res => {
         this.setState({
           data: res.data,
           isLoading: false,
         });
-        console.log(res);
       });
   }
 
-  handleOpenModal({ target }) {
-    this.setState({ showModal: true });
-    // eslint-disable-next-line array-callback-return
-    this.state.data.map(item => {
-      // eslint-disable-next-line radix, no-unused-expressions
-      parseInt(item.id) === parseInt(target.id)
-      ? this.setState({
-        trailDetail: item,
-      })
-      : null;
-    });
-    axios.get(`/reviews/trail/${target.id}`)
-      .then(res => {
-        this.setState({
-          reviewDetail: res.data,
-          reviewIsLoading: false,
-        });
-      });
+  onSearchTermChange({ target }) {
+    this.setState({ searchTerm: target.value });
   }
 
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   const { searchTerm } = this.state;
+  isSearched(searchTerm) {
+    return function (item) {
+      return !searchTerm || item['name'].toLowerCase().includes(searchTerm.toLowerCase());
+    };
+  }
+
+  // Not currently being used
+  // sortHighestPoint() {
+  //   const updatedList = this.state.data.sort((a, b) =>
+  //   parseFloat(b.highest_point) - parseFloat(a.highest_point));
+  //   this.setState({ data: updatedList });
   // }
-
-  sortHighestPoint() {
-    const updatedList = this.state.data.sort((a, b) =>
-    parseFloat(b.highest_point) - parseFloat(a.highest_point));
-    this.setState({ data: updatedList });
-  }
-
-  sortStars() {
-    const updatedList = this.state.data.sort((a, b) =>
-    parseFloat(b.current_rating) - parseFloat(a.current_rating));
-    this.setState({ data: updatedList });
-  }
-
-  sortName() {
-    const updatedList = this.state.data.sort();
-    this.setState({ data: updatedList });
-  }
-
-  // handleSearchSubmit() {
-  //   const { searchTerm } = this.state;
-  //   const newList = this.state.data.filter(item => item.name.toLowerCase() === this.state.searchTerm.toLowerCase());
-  //   this.setState({ data: newList })
+  //
+  // sortStars() {
+  //   const updatedList = this.state.data.sort((a, b) =>
+  //   parseFloat(b.current_rating) - parseFloat(a.current_rating));
+  //   this.setState({ data: updatedList });
   // }
 
   render() {
     return (
       <div className="container">
-
         <div>
           <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
             <Modal.Header closeButton>
@@ -172,9 +158,94 @@ export default class Search extends Component {
               {
                   this.props.isLoggedIn
                     ? <div style={{ textAlign: 'center' }}>
+                      <Button onClick={() => this.setState({ openForm: !this.state.openForm })}>
+                        Create Event
+                      </Button>
                       <Button style={{ margin: '1%' }} onClick={() => this.setState({ open: !this.state.open })}>
                         Review Trail
                       </Button>
+                      <Collapse in={this.state.openForm}>
+                        <div>
+                          <Well>
+                            <Form>
+                              <div>
+                                <FormGroup controlId="formControlsSelect">
+                                  <ControlLabel>Select Month</ControlLabel>
+                                  <FormControl
+                                    // onChange={}
+                                    componentClass="select"
+                                    placeholder="select"
+                                  >
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                  </FormControl>
+                                </FormGroup>
+                                <FormGroup controlId="formControlsSelect">
+                                  <ControlLabel>Select Date</ControlLabel>
+                                  <FormControl
+                                    // onChange={}
+                                    componentClass="select"
+                                    placeholder="select"
+                                  >
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                  </FormControl>
+                                </FormGroup>
+                                <FormGroup controlId="formControlsSelect">
+                                  <ControlLabel>Select Year</ControlLabel>
+                                  <FormControl
+                                    // onChange={}
+                                    componentClass="select"
+                                    placeholder="select"
+                                  >
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                  </FormControl>
+                                </FormGroup>
+                              </div>
+                            </Form>
+                          </Well>
+                        </div>
+                      </Collapse>
                       <Collapse in={this.state.open}>
                         <div>
                           <Well>
@@ -207,28 +278,29 @@ export default class Search extends Component {
               }
               <div>
                 <Panel header="Trail Stats:">
-                  <Table striped bordered condensed hover responsive>
-                    <thead>
-                      <tr>
-                        <th>Distance</th>
-                        <th>ElevationGain</th>
-                        <th>Highest Point</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>Star Rating</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{this.state.trailDetail.distance}</td>
-                        <td>{this.state.trailDetail.elevation_gain}</td>
-                        <td>{this.state.trailDetail.highest_point}</td>
-                        <td>{this.state.trailDetail.latitude}</td>
-                        <td>{this.state.trailDetail.longitude}</td>
-                        <td>{this.state.trailDetail.current_rating}</td>
-                      </tr>
-                    </tbody>
-                  </Table>
+                  <Row>
+                    <Col>
+                      Distance: {this.state.trailDetail.distance}
+                    </Col>
+                    <Col>
+                      Elevation Gain: {this.state.trailDetail.elevation_gain}
+                    </Col>
+                    <Col>
+                      Highest Point: {this.state.trailDetail.highest_point}
+                    </Col>
+                    <Col>
+                      Latitude: {this.state.trailDetail.latitude}
+                    </Col>
+                    <Col>
+                      Longitude: {this.state.trailDetail.longitude}
+                    </Col>
+                    <Col>
+                      Star Rating: {this.state.trailDetail.current_rating}
+                    </Col>
+                    <Col>
+                      Features: {this.state.trailDetail.features}
+                    </Col>
+                  </Row>
                 </Panel>
                 {
                   this.state.trailDetail.trail_description !== ''
@@ -253,12 +325,6 @@ export default class Search extends Component {
                     </Panel>
                     : null
                 }
-
-
-              </div>
-              <div>
-                Fetures:
-                <p>{this.state.trailDetail.features}</p>
               </div>
             </Modal.Body>
             <Modal.Footer>
@@ -273,7 +339,8 @@ export default class Search extends Component {
               <Form onSubmit={this.handeSearchSubmit}>
                 <FormGroup controlId="formControlsSelect">
                   <ControlLabel>Select Region</ControlLabel>
-                  <FormControl inline
+                  <FormControl
+                    inline
                     onChange={this.handleSelectChange.bind(this)} componentClass="select" placeholder="select">
                     <option value="Puget%20Sound%20and%20Islands">Puget Sound and Islands</option>
                     <option value="Central%20Cascades">Central Cascades</option>
@@ -292,16 +359,15 @@ export default class Search extends Component {
                   <div className="input-group">
                     <FormControl
                       inline
-                      onChange={this.handleChange} id="1"
-                      className="form-control"
+                      onChange={this.onSearchTermChange}
+                      id="1"
                       type="text"
                       name="searchTerm"
-                      value={this.state.searchTerm}
                       placeholder="Search..."
                       required
                     />
                     <span className="input-group-btn">
-                      <Button bsStyle="success" type="submit">
+                      <Button bsStyle="success">
                         <Glyphicon glyph="search" />
                       </Button>
                     </span>
@@ -312,7 +378,10 @@ export default class Search extends Component {
           </div>
         </div>
         {
-          this.state.isLoading ? <Col style={{ display: 'flex', justifyContent: 'center' }}><Loading style={{ textAlign: 'center' }} /></Col>
+          this.state.isLoading
+            ? <Col style={{ display: 'flex', justifyContent: 'center' }}>
+              <Loading style={{ textAlign: 'center' }} />
+            </Col>
           : <Table striped bordered hover>
             <thead>
               <tr>
@@ -321,48 +390,23 @@ export default class Search extends Component {
             </thead>
             <tbody>
               {
-                this.state.data.map(item =>
+                this.state.data.filter(this.isSearched(this.state.searchTerm)).map(item =>
                   <tr key={item.id}>
-                    <td>{item.name}<span><Glyphicon id={item.id} onClick={this.handleOpenModal} className="pull-right green" glyph="plus-sign" /></span></td>
-                  </tr>
+                    <td>{item.name}
+                      <span>
+                        <Glyphicon
+                          id={item.id}
+                          onClick={this.handleOpenModal}
+                          className="pull-right green"
+                          glyph="plus-sign"
+                        />
+                      </span>
+                    </td>
+                  </tr>,
                 )
               }
             </tbody>
           </Table>
-          // : <Table striped bordered responsive condensed hover>
-          //   <thead>
-          //     <tr>
-          //       <th><Button bsStyle="default" onClick={this.sortName}>Trail Name</Button></th>
-          //       <th>Distance</th>
-          //       <th>Elevation Gain</th>
-          //       <th>
-          //         <Button
-          //           bsStyle="default"
-          //           onClick={this.sortHighestPoint}
-          //         >
-          //           Highest Point
-          //         </Button>
-          //       </th>
-          //       <th><Button onClick={this.sortStars} bsStyle="default">Star Rating</Button></th>
-          //       <th>Features</th>
-          //       <th />
-          //     </tr>
-          //   </thead>
-          //   <tbody>
-          //     {
-          //       this.state.data.map(item =>
-          //         <tr id={item.id} key={item.id}>
-          //           <td>{item.name}<Button id={item.id} onClick={this.handleOpenModal}>Open</Button></td>
-          //           <td>{item.distance}</td>
-          //           <td>{item.elevation_gain === '' ? 'No Data' : `${item.elevation_gain} ft.`}</td>
-          //           <td>{item.highest_point === '' ? 'No Data' : `${item.highest_point} ft.`}</td>
-          //           <td>{parseFloat(item.current_rating) === 0 ? 'No Data' : parseFloat(item.current_rating)}</td>
-          //           <td>{item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</td>
-          //           <td></td>
-          //         </tr>)
-          //     }
-          //   </tbody>
-          // </Table>
         }
         <style jsx>{`
           .green {
