@@ -60,6 +60,7 @@ router.get('/reviews/user/:userId', (req, res, next) => {
 
   knex('reviews')
     .where('user_id', user_id)
+    .innerJoin('trails', 'reviews.trail_id', '=', 'trails.id')
     .then((row) => {
       if (!row) {
         throw boom.create(404, 'Not found');
@@ -84,6 +85,7 @@ router.get('/reviews/trail/:id', (req, res, next) => {
 
   knex('reviews')
     .where('trail_id', id)
+    .innerJoin('users', 'users.id', '=', 'reviews.user_id')
     .then((row) => {
       if (!row) {
         throw boom.create(404, 'Not found');
