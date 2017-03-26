@@ -17,6 +17,7 @@ export default class Search extends Component {
       isLoading: true,
       reviewIsLoading: true,
     };
+    this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
@@ -32,7 +33,6 @@ export default class Search extends Component {
           data: res.data,
           isLoading: false,
         });
-        console.log(res);
       });
     axios.get('/users/id')
       .then(res => {
@@ -41,37 +41,8 @@ export default class Search extends Component {
       });
   }
 
-  handleChange({ target }) {
-    if (target.name) {
-      this.setState({
-        [target.name]: target.value,
-      });
-      console.log(target.name, target.value);
-    }
-  }
-
-  handleOpenModal({ target }) {
-    this.setState({ showModal: true });
-    // eslint-disable-next-line array-callback-return
-    this.state.data.map(item => {
-      // eslint-disable-next-line radix, no-unused-expressions
-      parseInt(item.id) === parseInt(target.id)
-      ? this.setState({
-        trailDetail: item,
-      })
-      : null;
-    });
-    axios.get(`/reviews/trail/${target.id}`)
-      .then(res => {
-        this.setState({
-          reviewDetail: res.data,
-          reviewIsLoading: false,
-        });
-      });
-  }
-
-  handleCloseModal() {
-    this.setState({ showModal: false });
+  onSearchTermChange({ target }) {
+    this.setState({ searchTerm: target.value });
   }
 
   handleReviewSubmit(event) {
@@ -109,28 +80,44 @@ export default class Search extends Component {
       });
   }
 
-  onSearchTermChange({ target }) {
-    this.setState({ searchTerm: target.value });
+  handleOpenModal({ target }) {
+    this.setState({ showModal: true });
+    // eslint-disable-next-line array-callback-return
+    this.state.data.map(item => {
+      // eslint-disable-next-line no-unused-expressions
+      item.features = item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
+      parseInt(item.id) === parseInt(target.id)
+      ? this.setState({
+        trailDetail: item,
+      })
+      : null;
+    });
+
+    axios.get(`/reviews/trail/${target.id}`)
+      .then(res => {
+        console.log(res.data)
+        this.setState({
+          reviewDetail: res.data,
+          reviewIsLoading: false,
+        });
+      });
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
+
+  handleChange({ target }) {
+    if (target.name) {
+      this.setState({
+        [target.name]: target.value,
+      });
+    }
   }
 
   isSearched(searchTerm) {
-    return function (item) {
-      return !searchTerm || item['name'].toLowerCase().includes(searchTerm.toLowerCase());
-    };
+    return (item) => !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase());
   }
-
-  // Not currently being used
-  // sortHighestPoint() {
-  //   const updatedList = this.state.data.sort((a, b) =>
-  //   parseFloat(b.highest_point) - parseFloat(a.highest_point));
-  //   this.setState({ data: updatedList });
-  // }
-  //
-  // sortStars() {
-  //   const updatedList = this.state.data.sort((a, b) =>
-  //   parseFloat(b.current_rating) - parseFloat(a.current_rating));
-  //   this.setState({ data: updatedList });
-  // }
 
   render() {
     return (
@@ -278,29 +265,57 @@ export default class Search extends Component {
               }
               <div>
                 <Panel header="Trail Stats:">
-                  <Row>
-                    <Col>
-                      Distance: {this.state.trailDetail.distance}
-                    </Col>
-                    <Col>
-                      Elevation Gain: {this.state.trailDetail.elevation_gain}
-                    </Col>
-                    <Col>
-                      Highest Point: {this.state.trailDetail.highest_point}
-                    </Col>
-                    <Col>
-                      Latitude: {this.state.trailDetail.latitude}
-                    </Col>
-                    <Col>
-                      Longitude: {this.state.trailDetail.longitude}
-                    </Col>
-                    <Col>
-                      Star Rating: {this.state.trailDetail.current_rating}
-                    </Col>
-                    <Col>
-                      Features: {this.state.trailDetail.features}
-                    </Col>
-                  </Row>
+                  <div>
+                    {
+                      this.state.trailDetail.distance
+                        ? <Col>
+                          Distance: {this.state.trailDetail.distance}
+                        </Col>
+                        : null
+                    }
+                    {
+                      this.state.trailDetail.elevation_gain
+                        ? <Col>
+                          Elevation Gain: {this.state.trailDetail.elevation_gain}
+                        </Col>
+                        : null
+                    }
+                    {
+                      this.state.trailDetail.highest_point
+                        ? <Col>
+                          Highest Point: {this.state.trailDetail.highest_point}
+                        </Col>
+                        : null
+                    }
+                    {
+                      this.state.trailDetail.latitude
+                        ? <Col>
+                          Latitude: {this.state.trailDetail.latitude}
+                        </Col>
+                        : null
+                    }
+                    {
+                      this.state.trailDetail.longitude
+                        ? <Col>
+                          Longitude: {this.state.trailDetail.longitude}
+                        </Col>
+                        : null
+                    }
+                    {
+                      parseFloat(this.state.trailDetail.current_rating) > 0
+                        ? <Col>
+                          Star Rating: {this.state.trailDetail.current_rating}
+                        </Col>
+                          : null
+                    }
+                    {
+                        this.state.trailDetail.features !== ''
+                          ? <Col>
+                            Features: {this.state.trailDetail.features}
+                          </Col>
+                          : null
+                    }
+                  </div>
                 </Panel>
                 {
                   this.state.trailDetail.trail_description !== ''
@@ -318,10 +333,22 @@ export default class Search extends Component {
                 }
                 {
                   this.state.reviewDetail.length
-                    ? <Panel header="Reviews" style={{ textAlign: 'center' }}>
+                    ? <Panel header="Reviews">
                       { this.state.reviewIsLoading
                         ? <Loading />
-                        : this.state.reviewDetail.map(item => <p key={item.id}>{item.review_body}</p>)}
+                        : this.state.reviewDetail.map(item =>
+                          <div>
+                            <div>
+                              <p className="pull-left">
+                                {item.review_body}
+                              </p>
+                            </div>
+                            <div className="pull-right">
+                              <p>{item.created_at}</p>
+                              <p>{item.first_name}</p>
+                            </div>
+                          </div>,
+                        )}
                     </Panel>
                     : null
                 }
@@ -340,25 +367,24 @@ export default class Search extends Component {
                 <FormGroup controlId="formControlsSelect">
                   <ControlLabel>Select Region</ControlLabel>
                   <FormControl
-                    inline
-                    onChange={this.handleSelectChange.bind(this)} componentClass="select" placeholder="select">
-                    <option value="Puget%20Sound%20and%20Islands">Puget Sound and Islands</option>
+                    onChange={this.handleSelectChange} componentClass="select" placeholder="select"
+                  >
                     <option value="Central%20Cascades">Central Cascades</option>
-                    <option value="North%20Cascades">North Cascades</option>
-                    <option value="South%20Cascades">South Cascades</option>
+                    <option value="Central%20Washington">Central Washington</option>
+                    <option value="Eastern%20Washington">Eastern Washington</option>
                     <option value="Issaquah%20Alps">Issaquah Alps</option>
+                    <option value="Mount%20Rainier%20Area">Mount Rainier Area</option>
+                    <option value="North%20Cascades">North Cascades</option>
+                    <option value="Olympic%20Peninsula">Olympic Peninsula</option>
+                    <option value="Puget%20Sound%20and%20Islands">Puget Sound and Islands</option>
+                    <option value="South%20Cascades">South Cascades</option>
                     <option value="Southwest%20Washington">Southwest Washington</option>
                     <option value="Snoqualmie%20Region">Snoqualmie Region</option>
-                    <option value="Eastern%20Washington">Eastern Washington</option>
-                    <option value="Olympic%20Peninsula">Olympic Peninsula</option>
-                    <option value="Mount%20Rainier%20Area">Mount Rainier Area</option>
-                    <option value="Central%20Washington">Central Washington</option>
                   </FormControl>
                 </FormGroup>
                 <FormGroup>
                   <div className="input-group">
                     <FormControl
-                      inline
                       onChange={this.onSearchTermChange}
                       id="1"
                       type="text"

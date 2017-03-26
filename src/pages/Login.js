@@ -36,7 +36,7 @@ class Login extends Component {
   }
 
   getPasswordValidationState() {
-    if (this.state.password.length === 0) return '';
+    if (this.state.password.length === 0) return null;
     if (this.state.password.length >= 8 && this.state.password.length <= 64) {
       return 'success';
     }

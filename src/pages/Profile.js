@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Panel, Table, Col } from 'react-bootstrap';
+import { Image, Row, Panel, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -30,6 +30,7 @@ class Profile extends Component {
         this.setState({ name, profileUrl, joinedOn, email, userId });
         axios.get(`/reviews/user/${this.state.userId}`)
           .then(res => {
+            console.log(res)
             this.setState({
               review_body: res.data,
             });
@@ -43,16 +44,13 @@ class Profile extends Component {
             });
             this.setState({ events });
             const promises = this.state.events.map(item =>
-              axios.get(`/events/event/${item}`))
+              axios.get(`/events/event/${item}`));
             Promise.all(promises).then(res => {
-              const eventObjArr = res.map(item => {
-                return item.data[0];
-              })
-              console.log('eventobjarr', eventObjArr)
+              const eventObjArr = res.map(item => item.data[0]);
               this.setState({
                 eventObjArr,
-              })
-            })
+              });
+            });
           });
       });
   }
@@ -75,20 +73,22 @@ class Profile extends Component {
         {
           this.state.review_body.length
             ? <Panel header="Reviews" bsStyle="primary">
-              {this.state.review_body.map(item => <p key={item.id}>{item.review_body}</p>)}
-            </Panel>
+              {this.state.review_body.map(item =>
+                <div>
+                  <p key={item.id}>{item.review_body} <span>{item.created_at}</span></p>
+                  <p>{item.name}</p>
+                </div>)}
+                </Panel>
             : null
         }
         {
           this.state.eventObjArr.length
             ? <Panel header="Events">
-              {this.state.eventObjArr.map(item => <p key={item.id}>{item.trail_name}</p>
+              {this.state.eventObjArr.map(item => <p key={item.id}>{item.trail_name}</p>,
               )}
             </Panel>
             : null
         }
-        { console.log('evtobjarr', this.state.eventObjArr) }
-
       </div>
     );
   }
