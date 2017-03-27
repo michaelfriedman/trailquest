@@ -7,7 +7,6 @@ exports.up = knex => knex.schema.createTable('trails', (table) => {
   table.string('thumbnail').defaultTo('');
   table.string('region_image').defaultTo('');
   table.string('region').defaultTo('');
-  table.string('location').defaultTo('');
   table.string('latitude');
   table.string('longitude');
   table.string('distance').defaultTo();

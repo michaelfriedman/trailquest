@@ -75,10 +75,19 @@ class Profile extends Component {
             ? <Panel header="Reviews" bsStyle="primary">
               {this.state.review_body.map(item =>
                 <div>
-                  <p key={item.id}>{item.review_body} <span>{item.created_at}</span></p>
-                  <p>{item.name}</p>
-                </div>)}
-                </Panel>
+                  <blockquote>
+                    <Col>
+                      <p>
+                        {item.review_body}
+                      </p>
+                      <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
+                    </Col>
+                    <Col>
+                      <p><small><strong>{item.name}</strong></small></p>
+                    </Col>
+                  </blockquote>
+                  </div>)}
+            </Panel>
             : null
         }
         {
