@@ -338,15 +338,15 @@ export default class Search extends Component {
                         ? <Loading />
                         : this.state.reviewDetail.map(item =>
                           <div>
-                            <div>
-                              <p className="pull-left">
-                                {item.review_body}
+                            <Col xs={12} md={8}>
+                              <p>
+                                <em>{item.review_body}</em>
                               </p>
-                            </div>
-                            <div className="pull-right">
-                              <p>{item.created_at}</p>
-                              <p>{item.first_name}</p>
-                            </div>
+                            </Col>
+                            <Col xs={6} md={4}>
+                              <date>{item.created_at.slice(0, 10)}</date>
+                              <p><strong>{item.first_name}</strong></p>
+                            </Col>
                           </div>,
                         )}
                     </Panel>

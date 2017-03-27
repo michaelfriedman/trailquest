@@ -85,7 +85,7 @@ router.get('/reviews/trail/:id', (req, res, next) => {
 
   knex('reviews')
     .where('trail_id', id)
-    .innerJoin('users', 'users.id', '=', 'reviews.user_id')
+    .innerJoin('users', 'reviews.user_id', '=', 'users.id')
     .then((row) => {
       if (!row) {
         throw boom.create(404, 'Not found');
