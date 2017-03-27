@@ -16,6 +16,7 @@ export default class Search extends Component {
       review_body: '',
       isLoading: true,
       reviewIsLoading: true,
+      showReviewButton: true,
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
@@ -95,7 +96,6 @@ export default class Search extends Component {
 
     axios.get(`/reviews/trail/${target.id}`)
       .then(res => {
-        console.log(res.data)
         this.setState({
           reviewDetail: res.data,
           reviewIsLoading: false,
@@ -138,132 +138,31 @@ export default class Search extends Component {
             <Modal.Body>
               {
                 this.state.trailDetail.thumbnail !== ''
-                  ? <Image responsive src={this.state.trailDetail.thumbnail} />
+                  ? <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '550px', maxHeight: '300px' }}>
+                    <Image rounded responsive src={this.state.trailDetail.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%' }} />
+                  </div>
                   : null
               }
 
-              {
-                  this.props.isLoggedIn
-                    ? <div style={{ textAlign: 'center' }}>
-                      <Button onClick={() => this.setState({ openForm: !this.state.openForm })}>
-                        Create Event
-                      </Button>
-                      <Button style={{ margin: '1%' }} onClick={() => this.setState({ open: !this.state.open })}>
-                        Review Trail
-                      </Button>
-                      <Collapse in={this.state.openForm}>
-                        <div>
-                          <Well>
-                            <Form>
-                              <div>
-                                <FormGroup controlId="formControlsSelect">
-                                  <ControlLabel>Select Month</ControlLabel>
-                                  <FormControl
-                                    // onChange={}
-                                    componentClass="select"
-                                    placeholder="select"
-                                  >
-                                    <option value="01">January</option>
-                                    <option value="02">February</option>
-                                    <option value="03">March</option>
-                                    <option value="04">April</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
-                                    <option value="08">August</option>
-                                    <option value="09">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">November</option>
-                                    <option value="12">December</option>
-                                  </FormControl>
-                                </FormGroup>
-                                <FormGroup controlId="formControlsSelect">
-                                  <ControlLabel>Select Date</ControlLabel>
-                                  <FormControl
-                                    // onChange={}
-                                    componentClass="select"
-                                    placeholder="select"
-                                  >
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                    <option value="04">04</option>
-                                    <option value="05">05</option>
-                                    <option value="06">06</option>
-                                    <option value="07">07</option>
-                                    <option value="08">08</option>
-                                    <option value="09">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                    <option value="22">22</option>
-                                    <option value="23">23</option>
-                                    <option value="24">24</option>
-                                    <option value="25">25</option>
-                                    <option value="26">26</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <option value="29">29</option>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
-                                  </FormControl>
-                                </FormGroup>
-                                <FormGroup controlId="formControlsSelect">
-                                  <ControlLabel>Select Year</ControlLabel>
-                                  <FormControl
-                                    // onChange={}
-                                    componentClass="select"
-                                    placeholder="select"
-                                  >
-                                    <option value="2017">2017</option>
-                                    <option value="2018">2018</option>
-                                  </FormControl>
-                                </FormGroup>
-                              </div>
-                            </Form>
-                          </Well>
-                        </div>
-                      </Collapse>
-                      <Collapse in={this.state.open}>
-                        <div>
-                          <Well>
-                            <Row>
-                              <Form onSubmit={this.handleReviewSubmit}>
-                                <FormGroup controlId="formControlsTextarea">
-                                  <ControlLabel>Trail Review:</ControlLabel>
-                                  <FormControl
-                                    onChange={this.handleChange}
-                                    value={this.state.review_body}
-                                    name="review_body"
-                                    componentClass="textarea"
-                                    placeholder="Write your review."
-                                  />
-                                </FormGroup>
-                                <Button
-                                  type="submit"
-                                  className="center-block"
-                                  bsStyle="success"
-                                >
-                                  Submit
-                                </Button>
-                              </Form>
-                            </Row>
-                          </Well>
-                        </div>
-                      </Collapse>
-                    </div>
-                      : null
-              }
               <div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                </div>
+                <Panel
+                  header="Map"
+                  style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=11&size=566x300&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
+                >
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                </Panel>
                 <Panel header="Trail Stats:">
                   <div>
                     {
@@ -330,6 +229,52 @@ export default class Search extends Component {
                       {this.state.trailDetail.driving_directions}
                     </Panel>
                     : null
+                }
+                {
+                    this.props.isLoggedIn
+                      ? <div style={{ textAlign: 'center' }}>
+                        {
+                          this.state.showReviewButton
+                            ? <Button bsStyle="danger" bsSize="small" style={{ margin: '1%' }} onClick={() => this.setState({ open: !this.state.open, showReviewButton: !this.state.showReviewButton })}>
+                              Review Trail
+                            </Button>
+                            : null
+                        }
+                        <Collapse in={this.state.open}>
+                          <div>
+                            <Well>
+                              <Glyphicon
+                                className="pull-right"
+                                glyph="remove"
+                                onClick={() => this.setState({open: !this.state.open, showReviewButton: !this.state.showReviewButton })}
+                              />
+                              <Row>
+                                <Form onSubmit={this.handleReviewSubmit}>
+                                  <FormGroup controlId="formControlsTextarea">
+                                    <ControlLabel className="pull-left">Trail Review:</ControlLabel>
+                                    <FormControl
+                                      onChange={this.handleChange}
+                                      value={this.state.review_body}
+                                      name="review_body"
+                                      componentClass="textarea"
+                                      placeholder="Write your review."
+                                    />
+                                  </FormGroup>
+                                  <Button
+                                    bsSize="small"
+                                    type="submit"
+                                    className="center-block"
+                                    bsStyle="danger"
+                                  >
+                                    Submit
+                                  </Button>
+                                </Form>
+                              </Row>
+                            </Well>
+                          </div>
+                        </Collapse>
+                      </div>
+                        : null
                 }
                 {
                   this.state.reviewDetail.length

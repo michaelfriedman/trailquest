@@ -30,7 +30,6 @@ class Profile extends Component {
         this.setState({ name, profileUrl, joinedOn, email, userId });
         axios.get(`/reviews/user/${this.state.userId}`)
           .then(res => {
-            console.log(res)
             this.setState({
               review_body: res.data,
             });
@@ -59,22 +58,22 @@ class Profile extends Component {
       <div className="container">
         <div className="container">
           <Col xs={6} md={4}>
-            <Image style={{ border: '1px solid black' }} thumbnail src={this.state.profileUrl} />
+            <Image thumbnail src={this.state.profileUrl} />
           </Col>
           <Row>
             <div>
-              <p>{this.state.name}</p>
-              <p>{this.state.email}</p>
-              <p>{this.state.joinedOn}</p>
+              <div><strong>{this.state.name}</strong></div>
+              <div><small>{this.state.email}</small></div>
+              {/* <p>{this.state.joinedOn}</p> */}
             </div>
           </Row>
         </div>
         <hr />
         {
           this.state.review_body.length
-            ? <Panel header="Reviews" bsStyle="primary">
+            ? <Panel header="Reviews">
               {this.state.review_body.map(item =>
-                <div>
+                <div key={item.id}>
                   <blockquote>
                     <Col>
                       <p>
@@ -86,7 +85,7 @@ class Profile extends Component {
                       <p><small><strong>{item.name}</strong></small></p>
                     </Col>
                   </blockquote>
-                  </div>)}
+                </div>)}
             </Panel>
             : null
         }
@@ -98,6 +97,11 @@ class Profile extends Component {
             </Panel>
             : null
         }
+        <style jsx>{`
+          body {
+            background-color: darkgrey;
+          }
+        `}</style>
       </div>
     );
   }

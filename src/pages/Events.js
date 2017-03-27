@@ -18,21 +18,19 @@ class Events extends Component {
         this.setState({
           data: res.data,
         });
-        console.log(this.state.data);
       });
   }
 
   handleEventDetailsClick({ target }) {
-    browserHistory.push(`/events/event/${target.id}`)
-    // axios.get(`events/event/${target.id}`)
-    //   .then()
+    browserHistory.push(`/events/event/${target.id}`);
   }
+
   render() {
     return (
       <div>{
         this.state.data.length
         ? this.state.data.map(item =>
-          <div>
+          <div key={item.id}>
             <p>{item.trail_name}</p>
             <p>{item.event_date}</p>
             <div><Button onClick={this.handleEventDetailsClick} id={item.trail_id}>Details</Button></div>
