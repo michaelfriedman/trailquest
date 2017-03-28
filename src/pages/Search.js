@@ -146,22 +146,26 @@ export default class Search extends Component {
               }
 
               <div>
-                <Panel
-                  header="Map"
-                  style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=10&size=566x300&maptype=roadmap&markers=color:pink%7Clabel:T%7C${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
-                >
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                </Panel>
+                {
+                  this.state.trailDetail.latitude && this.state.trailDetail.longitude
+                    ? <Panel
+                      header="Map"
+                      style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=10&size=566x300&maptype=roadmap&markers=color:pink%7Clabel:T%7C${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
+                      >
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                    </Panel>
+                    : null
+                }
                 <Panel header="Trail Stats:">
                   <div>
                     {
