@@ -64,7 +64,6 @@ class Profile extends Component {
             <div>
               <div><strong>{this.state.name}</strong></div>
               <div><small>{this.state.email}</small></div>
-              {/* <p>{this.state.joinedOn}</p> */}
             </div>
           </Row>
         </div>
@@ -92,14 +91,14 @@ class Profile extends Component {
         {
           this.state.eventObjArr.length
             ? <Panel header="Events">
-              {this.state.eventObjArr.map(item => <p key={item.id}>{item.trail_name}</p>,
+              {this.state.eventObjArr.map(item => <p>{item.trail_name}</p>,
               )}
             </Panel>
             : null
         }
         <style jsx>{`
           body {
-            background-color: darkgrey;
+            background-color: antiquewhite;
           }
         `}</style>
       </div>
