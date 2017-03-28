@@ -27,13 +27,20 @@ class Events extends Component {
 
   render() {
     return (
-      <div>{
+      <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
           <div key={item.id}>
             <p>{item.trail_name}</p>
             <p>{item.event_date}</p>
-            <div><Button onClick={this.handleEventDetailsClick} id={item.trail_id}>Details</Button></div>
+            <div>
+              <Button
+                onClick={this.handleEventDetailsClick}
+                id={item.trail_id}
+              >
+                Details
+              </Button>
+            </div>
           </div>,
         )
         : null

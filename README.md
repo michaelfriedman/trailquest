@@ -1,3 +1,25 @@
+# TrailQuest
+
+## License
+SEE LICENSE
+
+## Data Scraping
+
+There was not enough robust data available in a public API for me to build this project. All of the data made available in this application was gathered using a custom web scraping program that I wrote in Node using an NPM package called Cheerio.
+
+The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every single URL and creates a trail object for each page, where the key-values are either text or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
+
+[Custom Web Scraper](https://github.com/michaelfriedman/capstone-g40/blob/master/scraper/hikeScraper.js "hikeScraper.js")
+
+## Built With
+* React
+* Node
+* Express
+* Knex
+* PostgreSQL
+* bCrypt
+
+________
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
@@ -1496,17 +1518,17 @@ When you build the project, Create React App will place the `public` folder cont
 2. Install `serve` by running `npm install --save serve`.
 
 3. Add this line to `scripts` in `package.json`:
-    
+
     ```
     "now-start": "serve build/",
     ```
-    
+
 4. Run `now` from your project directory. You will see a **now.sh** URL in your output like this:
-    
+
     ```
     > Ready! https://your-project-dirname-tpspyhtdtk.now.sh (copied to clipboard)
     ```
-    
+
     Paste that URL into your browser when the build is complete, and you will see your deployed app.
 
 Details are available in [this article.](https://zeit.co/blog/now-static)

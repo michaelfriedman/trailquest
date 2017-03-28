@@ -60,6 +60,7 @@ export default class Search extends Component {
             .then(res => {
               this.setState({
                 reviewDetail: res.data,
+                showReviewButton: !this.state.showReviewButton
               });
             });
           this.setState({ open: !this.state.open, review_body: '' });
@@ -145,11 +146,9 @@ export default class Search extends Component {
               }
 
               <div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                </div>
                 <Panel
                   header="Map"
-                  style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=11&size=566x300&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
+                  style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=10&size=566x300&maptype=roadmap&markers=color:pink%7Clabel:T%7C${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
                 >
                   <br />
                   <br />
@@ -235,7 +234,7 @@ export default class Search extends Component {
                       ? <div style={{ textAlign: 'center' }}>
                         {
                           this.state.showReviewButton
-                            ? <Button bsStyle="danger" bsSize="small" style={{ margin: '1%' }} onClick={() => this.setState({ open: !this.state.open, showReviewButton: !this.state.showReviewButton })}>
+                            ? <Button bsStyle="danger" bsSize="small" style={{ margin: '1%', marginBottom: '3%' }} onClick={() => this.setState({ open: !this.state.open, showReviewButton: !this.state.showReviewButton })}>
                               Review Trail
                             </Button>
                             : null
@@ -244,9 +243,12 @@ export default class Search extends Component {
                           <div>
                             <Well>
                               <Glyphicon
-                                className="pull-right"
+                                className="pull-right pointer"
                                 glyph="remove"
-                                onClick={() => this.setState({open: !this.state.open, showReviewButton: !this.state.showReviewButton })}
+                                onClick={() => this.setState({
+                                  open: !this.state.open,
+                                  showReviewButton: !this.state.showReviewButton,
+                                })}
                               />
                               <Row>
                                 <Form onSubmit={this.handleReviewSubmit}>
@@ -314,6 +316,7 @@ export default class Search extends Component {
                   <FormControl
                     onChange={this.handleSelectChange} componentClass="select" placeholder="select"
                   >
+                    <option value="Puget%20Sound%20and%20Islands">Puget Sound and Islands</option>
                     <option value="Central%20Cascades">Central Cascades</option>
                     <option value="Central%20Washington">Central Washington</option>
                     <option value="Eastern%20Washington">Eastern Washington</option>
@@ -321,7 +324,6 @@ export default class Search extends Component {
                     <option value="Mount%20Rainier%20Area">Mount Rainier Area</option>
                     <option value="North%20Cascades">North Cascades</option>
                     <option value="Olympic%20Peninsula">Olympic Peninsula</option>
-                    <option value="Puget%20Sound%20and%20Islands">Puget Sound and Islands</option>
                     <option value="South%20Cascades">South Cascades</option>
                     <option value="Southwest%20Washington">Southwest Washington</option>
                     <option value="Snoqualmie%20Region">Snoqualmie Region</option>
@@ -368,7 +370,7 @@ export default class Search extends Component {
                         <Glyphicon
                           id={item.id}
                           onClick={this.handleOpenModal}
-                          className="pull-right green"
+                          className="pull-right green pointer"
                           glyph="plus-sign"
                         />
                       </span>
@@ -382,6 +384,10 @@ export default class Search extends Component {
         <style jsx>{`
           .green {
             color: green;
+          }
+
+          .pointer {
+            cursor: pointer;
           }
         `}</style>
       </div>
