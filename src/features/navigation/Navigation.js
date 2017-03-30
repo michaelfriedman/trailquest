@@ -67,10 +67,10 @@ class NavbarComponent extends Component {
                       <LinkContainer to={{ pathname: '/events' }}>
                         <MenuItem>Events</MenuItem>
                       </LinkContainer>
-                        <MenuItem divider />
+                      <MenuItem divider />
                       <MenuItem>Submit Feedback</MenuItem>
                     </NavDropdown>
-                :   <LinkContainer to={{ pathname: '/search' }}><NavItem>Search</NavItem></LinkContainer>
+                : <LinkContainer to={{ pathname: '/search' }}><NavItem>Search</NavItem></LinkContainer>
               }
             </Nav>
             <Nav pullRight>
