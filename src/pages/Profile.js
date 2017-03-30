@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Panel, Col } from 'react-bootstrap';
+import { Image, Row, Panel, Col, Well } from 'react-bootstrap';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -53,54 +53,38 @@ class Profile extends Component {
           });
       });
   }
+
   render() {
     return (
+
       <div className="container">
-        <div className="container">
-          <Col xs={6} md={4}>
-            <Image thumbnail src={this.state.profileUrl} />
-          </Col>
-          <Row>
-            <div>
-              <div><strong>{this.state.name}</strong></div>
-              <div><small>{this.state.email}</small></div>
-            </div>
-          </Row>
-        </div>
-        <hr />
+        <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_293,q_50,w_1140/v1490900758/AdobeStock_116743095_oi24wz.jpg)'}}>
+          <center>
+            <a href="#aboutModal" data-toggle="modal" data-target="#myModal"><Image thumbnail responsive rounded src={this.state.profileUrl} width="150" height="150" /></a>
+            <h3 style={{ color: 'white' }}>{this.state.name}</h3>
+          </center>
+        </Well>
         {
-          this.state.review_body.length
-            ? <Panel header="Reviews">
-              {this.state.review_body.map(item =>
-                <div key={item.id}>
-                  <blockquote>
-                    <Col>
-                      <p>
-                        {item.review_body}
-                      </p>
-                      <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
-                    </Col>
-                    <Col>
-                      <p><small><strong>{item.name}</strong></small></p>
-                    </Col>
-                  </blockquote>
-                </div>)}
-            </Panel>
+            this.state.review_body.length
+              ? <Panel header="My Trail Reviews">
+                {this.state.review_body.map(item =>
+                  <div key={item.id}>
+                    <blockquote>
+                      <Col>
+                        <p>
+                          {item.review_body}
+                        </p>
+                        <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
+                      </Col>
+                      <Col>
+                        <p><small><strong>{item.name}</strong></small></p>
+                      </Col>
+                    </blockquote>
+                  </div>)}
+              </Panel>
             : null
         }
-        {
-          this.state.eventObjArr.length
-            ? <Panel header="Events">
-              {this.state.eventObjArr.map(item => <p>{item.trail_name}</p>,
-              )}
-            </Panel>
-            : null
-        }
-        <style jsx>{`
-          body {
-            background-color: antiquewhite;
-          }
-        `}</style>
+
       </div>
     );
   }
