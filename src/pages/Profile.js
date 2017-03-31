@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Row, Panel, Col, Well } from 'react-bootstrap';
+import { Image, Panel, Col, Well, Modal, Button, Glyphicon } from 'react-bootstrap';
 import axios from 'axios';
 
 class Profile extends Component {
@@ -12,22 +12,34 @@ class Profile extends Component {
       joinedOn: '',
       email: '',
       userId: '',
+      phone: '',
       list: '',
       review_body: [],
       events: [],
       organized_events: [],
       eventObjArr: [],
+      showModal: false,
+      showContact: false,
+      showEvents: false,
     };
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
+    this.openContact = this.openContact.bind(this);
+    this.closeContact = this.closeContact.bind(this);
+    this.openEvents = this.openEvents.bind(this);
+    this.closeEvents = this.closeEvents.bind(this);
   }
   componentDidMount() {
     axios.get('/users/id')
       .then(res => {
         const name = `${res.data.first_name} ${res.data.last_name}`;
         const email = res.data.email;
+        const area = res.data.area;
+        const phone = res.data.phone;
         const profileUrl = res.data.profile_photo_url;
         const joinedOn = res.data.created_at.slice(0, 10);
         const userId = res.data.id;
-        this.setState({ name, profileUrl, joinedOn, email, userId });
+        this.setState({ name, profileUrl, joinedOn, email, userId, area, phone });
         axios.get(`/reviews/user/${this.state.userId}`)
           .then(res => {
             this.setState({
@@ -54,6 +66,30 @@ class Profile extends Component {
       });
   }
 
+  close() {
+    this.setState({ showModal: false });
+  }
+
+  open() {
+    this.setState({ showModal: true });
+  }
+
+  openContact() {
+    this.setState({ showContact: true });
+  }
+
+  closeContact() {
+    this.setState({ showContact: false });
+  }
+
+  openEvents() {
+    this.setState({ showEvents: true });
+  }
+
+  closeEvents() {
+    this.setState({ showEvents: false });
+  }
+
   render() {
     return (
 
@@ -64,27 +100,144 @@ class Profile extends Component {
             <h3 style={{ color: 'white' }}>{this.state.name}</h3>
           </center>
         </Well>
-        {
-            this.state.review_body.length
-              ? <Panel header="My Trail Reviews">
-                {this.state.review_body.map(item =>
-                  <div key={item.id}>
-                    <blockquote>
-                      <Col>
-                        <p>
-                          {item.review_body}
-                        </p>
-                        <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
-                      </Col>
-                      <Col>
-                        <p><small><strong>{item.name}</strong></small></p>
-                      </Col>
-                    </blockquote>
-                  </div>)}
-              </Panel>
-            : null
-        }
 
+        <div className="well" style={{maxWidth: 400, margin: '0 auto 10px'}}>
+          { this.state.review_body.length
+            ? <Button
+              block
+              bsStyle="default"
+              bsSize="small"
+              onClick={this.open}
+              >
+              My Trail Reviews
+            </Button>
+            : null
+          }
+
+          <Button
+            block
+            bsStyle="default"
+            bsSize="small"
+            onClick={this.openContact}
+          >
+            My Contact Info
+          </Button>
+
+          { this.state.eventObjArr.length
+            ? <Button
+              block
+              bsStyle="default"
+              bsSize="small"
+              onClick={this.openEvents}
+              >
+              Upcoming Adventures
+            </Button>
+            : null
+          }
+        </div>
+
+
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title style={{ textAlign: 'center' }}>{this.state.name}'s Trail Reviews</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            { this.state.review_body
+              ? this.state.review_body.map(item =>
+                <div key={item.id}>
+                  <Panel header={item.name}>
+                    <Col>
+                      <p>
+                        <em>{item.review_body}</em>
+                      </p>
+                      <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
+                    </Col>
+                  </Panel>
+                </div>)
+                : null
+            }
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.showContact} onHide={this.closeContact}>
+          <Modal.Header closeButton>
+            <Modal.Title  style={{ textAlign: 'center' }}>{this.state.name}'s Contact Information</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p><a href={'mailto:' + this.state.email}><Glyphicon glyph="envelope" />  {this.state.email}</a></p>
+            <p><Glyphicon glyph="phone" />  ({this.state.phone.slice(0, 3)}) {this.state.phone.slice(3, 6)} - {this.state.phone.slice(6, 10)}</p>
+            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+              <a href="http://facebook.com" className="btn btn-social-icon btn-facebook"><i className="fa fa-facebook"></i></a>
+              <a className="btn btn-social-icon btn-github"><i className="fa fa-github"></i></a>
+              <a className="btn btn-social-icon btn-google-plus"><i className="fa fa-google-plus"></i></a>
+              <a className="btn btn-social-icon btn-instagram"><i className="fa fa-instagram"></i></a>
+              <a className="btn btn-social-icon btn-linkedin"><i className="fa fa-linkedin"></i></a>
+              <a className="btn btn-social-icon btn-twitter"><i className="fa fa-twitter"></i></a>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.closeContact}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.showEvents} onHide={this.closeEvents}>
+          <Modal.Header closeButton>
+            <Modal.Title  style={{ textAlign: 'center' }}>{this.state.name}'s Upcoming Adventures</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              this.state.eventObjArr.length
+              ? this.state.eventObjArr.map(item =>
+                <Panel header={item.trail_name}>
+                  {item.event_date}
+                  {item.max_participants}
+                </Panel>
+              )
+              : null
+            }
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.closeEvents}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+        <style jsx>{`
+          .btn-social{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn-social :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
+          .btn-social.btn-lg{padding-left:61px}.btn-social.btn-lg :first-child{line-height:45px;width:45px;font-size:1.8em}
+          .btn-social.btn-sm{padding-left:38px}.btn-social.btn-sm :first-child{line-height:28px;width:28px;font-size:1.4em}
+          .btn-social.btn-xs{padding-left:30px}.btn-social.btn-xs :first-child{line-height:20px;width:20px;font-size:1.2em}
+          .btn-social-icon{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;height:34px;width:34px;padding:0}.btn-social-icon :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
+          .btn-social-icon.btn-lg{padding-left:61px}.btn-social-icon.btn-lg :first-child{line-height:45px;width:45px;font-size:1.8em}
+          .btn-social-icon.btn-sm{padding-left:38px}.btn-social-icon.btn-sm :first-child{line-height:28px;width:28px;font-size:1.4em}
+          .btn-social-icon.btn-xs{padding-left:30px}.btn-social-icon.btn-xs :first-child{line-height:20px;width:20px;font-size:1.2em}
+          .btn-social-icon :first-child{border:none;text-align:center;width:100% !important}
+          .btn-social-icon.btn-lg{height:45px;width:45px;padding-left:0;padding-right:0}
+          .btn-social-icon.btn-sm{height:30px;width:30px;padding-left:0;padding-right:0}
+          .btn-social-icon.btn-xs{height:22px;width:22px;padding-left:0;padding-right:0}
+          .btn-facebook{color:#fff;background-color:#3b5998;border-color:rgba(0,0,0,0.2)}.btn-facebook:hover,.btn-facebook:focus,.btn-facebook:active,.btn-facebook.active,.open .dropdown-toggle.btn-facebook{color:#fff;background-color:#30487b;border-color:rgba(0,0,0,0.2)}
+          .btn-facebook:active,.btn-facebook.active,.open .dropdown-toggle.btn-facebook{background-image:none}
+          .btn-facebook.disabled,.btn-facebook[disabled],fieldset[disabled] .btn-facebook,.btn-facebook.disabled:hover,.btn-facebook[disabled]:hover,fieldset[disabled] .btn-facebook:hover,.btn-facebook.disabled:focus,.btn-facebook[disabled]:focus,fieldset[disabled] .btn-facebook:focus,.btn-facebook.disabled:active,.btn-facebook[disabled]:active,fieldset[disabled] .btn-facebook:active,.btn-facebook.disabled.active,.btn-facebook[disabled].active,fieldset[disabled] .btn-facebook.active{background-color:#3b5998;border-color:rgba(0,0,0,0.2)}
+          .btn-github{color:#fff;background-color:#444;border-color:rgba(0,0,0,0.2)}.btn-github:hover,.btn-github:focus,.btn-github:active,.btn-github.active,.open .dropdown-toggle.btn-github{color:#fff;background-color:#303030;border-color:rgba(0,0,0,0.2)}
+          .btn-github:active,.btn-github.active,.open .dropdown-toggle.btn-github{background-image:none}
+          .btn-github.disabled,.btn-github[disabled],fieldset[disabled] .btn-github,.btn-github.disabled:hover,.btn-github[disabled]:hover,fieldset[disabled] .btn-github:hover,.btn-github.disabled:focus,.btn-github[disabled]:focus,fieldset[disabled] .btn-github:focus,.btn-github.disabled:active,.btn-github[disabled]:active,fieldset[disabled] .btn-github:active,.btn-github.disabled.active,.btn-github[disabled].active,fieldset[disabled] .btn-github.active{background-color:#444;border-color:rgba(0,0,0,0.2)}
+          .btn-google-plus{color:#fff;background-color:#dd4b39;border-color:rgba(0,0,0,0.2)}.btn-google-plus:hover,.btn-google-plus:focus,.btn-google-plus:active,.btn-google-plus.active,.open .dropdown-toggle.btn-google-plus{color:#fff;background-color:#ca3523;border-color:rgba(0,0,0,0.2)}
+          .btn-google-plus:active,.btn-google-plus.active,.open .dropdown-toggle.btn-google-plus{background-image:none}
+          .btn-google-plus.disabled,.btn-google-plus[disabled],fieldset[disabled] .btn-google-plus,.btn-google-plus.disabled:hover,.btn-google-plus[disabled]:hover,fieldset[disabled] .btn-google-plus:hover,.btn-google-plus.disabled:focus,.btn-google-plus[disabled]:focus,fieldset[disabled] .btn-google-plus:focus,.btn-google-plus.disabled:active,.btn-google-plus[disabled]:active,fieldset[disabled] .btn-google-plus:active,.btn-google-plus.disabled.active,.btn-google-plus[disabled].active,fieldset[disabled] .btn-google-plus.active{background-color:#dd4b39;border-color:rgba(0,0,0,0.2)}
+          .btn-instagram{color:#fff;background-color:#3f729b;border-color:rgba(0,0,0,0.2)}.btn-instagram:hover,.btn-instagram:focus,.btn-instagram:active,.btn-instagram.active,.open .dropdown-toggle.btn-instagram{color:#fff;background-color:#335d7e;border-color:rgba(0,0,0,0.2)}
+          .btn-instagram:active,.btn-instagram.active,.open .dropdown-toggle.btn-instagram{background-image:none}
+          .btn-instagram.disabled,.btn-instagram[disabled],fieldset[disabled] .btn-instagram,.btn-instagram.disabled:hover,.btn-instagram[disabled]:hover,fieldset[disabled] .btn-instagram:hover,.btn-instagram.disabled:focus,.btn-instagram[disabled]:focus,fieldset[disabled] .btn-instagram:focus,.btn-instagram.disabled:active,.btn-instagram[disabled]:active,fieldset[disabled] .btn-instagram:active,.btn-instagram.disabled.active,.btn-instagram[disabled].active,fieldset[disabled] .btn-instagram.active{background-color:#3f729b;border-color:rgba(0,0,0,0.2)}
+          .btn-linkedin{color:#fff;background-color:#007bb6;border-color:rgba(0,0,0,0.2)}.btn-linkedin:hover,.btn-linkedin:focus,.btn-linkedin:active,.btn-linkedin.active,.open .dropdown-toggle.btn-linkedin{color:#fff;background-color:#005f8d;border-color:rgba(0,0,0,0.2)}
+          .btn-linkedin:active,.btn-linkedin.active,.open .dropdown-toggle.btn-linkedin{background-image:none}
+          .btn-linkedin.disabled,.btn-linkedin[disabled],fieldset[disabled] .btn-linkedin,.btn-linkedin.disabled:hover,.btn-linkedin[disabled]:hover,fieldset[disabled] .btn-linkedin:hover,.btn-linkedin.disabled:focus,.btn-linkedin[disabled]:focus,fieldset[disabled] .btn-linkedin:focus,.btn-linkedin.disabled:active,.btn-linkedin[disabled]:active,fieldset[disabled] .btn-linkedin:active,.btn-linkedin.disabled.active,.btn-linkedin[disabled].active,fieldset[disabled] .btn-linkedin.active{background-color:#007bb6;border-color:rgba(0,0,0,0.2)}
+          .btn-twitter{color:#fff;background-color:#55acee;border-color:rgba(0,0,0,0.2)}.btn-twitter:hover,.btn-twitter:focus,.btn-twitter:active,.btn-twitter.active,.open .dropdown-toggle.btn-twitter{color:#fff;background-color:#309aea;border-color:rgba(0,0,0,0.2)}
+          .btn-twitter:active,.btn-twitter.active,.open .dropdown-toggle.btn-twitter{background-image:none}
+          .btn-twitter.disabled,.btn-twitter[disabled],fieldset[disabled] .btn-twitter,.btn-twitter.disabled:hover,.btn-twitter[disabled]:hover,fieldset[disabled] .btn-twitter:hover,.btn-twitter.disabled:focus,.btn-twitter[disabled]:focus,fieldset[disabled] .btn-twitter:focus,.btn-twitter.disabled:active,.btn-twitter[disabled]:active,fieldset[disabled] .btn-twitter:active,.btn-twitter.disabled.active,.btn-twitter[disabled].active,fieldset[disabled] .btn-twitter.active{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
+          a {
+            text-decoration: none;
+          }
+        `}</style>
       </div>
     );
   }

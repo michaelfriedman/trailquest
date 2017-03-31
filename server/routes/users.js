@@ -43,7 +43,7 @@ router.get('/users/id', auth, (req, res, next) => {
 
 router.post('/users', (req, res, next) => {
   let user;
-  const { first_name, last_name, email, password, profile_photo_url } = req.body;
+  const { first_name, last_name, email, phone, password, profile_photo_url } = req.body;
   knex('users').where('email', email)
     .then((data) => {
       if (data.length) {
@@ -53,7 +53,7 @@ router.post('/users', (req, res, next) => {
     })
     // eslint-disable-next-line camelcase
     .then((hashed_password) => {
-      user = { first_name, last_name, email, hashed_password, profile_photo_url };
+      user = { first_name, last_name, email, phone, hashed_password, profile_photo_url };
 
       return knex('users').insert((user), '*');
     })
