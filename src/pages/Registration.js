@@ -10,13 +10,14 @@ const CLOUDINARY_UPLOAD_PRESET = 'torqfs7z';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dk5dqve4y/upload';
 
 // eslint-disable-next-line camelcase
-function validate(first_name, last_name, email, password, password_confirm) {
+function validate(first_name, last_name, email, password, password_confirm, phone) {
   // True means invalid
   return {
     first_name: first_name.length === 0,
     last_name: last_name.length === 0,
     email: email.length === 0,
     password: password.length < 8,
+    phone: phone.length < 10,
     // eslint-disable-next-line camelcase
     password_confirm: password !== password_confirm,
   };
@@ -35,6 +36,7 @@ class Registration extends Component {
       email: '',
       password: '',
       password_confirm: '',
+      phone: '',
       uploadedFileCloudinaryUrl: '',
       everFocusedFirstName: false,
       everFocusedEmail: false,
@@ -46,6 +48,9 @@ class Registration extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
     this.onImageDrop = this.onImageDrop.bind(this);
+
+    this.getValidationState = this.getValidationState.bind(this);
+    this.getPhoneValidationState = this.getPhoneValidationState.bind(this);
   }
 
   onImageDrop(files) {
@@ -65,7 +70,13 @@ class Registration extends Component {
     // eslint-disable-next-line consistent-return
     else if (isString !== String) return 'warning';
     // eslint-disable-next-line no-useless-return
-    else if (this.state.first_name === undefined) return;
+  }
+
+  getPhoneValidationState() {
+    if (this.state.phone === undefined) return;
+    else if (this.state.phone.length < 10 && this.state.phone.length >= 1) return 'error';
+    else if (this.state.phone.length === 10) return 'success';
+    else if (this.state.phone.length > 10) return 'error';
   }
 
   getLastNameValidationState() {
@@ -111,25 +122,37 @@ class Registration extends Component {
     const errors = validate(
       this.state.first_name,
       this.state.last_name,
-      this.state.email, this.state.password,
+      this.state.email,
+      this.state.password,
       this.state.password_confirm,
+      this.state.phone,
     );
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     return !isDisabled;
   }
 
   handleSubmit(event) {
+    console.log(this.state.phone)
     event.preventDefault();
     if (!this.canBeSubmitted()) {
       event.preventDefault();
       return;
     }
 
-    const { first_name, last_name, email, password, uploadedFileCloudinaryUrl } = this.state;
+    const {
+      first_name,
+      last_name,
+      email,
+      phone,
+      password,
+      uploadedFileCloudinaryUrl,
+    } = this.state;
+
     const user = {
       first_name,
       last_name,
       email,
+      phone,
       password,
       profile_photo_url: uploadedFileCloudinaryUrl,
     };
@@ -181,6 +204,7 @@ class Registration extends Component {
       this.state.email,
       this.state.password,
       this.state.password_confirm,
+      this.state.phone,
     );
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     return (
@@ -234,6 +258,21 @@ class Registration extends Component {
                       <i className="fa fa-envelope fa" aria-hidden="true" />
                     </span>
                     <FormControl type="email" className={errors.email ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.email} name="email" placeholder="Enter your email" />
+                    <FormControl.Feedback />
+                  </div>
+                </Col>
+              </FormGroup>
+
+              <FormGroup validationState={this.getPhoneValidationState()}>
+                <ControlLabel htmlFor="phone" className="cols-sm-2 control-label">
+                  Phone
+                </ControlLabel>
+                <Col>
+                  <div className="input-group">
+                    <span className="input-group-addon">
+                      <i className="fa fa-phone fa" aria-hidden="true" />
+                    </span>
+                    <FormControl type="phone" className={errors.phone ? 'error form-control input-sm' : 'form-control input-sm'} onChange={this.handleChange} value={this.state.phone} name="phone" placeholder="Enter your phone number" />
                     <FormControl.Feedback />
                   </div>
                 </Col>
