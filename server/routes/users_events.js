@@ -17,8 +17,9 @@ const auth = (req, res, next) => {
 
 router.get('/users_events/user/:userId', (req, res, next) => {
   knex('users_events')
-    .where('user_id', req.params.userId)
+    .where('users_events.user_id', req.params.userId)
     .then((response) => {
+
       res.send(response);
     })
     .catch((err) => {

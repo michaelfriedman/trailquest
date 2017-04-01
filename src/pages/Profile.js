@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Image, Panel, Col, Well, Modal, Button, Glyphicon } from 'react-bootstrap';
 import axios from 'axios';
+import Moment from 'react-moment';
+import { Image, Panel, Col, Well, Modal, Button, Glyphicon } from 'react-bootstrap';
+
 
 class Profile extends Component {
   constructor(props) {
@@ -29,6 +31,7 @@ class Profile extends Component {
     this.openEvents = this.openEvents.bind(this);
     this.closeEvents = this.closeEvents.bind(this);
   }
+
   componentDidMount() {
     axios.get('/users/id')
       .then(res => {
@@ -45,6 +48,7 @@ class Profile extends Component {
             this.setState({
               review_body: res.data,
             });
+            console.log(this.state.review_body);
           });
         axios.get(`/users_events/user/${this.state.userId}`)
           .then(res => {
@@ -61,6 +65,7 @@ class Profile extends Component {
               this.setState({
                 eventObjArr,
               });
+              console.log('eventObjArr', this.state.eventObjArr)
             });
           });
       });
@@ -96,7 +101,7 @@ class Profile extends Component {
       <div className="container">
         <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_293,q_50,w_1140/v1490900758/AdobeStock_116743095_oi24wz.jpg)'}}>
           <center>
-            <a href="#aboutModal" data-toggle="modal" data-target="#myModal"><Image thumbnail responsive rounded src={this.state.profileUrl} width="150" height="150" /></a>
+            <Image thumbnail responsive rounded src={this.state.profileUrl} width="150" height="150" />
             <h3 style={{ color: 'white' }}>{this.state.name}</h3>
           </center>
         </Well>
@@ -145,12 +150,12 @@ class Profile extends Component {
             { this.state.review_body
               ? this.state.review_body.map(item =>
                 <div key={item.id}>
-                  <Panel header={item.name}>
+                  <Panel header={<h6>{item.name}</h6>}>
                     <Col>
                       <p>
                         <em>{item.review_body}</em>
                       </p>
-                      <p><date><small>{item.created_at.slice(0, 10)}</small></date></p>
+                      <p><date><small><Moment tz="America/Los_Angeles">{item.created_at}</Moment></small></date></p>
                     </Col>
                   </Panel>
                 </div>)
@@ -191,10 +196,20 @@ class Profile extends Component {
             {
               this.state.eventObjArr.length
               ? this.state.eventObjArr.map(item =>
-                <Panel header={item.trail_name}>
-                  {item.event_date}
-                  {item.max_participants}
-                </Panel>
+                <Panel header={<div><h6>{item.trail_name} </h6> <small><Moment tz="America/Los_Angeles">{item.event_date}</Moment></small></div>}>
+                  <p>Max Participants: {item.max_participants}</p>
+                  <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} className="pull-right" />
+                  <p>Organizer: {item.first_name} {item.last_name}</p>
+                  <p>Organizer Email: {item.email}</p>
+                  <p>Organizer Phone: ({item.phone.slice(0, 3)} {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}</p>
+                  <p>Region: {item.region}</p>
+                  <p>Elevation Gain: {item.elevation_gain}</p>
+                  <p>Region: {item.region}</p>
+                  <p>Driving Directions: {item.driving_directions}</p>
+                  <p>Trail Description: {item.trail_description}</p>
+                  <p>Coordinates: {item.latitude}, {item.longitude}</p>
+                  <p>Features: {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
+                  <p>Highest Point: {item.highest_point}</p> </Panel>
               )
               : null
             }

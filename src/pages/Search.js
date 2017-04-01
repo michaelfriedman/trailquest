@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, FormControl, Table, Modal, Collapse, Well, Glyphicon, Image, Panel, FormGroup, ControlLabel, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
 
 export default class Search extends Component {
@@ -75,10 +76,7 @@ export default class Search extends Component {
   handleSelectChange({ target }) {
     axios.get(`/trails/region/${target.value}`)
       .then(res => {
-        this.setState({
-          data: res.data,
-          isLoading: false,
-        });
+        this.setState({ data: res.data, isLoading: false });
       });
   }
 
@@ -166,59 +164,62 @@ export default class Search extends Component {
                     </Panel>
                     : null
                 }
-                <Panel header="Trail Stats:">
-                  <div>
-                    {
-                      this.state.trailDetail.distance
-                        ? <Col>
-                          Distance: {this.state.trailDetail.distance}
-                        </Col>
+                { this.state.trailDetail.length
+                  ? <Panel header="Trail Stats:">
+                    <div>
+                      {
+                        this.state.trailDetail.distance
+                          ? <Col>
+                            Distance: {this.state.trailDetail.distance}
+                          </Col>
                         : null
-                    }
-                    {
-                      this.state.trailDetail.elevation_gain
-                        ? <Col>
-                          Elevation Gain: {this.state.trailDetail.elevation_gain}
-                        </Col>
+                      }
+                      {
+                        this.state.trailDetail.elevation_gain
+                          ? <Col>
+                            Elevation Gain: {this.state.trailDetail.elevation_gain}
+                          </Col>
                         : null
-                    }
-                    {
-                      this.state.trailDetail.highest_point
-                        ? <Col>
-                          Highest Point: {this.state.trailDetail.highest_point}
-                        </Col>
+                      }
+                      {
+                        this.state.trailDetail.highest_point
+                          ? <Col>
+                            Highest Point: {this.state.trailDetail.highest_point}
+                          </Col>
                         : null
-                    }
-                    {
-                      this.state.trailDetail.latitude
-                        ? <Col>
-                          Latitude: {this.state.trailDetail.latitude}
-                        </Col>
+                      }
+                      {
+                        this.state.trailDetail.latitude
+                          ? <Col>
+                            Latitude: {this.state.trailDetail.latitude}
+                          </Col>
                         : null
-                    }
-                    {
-                      this.state.trailDetail.longitude
-                        ? <Col>
-                          Longitude: {this.state.trailDetail.longitude}
-                        </Col>
+                      }
+                      {
+                        this.state.trailDetail.longitude
+                          ? <Col>
+                            Longitude: {this.state.trailDetail.longitude}
+                          </Col>
                         : null
-                    }
-                    {
-                      parseFloat(this.state.trailDetail.current_rating) > 0
-                        ? <Col>
-                          Star Rating: {this.state.trailDetail.current_rating}
-                        </Col>
-                          : null
-                    }
-                    {
+                      }
+                      {
+                        parseFloat(this.state.trailDetail.current_rating) > 0
+                          ? <Col>
+                            Star Rating: {this.state.trailDetail.current_rating}
+                          </Col>
+                        : null
+                      }
+                      {
                         this.state.trailDetail.features !== ''
                           ? <Col>
                             Features: {this.state.trailDetail.features}
                           </Col>
-                          : null
-                    }
-                  </div>
-                </Panel>
+                        : null
+                      }
+                    </div>
+                  </Panel>
+                  : null
+                }
                 {
                   this.state.trailDetail.trail_description !== ''
                     ? <Panel header="Trail Description:">
@@ -295,7 +296,7 @@ export default class Search extends Component {
                               </p>
                             </Col>
                             <Col xs={6} md={4}>
-                              <date>{item.created_at.slice(0, 10)}</date>
+                              <date><Moment tz="America/Los_Angeles">{item.created_at}</Moment></date>
                               <p><strong>{item.first_name}</strong></p>
                             </Col>
                           </div>,

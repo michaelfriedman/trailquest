@@ -18,8 +18,6 @@ export default () => (
           </LinkContainer>
         </p>
       </Jumbotron>
-
-
       <hr />
       <div className="container">
         <Row style={{ textAlign: 'center' }}>
@@ -36,8 +34,8 @@ export default () => (
           <Col sm={4}>
             <Glyphicon className="larger" glyph="camera" />
             <p className="lobster">
-              Share your opinion on trails you've hiked with our community.
-            </p>
+              Share your opinion on trails you have hiked with our community.
+\            </p>
           </Col>
         </Row>
       </div>
