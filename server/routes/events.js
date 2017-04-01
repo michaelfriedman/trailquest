@@ -19,8 +19,11 @@ const auth = (req, res, next) => {
 router.get('/events/event/:eventId', (req, res, next) => {
   const id = req.params.eventId;
   knex('events')
-    .where('id', id)
+    .innerJoin('trails', 'trails.id', 'events.trail_id')
+    .innerJoin('users', 'users.id', 'events.organizer_id')
+    .where('events.id', id)
     .then((details) => {
+      delete details[0].hashed_password;
       res.send(details);
     })
     .catch((err) => {
@@ -45,7 +48,12 @@ router.get('/events/:eventId', (req, res, next) => {
 // this grabs all the events that have been created
 router.get('/events/', (req, res, next) => {
   knex('events')
+    .innerJoin('users', 'users.id', '=', 'events.organizer_id')
+    .innerJoin('trails', 'trails.id', '=', 'events.trail_id')
     .then((events) => {
+      events.map(item => {
+        delete item.hashed_password;
+      })
       res.send(events);
     })
     .catch((err) => {
