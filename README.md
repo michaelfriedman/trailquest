@@ -13,12 +13,23 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 
 ## Built With
 * React
+* react-router
 * Node
 * Express
 * Knex
 * PostgreSQL
-* bCrypt
 
+
+## Dependencies
+* bCrypt
+* morgan
+* body-parser
+* jsonwebtoken
+* cookie-parser
+* react-bootstrap
+* Google Maps API
+* Cloudinary API
+* Axios
 ________
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

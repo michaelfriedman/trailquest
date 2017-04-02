@@ -48,8 +48,8 @@ router.get('/events/:eventId', (req, res, next) => {
 // this grabs all the events that have been created
 router.get('/events/', (req, res, next) => {
   knex('events')
+  .innerJoin('trails', 'trails.id', '=', 'events.trail_id')
     .innerJoin('users', 'users.id', '=', 'events.organizer_id')
-    .innerJoin('trails', 'trails.id', '=', 'events.trail_id')
     .then((events) => {
       events.map(item => {
         delete item.hashed_password;
