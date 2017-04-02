@@ -9,19 +9,19 @@ class Events extends Component {
     super(props);
     this.state = {
       data: [],
+      openEventsTrailDescription: false,
     };
     this.handleEventDetailsClick = this.handleEventDetailsClick.bind(this);
     this.handleRegistration = this.handleRegistration.bind(this);
   }
 
   componentWillMount() {
-    console.log(this.props.userId)
     axios.get('/users/id')
       .then(res => {
         const userId = res.data.id;
         this.setState({ userId });
-        console.log(this.state.userId)
-      })
+        console.log(this.state.userId);
+      });
     axios.get('events')
       .then(res => {
         this.setState({
@@ -36,14 +36,14 @@ class Events extends Component {
   }
 
   handleRegistration({ target }) {
-    let event_id = target.id;
-    console.log(this.state.userId, target.id)
+    const event_id = target.id;
+    console.log(this.state.userId, target.id);
     const { userId } = this.state;
     const user_id = userId;
     const attendee = { event_id, user_id };
     axios.post('users_events', attendee)
       .then(res => {
-        res.send(res);
+        this.setState({ events: res.data });
       });
   }
 
@@ -52,42 +52,66 @@ class Events extends Component {
       <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
-          <div key={item.id}>
-            <Panel header={<Moment tz="America/Los_Angeles">{item.event_date}</Moment>}>
-              <p>Trail: {item.trail_name} </p>
-              <p>Event Organizer: {item.first_name} {item.last_name}</p>
+          <div>
+            <Panel
+              header={<div>
+                <strong>{item.trail_name} </strong>
+                <div><small><Moment
+                  tz="America/Los_Angeles">{item.event_date}</Moment></small></div>
+              </div>}
+              footer={<div style={{ display: 'flex', justifyContent: 'center' }}><Button
+                bsStyle="success"
+                bsSize="small"
+                id={item.id}
+                onClick={this.handleRegistration}>
+                Register
+              </Button>
+              </div>}>
               <Image thumbnail className="pull-right" src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} />
-              <p>Max Participants: {item.max_participants}</p>
-              <p>Organizer Phone: {item.phone}</p>
-              <p>Organizer Email: {item.email}</p>
-              <p>Distance: {item.distance}</p>
-              <p>Highest Point: {item.highest_point}</p>
-              <p>Features: {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
-              <p>Driving Directions: {item.driving_directions}</p>
-              <p>Coordinates: {item.latitude}, {item.longitude}</p>
-              <p>Trail Description: {item.trail_description}</p>
-              <p>Elevation Gain: {item.elevation_gain}</p>
-              <p>Region: {item.region}</p>
-              <p>Trail Rating: {item.current_rating}</p>
+              <p><strong>Event Organizer:</strong> {item.first_name} {item.last_name}</p>
+              <p><strong>Max Participants:</strong> {item.max_participants}</p>
+              <p>
+                <strong>Organizer Phone: </strong>
+                ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}
+              </p>
+              <p><strong>Organizer Email:</strong> {item.email}</p>
+              <p><strong>Distance:</strong> {item.distance}</p>
+              <p><strong>Highest Point:</strong> {item.highest_point}</p>
+              {/* <p>Features: {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p> */}
+              <p><strong>Coordinates:</strong> {item.latitude}, {item.longitude}</p>
+              <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
+              <p><strong>Region:</strong> {item.region}</p>
+              <p><strong>Trail Rating:</strong> {item.current_rating}</p>
+              <p>
+                <strong>Driving Directions:</strong>
+                <div>{item.driving_directions}</div>
+              </p>
+
               <div>
                 <Button
-                  onClick={this.handleEventDetailsClick}
-                  id={item.trail_id}
+                  onClick={() => this.setState({
+                    openEventsTrailDescription: !this.state.openEventsTrailDescription,
+                  })}
                 >
-                  Details
+                  Read Trail Description
                 </Button>
-                <Button
-                  id={item.id}
-                  onClick={this.handleRegistration}
-                >
-                  Register
-                </Button>
+                <Panel collapsible expanded={this.state.openEventsTrailDescription}>
+                  {item.trail_description}
+                </Panel>
               </div>
             </Panel>
           </div>,
         )
         : null
-      }</div>
+      }
+        <style jsx>{`
+        @import url('https://fonts.googleapis.com/css?family=Raleway');
+          body {
+              font-family: 'Raleway', sans-serif;
+            }
+
+        `}</style>
+      </div>
     );
   }
 }

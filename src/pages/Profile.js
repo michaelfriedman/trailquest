@@ -9,6 +9,7 @@ class Profile extends Component {
     super(props);
 
     this.state = {
+      openEventsTrailDescription: false,
       name: '',
       profileUrl: '',
       joinedOn: '',
@@ -65,7 +66,7 @@ class Profile extends Component {
               this.setState({
                 eventObjArr,
               });
-              console.log('eventObjArr', this.state.eventObjArr)
+              console.log('eventObjArr', this.state.eventObjArr);
             });
           });
       });
@@ -99,14 +100,21 @@ class Profile extends Component {
     return (
 
       <div className="container">
-        <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_293,q_50,w_1140/v1490900758/AdobeStock_116743095_oi24wz.jpg)'}}>
+        <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_293,q_50,w_1140/v1490900758/AdobeStock_116743095_oi24wz.jpg)' }}>
           <center>
-            <Image thumbnail responsive rounded src={this.state.profileUrl} width="150" height="150" />
+            <Image
+              thumbnail
+              responsive
+              rounded
+              src={this.state.profileUrl}
+              width="150"
+              height="150"
+            />
             <h3 style={{ color: 'white' }}>{this.state.name}</h3>
           </center>
         </Well>
 
-        <div className="well" style={{maxWidth: 400, margin: '0 auto 10px'}}>
+        <div className="well" style={{ maxWidth: 400, margin: '0 auto 10px' }}>
           { this.state.review_body.length
             ? <Button
               block
@@ -144,18 +152,24 @@ class Profile extends Component {
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
-            <Modal.Title style={{ textAlign: 'center' }}>{this.state.name}'s Trail Reviews</Modal.Title>
+            <Modal.Title style={{ textAlign: 'center' }}>{`${this.state.name}'s`} Trail Reviews</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { this.state.review_body
               ? this.state.review_body.map(item =>
                 <div key={item.id}>
-                  <Panel header={<h6>{item.name}</h6>}>
+                  <Panel header={<strong>{item.name}</strong>} footer={<date>
+                    <small>
+                      <Moment tz="America/Los_Angeles">
+                        {item.created_at}
+                      </Moment>
+                    </small>
+                  </date>}>
                     <Col>
                       <p>
                         <em>{item.review_body}</em>
                       </p>
-                      <p><date><small><Moment tz="America/Los_Angeles">{item.created_at}</Moment></small></date></p>
+
                     </Col>
                   </Panel>
                 </div>)
@@ -163,62 +177,82 @@ class Profile extends Component {
             }
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.close}>Close</Button>
+            <Button bsStyle="danger" onClick={this.close}>Close</Button>
           </Modal.Footer>
         </Modal>
 
         <Modal show={this.state.showContact} onHide={this.closeContact}>
           <Modal.Header closeButton>
-            <Modal.Title  style={{ textAlign: 'center' }}>{this.state.name}'s Contact Information</Modal.Title>
+            <Modal.Title style={{ textAlign: 'center' }}>{`${this.state.name}'s`} Contact Information</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p><a href={'mailto:' + this.state.email}><Glyphicon glyph="envelope" />  {this.state.email}</a></p>
             <p><Glyphicon glyph="phone" />  ({this.state.phone.slice(0, 3)}) {this.state.phone.slice(3, 6)} - {this.state.phone.slice(6, 10)}</p>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              <a href="http://facebook.com" className="btn btn-social-icon btn-facebook"><i className="fa fa-facebook"></i></a>
-              <a className="btn btn-social-icon btn-github"><i className="fa fa-github"></i></a>
-              <a className="btn btn-social-icon btn-google-plus"><i className="fa fa-google-plus"></i></a>
-              <a className="btn btn-social-icon btn-instagram"><i className="fa fa-instagram"></i></a>
-              <a className="btn btn-social-icon btn-linkedin"><i className="fa fa-linkedin"></i></a>
-              <a className="btn btn-social-icon btn-twitter"><i className="fa fa-twitter"></i></a>
+              <a href="http://facebook.com" className="btn btn-social-icon btn-facebook"><i className="fa fa-facebook" /></a>
+              <a className="btn btn-social-icon btn-github"><i className="fa fa-github" /></a>
+              <a className="btn btn-social-icon btn-google-plus"><i className="fa fa-google-plus" /></a>
+              <a className="btn btn-social-icon btn-instagram"><i className="fa fa-instagram" /></a>
+              <a className="btn btn-social-icon btn-linkedin"><i className="fa fa-linkedin" /></a>
+              <a className="btn btn-social-icon btn-twitter"><i className="fa fa-twitter" /></a>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.closeContact}>Close</Button>
+            <Button bsStyle="danger" onClick={this.closeContact}>Close</Button>
           </Modal.Footer>
         </Modal>
 
         <Modal show={this.state.showEvents} onHide={this.closeEvents}>
           <Modal.Header closeButton>
-            <Modal.Title  style={{ textAlign: 'center' }}>{this.state.name}'s Upcoming Adventures</Modal.Title>
+            <Modal.Title style={{ textAlign: 'center' }}>{this.state.name}'s Upcoming Adventures</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {
               this.state.eventObjArr.length
               ? this.state.eventObjArr.map(item =>
-                <Panel header={<div><h6>{item.trail_name} </h6> <small><Moment tz="America/Los_Angeles">{item.event_date}</Moment></small></div>}>
-                  <p>Max Participants: {item.max_participants}</p>
+                <Panel
+                  header={<div>
+                    <strong>{item.trail_name} </strong>
+                    <div><small><Moment tz="America/Los_Angeles">{item.event_date}</Moment></small></div>
+                  </div>}
+                >
                   <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} className="pull-right" />
-                  <p>Organizer: {item.first_name} {item.last_name}</p>
-                  <p>Organizer Email: {item.email}</p>
-                  <p>Organizer Phone: ({item.phone.slice(0, 3)} {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}</p>
-                  <p>Region: {item.region}</p>
-                  <p>Elevation Gain: {item.elevation_gain}</p>
-                  <p>Region: {item.region}</p>
-                  <p>Driving Directions: {item.driving_directions}</p>
-                  <p>Trail Description: {item.trail_description}</p>
-                  <p>Coordinates: {item.latitude}, {item.longitude}</p>
-                  <p>Features: {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
-                  <p>Highest Point: {item.highest_point}</p> </Panel>
+                  <p><strong>Max Participants:</strong> {item.max_participants}</p>
+                  <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
+                  <p><strong>Organizer Email:</strong> {item.email}</p>
+                  <p>
+                    <strong>Organizer Phone:</strong> ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}</p>
+                  <p><strong>Region:</strong> {item.region}</p>
+                  <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
+
+                  <p><strong>Coordinates:</strong> {item.latitude}, {item.longitude}</p>
+                  <p><strong>Features:</strong> {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
+                  <p><strong>Highest Point:</strong> {item.highest_point}</p>
+                  <p><strong>Driving Directions:</strong> <div>{item.driving_directions}</div></p>
+
+                  {/* <p>Trail Description: {item.trail_description}</p> */}
+                  <div>
+                    <Button bsSize="xsmall" onClick={() => this.setState({ openEventsTrailDescription: !this.state.openEventsTrailDescription })}>
+                      Read Trail Description
+                    </Button>
+                    <Panel collapsible expanded={this.state.openEventsTrailDescription}>
+                      {item.trail_description}
+                    </Panel>
+                  </div>
+
+                   </Panel>,
               )
               : null
             }
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.closeEvents}>Close</Button>
+            <Button bsStyle="danger" onClick={this.closeEvents}>Close</Button>
           </Modal.Footer>
+
+
         </Modal>
         <style jsx>{`
+          @import url('https://fonts.googleapis.com/css?family=Raleway');
           .btn-social{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn-social :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
           .btn-social.btn-lg{padding-left:61px}.btn-social.btn-lg :first-child{line-height:45px;width:45px;font-size:1.8em}
           .btn-social.btn-sm{padding-left:38px}.btn-social.btn-sm :first-child{line-height:28px;width:28px;font-size:1.4em}
@@ -251,6 +285,10 @@ class Profile extends Component {
           .btn-twitter.disabled,.btn-twitter[disabled],fieldset[disabled] .btn-twitter,.btn-twitter.disabled:hover,.btn-twitter[disabled]:hover,fieldset[disabled] .btn-twitter:hover,.btn-twitter.disabled:focus,.btn-twitter[disabled]:focus,fieldset[disabled] .btn-twitter:focus,.btn-twitter.disabled:active,.btn-twitter[disabled]:active,fieldset[disabled] .btn-twitter:active,.btn-twitter.disabled.active,.btn-twitter[disabled].active,fieldset[disabled] .btn-twitter.active{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
           a {
             text-decoration: none;
+          }
+
+          body {
+            font-family: 'Raleway', sans-serif;
           }
         `}</style>
       </div>

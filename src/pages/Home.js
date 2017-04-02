@@ -35,7 +35,7 @@ export default () => (
             <Glyphicon className="larger" glyph="camera" />
             <p className="lobster">
               Share your opinion on trails you have hiked with our community.
-\            </p>
+            </p>
           </Col>
         </Row>
       </div>
@@ -105,12 +105,19 @@ export default () => (
     </div>
     <style jsx>{`
       @import url('https://fonts.googleapis.com/css?family=Lobster+Two');
+      @import url('https://fonts.googleapis.com/css?family=Raleway');
+
+      body {
+              font-family: 'Raleway', sans-serif;
+            }
       .lobster {
         font-family: 'Lobster Two', cursive;
       }
        .larger {
         font-size: 5em;
       }
+
+
     `}</style>
   </div>
 );

@@ -61,7 +61,6 @@ export default class Search extends Component {
             .then(res => {
               this.setState({
                 reviewDetail: res.data,
-                showReviewButton: !this.state.showReviewButton
               });
             });
           this.setState({ open: !this.state.open, review_body: '' });
@@ -142,7 +141,6 @@ export default class Search extends Component {
                   </div>
                   : null
               }
-
               <div>
                 {
                   this.state.trailDetail.latitude && this.state.trailDetail.longitude
@@ -164,60 +162,65 @@ export default class Search extends Component {
                     </Panel>
                     : null
                 }
-                { this.state.trailDetail.length
-                  ? <Panel header="Trail Stats:">
-                    <div>
-                      {
-                        this.state.trailDetail.distance
-                          ? <Col>
-                            Distance: {this.state.trailDetail.distance}
-                          </Col>
-                        : null
-                      }
-                      {
-                        this.state.trailDetail.elevation_gain
-                          ? <Col>
-                            Elevation Gain: {this.state.trailDetail.elevation_gain}
-                          </Col>
-                        : null
-                      }
-                      {
-                        this.state.trailDetail.highest_point
-                          ? <Col>
-                            Highest Point: {this.state.trailDetail.highest_point}
-                          </Col>
-                        : null
-                      }
-                      {
-                        this.state.trailDetail.latitude
-                          ? <Col>
-                            Latitude: {this.state.trailDetail.latitude}
-                          </Col>
-                        : null
-                      }
-                      {
-                        this.state.trailDetail.longitude
-                          ? <Col>
-                            Longitude: {this.state.trailDetail.longitude}
-                          </Col>
-                        : null
-                      }
-                      {
-                        parseFloat(this.state.trailDetail.current_rating) > 0
-                          ? <Col>
-                            Star Rating: {this.state.trailDetail.current_rating}
-                          </Col>
-                        : null
-                      }
-                      {
-                        this.state.trailDetail.features !== ''
-                          ? <Col>
-                            Features: {this.state.trailDetail.features}
-                          </Col>
-                        : null
-                      }
-                    </div>
-                  </Panel>
+                { this.state.trailDetail.distance || this.state.trailDetail.elevation_gain ||
+                  this.state.trailDetail.highest_point
+                  || this.state.trailDetail.latitude
+                  || this.state.trailDetail.longitude
+                  || parseFloat(this.state.trailDetail.current_rating) > 0
+                  || this.state.trailDetail.features !== ''
+                    ? <Panel header="Trail Stats:">
+                      <div>
+                        {
+                          this.state.trailDetail.distance
+                            ? <Col>
+                              Distance: {this.state.trailDetail.distance}
+                            </Col>
+                          : null
+                        }
+                        {
+                          this.state.trailDetail.elevation_gain
+                            ? <Col>
+                              Elevation Gain: {this.state.trailDetail.elevation_gain}
+                            </Col>
+                          : null
+                        }
+                        {
+                          this.state.trailDetail.highest_point
+                            ? <Col>
+                              Highest Point: {this.state.trailDetail.highest_point}
+                            </Col>
+                          : null
+                        }
+                        {
+                          this.state.trailDetail.latitude
+                            ? <Col>
+                              Latitude: {this.state.trailDetail.latitude}
+                            </Col>
+                          : null
+                        }
+                        {
+                          this.state.trailDetail.longitude
+                            ? <Col>
+                              Longitude: {this.state.trailDetail.longitude}
+                            </Col>
+                          : null
+                        }
+                        {
+                          parseFloat(this.state.trailDetail.current_rating) > 0
+                            ? <Col>
+                              Star Rating: {this.state.trailDetail.current_rating}
+                            </Col>
+                          : null
+                        }
+                        {
+                          this.state.trailDetail.features !== ''
+                            ? <Col>
+                              Features: {this.state.trailDetail.features}
+                            </Col>
+                          : null
+                        }
+                      </div>
+                    </Panel>
                   : null
                 }
                 {
@@ -296,7 +299,11 @@ export default class Search extends Component {
                               </p>
                             </Col>
                             <Col xs={6} md={4}>
-                              <date><Moment tz="America/Los_Angeles">{item.created_at}</Moment></date>
+                              <date>
+                                <Moment tz="America/Los_Angeles">
+                                  {item.created_at}
+                                </Moment>
+                              </date>
                               <p><strong>{item.first_name}</strong></p>
                             </Col>
                           </div>,
@@ -304,6 +311,7 @@ export default class Search extends Component {
                     </Panel>
                     : null
                 }
+                
               </div>
             </Modal.Body>
             <Modal.Footer>
@@ -387,9 +395,15 @@ export default class Search extends Component {
           </Table>
         }
         <style jsx>{`
+          @import url('https://fonts.googleapis.com/css?family=Raleway');
+          body {
+              font-family: 'Raleway', sans-serif;
+            }
+
           .green {
             color: green;
           }
+
 
           .pointer {
             cursor: pointer;
