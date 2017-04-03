@@ -311,7 +311,6 @@ export default class Search extends Component {
                     </Panel>
                     : null
                 }
-                
               </div>
             </Modal.Body>
             <Modal.Footer>

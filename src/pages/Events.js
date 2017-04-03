@@ -87,18 +87,9 @@ class Events extends Component {
                 <div>{item.driving_directions}</div>
               </p>
 
-              <div>
-                <Button
-                  onClick={() => this.setState({
-                    openEventsTrailDescription: !this.state.openEventsTrailDescription,
-                  })}
-                >
-                  Read Trail Description
-                </Button>
-                <Panel collapsible expanded={this.state.openEventsTrailDescription}>
-                  {item.trail_description}
-                </Panel>
-              </div>
+              <p><strong>Trail Description: </strong>
+                <div>{item.trail_description}</div></p>
+
             </Panel>
           </div>,
         )
