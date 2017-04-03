@@ -9,7 +9,6 @@ class Profile extends Component {
     super(props);
 
     this.state = {
-      openEventsTrailDescription: false,
       name: '',
       profileUrl: '',
       joinedOn: '',
@@ -229,18 +228,11 @@ class Profile extends Component {
                   <p><strong>Features:</strong> {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
                   <p><strong>Highest Point:</strong> {item.highest_point}</p>
                   <p><strong>Driving Directions:</strong> <div>{item.driving_directions}</div></p>
-
-                  {/* <p>Trail Description: {item.trail_description}</p> */}
-                  <div>
-                    <Button bsSize="xsmall" onClick={() => this.setState({ openEventsTrailDescription: !this.state.openEventsTrailDescription })}>
-                      Read Trail Description
-                    </Button>
-                    <Panel collapsible expanded={this.state.openEventsTrailDescription}>
-                      {item.trail_description}
-                    </Panel>
-                  </div>
-
-                   </Panel>,
+                  <p>
+                    <strong>Trail Description: </strong>
+                    <div>{item.trail_description}</div>
+                  </p>
+                </Panel>,
               )
               : null
             }
