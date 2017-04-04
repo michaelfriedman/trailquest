@@ -99,7 +99,7 @@ class Profile extends Component {
     return (
 
       <div className="container">
-        <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_293,q_50,w_1140/v1490900758/AdobeStock_116743095_oi24wz.jpg)' }}>
+        <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_291,q_20,w_1140/v1491267783/AdobeStock_93889805_cn6fbz.jpg)' }}>
           <center>
             <Image
               thumbnail

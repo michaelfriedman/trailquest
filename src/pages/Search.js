@@ -3,6 +3,14 @@ import { Button, Form, FormControl, Table, Modal, Collapse, Well, Glyphicon, Ima
 import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
+import GoogleMap from '../features/map/GoogleMap';
+
+const cleanupFeatures = features => features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
+
+const isSearched = (searchTerm) => (item) => (
+  !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
 export default class Search extends Component {
   constructor(props) {
@@ -25,7 +33,6 @@ export default class Search extends Component {
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.isSearched = this.isSearched.bind(this);
   }
 
   componentDidMount() {
@@ -82,14 +89,13 @@ export default class Search extends Component {
   handleOpenModal({ target }) {
     this.setState({ showModal: true });
     // eslint-disable-next-line array-callback-return
-    this.state.data.map(item => {
-      // eslint-disable-next-line no-unused-expressions
-      item.features = item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
-      parseInt(item.id) === parseInt(target.id)
-      ? this.setState({
-        trailDetail: item,
-      })
-      : null;
+    this.state.data.map((item) => {
+      if (parseInt(item.id, 10) === parseInt(target.id, 10)) {
+        // this only happens once, not a bug
+        this.setState({
+          trailDetail: item,
+        });
+      }
     });
 
     axios.get(`/reviews/trail/${target.id}`)
@@ -111,10 +117,6 @@ export default class Search extends Component {
         [target.name]: target.value,
       });
     }
-  }
-
-  isSearched(searchTerm) {
-    return (item) => !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   render() {
@@ -142,7 +144,10 @@ export default class Search extends Component {
                   : null
               }
               <div>
-                {
+                <div responsive style={{ height: '300px' }}>
+                  <GoogleMap lat={parseInt(this.state.trailDetail.latitude, 10)} lng={parseInt(this.state.trailDetail.longitude, 10)} />
+                </div>
+                {/* {
                   this.state.trailDetail.latitude && this.state.trailDetail.longitude
                     ? <Panel
                       header="Map"
@@ -161,7 +166,7 @@ export default class Search extends Component {
                       <br />
                     </Panel>
                     : null
-                }
+                } */}
                 { this.state.trailDetail.distance || this.state.trailDetail.elevation_gain ||
                   this.state.trailDetail.highest_point
                   || this.state.trailDetail.latitude
@@ -213,9 +218,9 @@ export default class Search extends Component {
                           : null
                         }
                         {
-                          this.state.trailDetail.features !== ''
+                          this.state.trailDetail.features !== undefined
                             ? <Col>
-                              Features: {this.state.trailDetail.features}
+                              Features: {cleanupFeatures(this.state.trailDetail.features)}
                             </Col>
                           : null
                         }
@@ -375,7 +380,7 @@ export default class Search extends Component {
             </thead>
             <tbody>
               {
-                this.state.data.filter(this.isSearched(this.state.searchTerm)).map(item =>
+                this.state.data.filter(isSearched(this.state.searchTerm)).map(item =>
                   <tr key={item.id}>
                     <td>{item.name}
                       <span>

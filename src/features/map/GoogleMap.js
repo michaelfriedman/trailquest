@@ -1,39 +1,38 @@
-/* global google */
-import {
-  default as React,
-  Component,
-} from "react";
+import React from 'react';
 
-import {
-  withGoogleMap,
-  GoogleMap,
-} from "react-google-maps";
+import { GoogleMapLoader, GoogleMap, Marker } from 'react-google-maps';
 
-/*
- * Sample From: https://developers.google.com/maps/documentation/javascript/examples/map-simple
- */
-const SimpleMapExampleGoogleMap = withGoogleMap(props => (
-  <GoogleMap
-    defaultZoom={8}
-    defaultCenter={{ lat: -34.397, lng: 150.644 }}
-  />
-));
+const noop = () => {};
 
-/*
- * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
- */
-export default class SimpleMapExample extends Component {
+// Wrap all `react-google-maps` components with `withGoogleMap` HOC
+// and name it GettingStartedGoogleMap
+const Map = ({ lat, lng, onMapLoad, marker, onMapClick = noop, containerElementProps }) => (
+  <div style={{ height: '100%' }}>
+    <GoogleMapLoader
+      containerElement={
+        <div
+          {...containerElementProps}
+          style={{
+            height: '100%',
+          }}
+        />
+      }
+      googleMapElement={
+        <GoogleMap
+          ref={onMapLoad}
+          defaultZoom={9}
+          defaultCenter={{ lat, lng }}
+          onClick={onMapClick}
+        >
+          <Marker
+            position={{ lat, lng }}
+          />
+        </GoogleMap>
+      }
+    />
+  </div>
+);
 
-  render() {
-    return (
-      <SimpleMapExampleGoogleMap
-        containerElement={
-          <div style={{ height: `100%` }} />
-        }
-        mapElement={
-          <div style={{ height: `100%` }} />
-        }
-      />
-    );
-  }
-}
+Map.propTypes = {};
+
+export default Map;
