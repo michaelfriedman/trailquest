@@ -132,7 +132,6 @@ class Registration extends Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state.phone)
     event.preventDefault();
     if (!this.canBeSubmitted()) {
       event.preventDefault();

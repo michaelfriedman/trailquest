@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router'
 import { Button, Form, FormControl, Table, Modal, Collapse, Well, Glyphicon, Image, Panel, FormGroup, ControlLabel, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
 import GoogleMap from '../features/map/GoogleMap';
+import DatePickerComponent from '../features/datepicker/DatePicker';
+import moment from 'moment';
+
+
 
 const cleanupFeatures = features => features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
 
@@ -26,6 +31,9 @@ export default class Search extends Component {
       isLoading: true,
       reviewIsLoading: true,
       showReviewButton: true,
+      showEventButton: true,
+      openEventForm: false,
+      event_date: moment(),
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
@@ -33,6 +41,7 @@ export default class Search extends Component {
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleCreateEventSubmit = this.handleCreateEventSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -77,6 +86,27 @@ export default class Search extends Component {
         // eslint-disable-next-line no-console
         console.error(error);
       });
+  }
+
+  handleCreateEventSubmit(event) {
+    event.preventDefault();
+    const trail_id = this.state.trailDetail.id;
+    const event_date_str = this.state.event_date._d
+    const trail_name = this.state.trailDetail.name;
+    const {
+       userId
+    } = this.state;
+    const organizer_id = userId;
+    const createEvent = {
+      event_date_str, organizer_id, trail_id, trail_name
+    };
+    console.log(createEvent)
+
+    axios.post('events', createEvent)
+      .then(res => {
+        console.log(res)
+      })
+      browserHistory.push('/events')
   }
 
   handleSelectChange({ target }) {
@@ -144,29 +174,19 @@ export default class Search extends Component {
                   : null
               }
               <div>
-                <div responsive style={{ height: '300px' }}>
-                  <GoogleMap lat={parseInt(this.state.trailDetail.latitude, 10)} lng={parseInt(this.state.trailDetail.longitude, 10)} />
-                </div>
-                {/* {
+                {
                   this.state.trailDetail.latitude && this.state.trailDetail.longitude
                     ? <Panel
-                      header="Map"
-                      style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&zoom=9&size=566x300&maptype=roadmap&markers=color:pink%7Clabel:T%7C${this.state.trailDetail.latitude},${this.state.trailDetail.longitude}&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
+                      className="map"
+                      header={this.state.trailDetail.name}
                       >
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      <br />
+                      <div style={{ height: '300px' }}>
+                        <GoogleMap lat={parseFloat(this.state.trailDetail.latitude, 10)} lng={parseFloat(this.state.trailDetail.longitude, 10)} />
+                      </div>
+
                     </Panel>
                     : null
-                } */}
+                }
                 { this.state.trailDetail.distance || this.state.trailDetail.elevation_gain ||
                   this.state.trailDetail.highest_point
                   || this.state.trailDetail.latitude
@@ -178,49 +198,49 @@ export default class Search extends Component {
                         {
                           this.state.trailDetail.distance
                             ? <Col>
-                              Distance: {this.state.trailDetail.distance}
+                              <strong>Distance: </strong> {this.state.trailDetail.distance}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.elevation_gain
                             ? <Col>
-                              Elevation Gain: {this.state.trailDetail.elevation_gain}
+                              <strong>Elevation Gain: </strong> {this.state.trailDetail.elevation_gain}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.highest_point
                             ? <Col>
-                              Highest Point: {this.state.trailDetail.highest_point}
+                              <strong>Highest Point: </strong> {this.state.trailDetail.highest_point}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.latitude
                             ? <Col>
-                              Latitude: {this.state.trailDetail.latitude}
+                              <strong>Latitude: </strong> {this.state.trailDetail.latitude}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.longitude
                             ? <Col>
-                              Longitude: {this.state.trailDetail.longitude}
+                              <strong>Longitude: </strong> {this.state.trailDetail.longitude}
                             </Col>
                           : null
                         }
                         {
                           parseFloat(this.state.trailDetail.current_rating) > 0
                             ? <Col>
-                              Star Rating: {this.state.trailDetail.current_rating}
+                              <strong>Star Rating: </strong> {this.state.trailDetail.current_rating}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.features !== undefined
                             ? <Col>
-                              Features: {cleanupFeatures(this.state.trailDetail.features)}
+                              <strong>Features: </strong> {cleanupFeatures(this.state.trailDetail.features)}
                             </Col>
                           : null
                         }
@@ -291,6 +311,55 @@ export default class Search extends Component {
                       </div>
                         : null
                 }
+
+                {
+                    this.props.isLoggedIn
+                      ? <div style={{ textAlign: 'center' }}>
+                        {
+                          this.state.showEventButton
+                            ? <Button bsStyle="danger" bsSize="small" style={{ margin: '1%', marginBottom: '3%' }} onClick={() => this.setState({ openEventForm: !this.state.openEventForm, showEventButton: !this.state.showEventButton })}>
+                              Create Event
+                            </Button>
+                            : null
+                        }
+                        <Collapse in={this.state.openEventForm}>
+                          <div>
+                            <Well>
+                              <Glyphicon
+                                className="pull-right pointer"
+                                glyph="remove"
+                                onClick={() => this.setState({
+                                  openEventForm: !this.state.openEventForm,
+                                  showEventButton: !this.state.showEventButton,
+                                })}
+                              />
+                              <Row>
+                                <Form onSubmit={this.handleCreateEventSubmit}>
+                                  <Row>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+
+                                      <DatePickerComponent
+                                        selected={this.state.startDate}
+                                        onChange={this.handleChange} />
+                                    </div>
+                                  </Row>
+                                  <Button
+                                    bsSize="small"
+                                    type="submit"
+                                      className="center-block"
+                                      bsStyle="danger"
+                                    >
+                                      Create Event
+                                    </Button>
+                                  </Form>
+                              </Row>
+                            </Well>
+                          </div>
+                        </Collapse>
+                      </div>
+                        : null
+                }
+
                 {
                   this.state.reviewDetail.length
                     ? <Panel header="Reviews">
@@ -411,6 +480,10 @@ export default class Search extends Component {
 
           .pointer {
             cursor: pointer;
+          }
+
+          .map .panel-body {
+            padding: 0px;
           }
         `}</style>
       </div>

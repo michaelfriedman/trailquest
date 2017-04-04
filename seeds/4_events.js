@@ -13,7 +13,7 @@ exports.seed = (knex) => knex('events').del()
         trail_name: 'Silver Lake - Monte Cristo',
         trail_id: 211,
         event_date: new Date('2017-05-03 09:26:16 UTC'),
-        organizer_id: 1,
+        organizer_id: 2,
         max_participants: 4,
       },
       {

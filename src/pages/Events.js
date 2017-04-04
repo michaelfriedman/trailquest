@@ -20,14 +20,14 @@ class Events extends Component {
       .then(res => {
         const userId = res.data.id;
         this.setState({ userId });
-        console.log(this.state.userId);
       });
     axios.get('events')
       .then(res => {
         this.setState({
           data: res.data,
         });
-        console.log(this.state.data);
+        console.log(this.state.data)
+
       });
   }
 
@@ -37,7 +37,6 @@ class Events extends Component {
 
   handleRegistration({ target }) {
     const event_id = target.id;
-    console.log(this.state.userId, target.id);
     const { userId } = this.state;
     const user_id = userId;
     const attendee = { event_id, user_id };
@@ -52,6 +51,7 @@ class Events extends Component {
       <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
+
           <div>
             <Panel
               header={<div>
@@ -62,7 +62,7 @@ class Events extends Component {
               footer={<div style={{ display: 'flex', justifyContent: 'center' }}><Button
                 bsStyle="success"
                 bsSize="small"
-                id={item.id}
+                id={item.trail_id}
                 onClick={this.handleRegistration}>
                 Register
               </Button>
