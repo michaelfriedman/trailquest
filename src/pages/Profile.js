@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { Image, Panel, Col, Well, Modal, Button, Glyphicon } from 'react-bootstrap';
-
+import GoogleMap from '../features/map/GoogleMap';
 
 class Profile extends Component {
   constructor(props) {
@@ -48,7 +48,6 @@ class Profile extends Component {
             this.setState({
               review_body: res.data,
             });
-            console.log(this.state.review_body);
           });
         axios.get(`/users_events/user/${this.state.userId}`)
           .then(res => {
@@ -60,12 +59,13 @@ class Profile extends Component {
             this.setState({ events });
             const promises = this.state.events.map(item =>
               axios.get(`/events/event/${item}`));
+
+
             Promise.all(promises).then(res => {
               const eventObjArr = res.map(item => item.data[0]);
               this.setState({
                 eventObjArr,
               });
-              console.log('eventObjArr', this.state.eventObjArr);
             });
           });
       });
@@ -120,7 +120,7 @@ class Profile extends Component {
               bsStyle="default"
               bsSize="small"
               onClick={this.open}
-              >
+            >
               My Trail Reviews
             </Button>
             : null
@@ -141,7 +141,7 @@ class Profile extends Component {
               bsStyle="default"
               bsSize="small"
               onClick={this.openEvents}
-              >
+            >
               Upcoming Adventures
             </Button>
             : null
@@ -156,14 +156,17 @@ class Profile extends Component {
           <Modal.Body>
             { this.state.review_body
               ? this.state.review_body.map(item =>
-                <div key={item.id}>
-                  <Panel header={<strong>{item.name}</strong>} footer={<date>
-                    <small>
-                      <Moment tz="America/Los_Angeles">
-                        {item.created_at}
-                      </Moment>
-                    </small>
-                  </date>}>
+                <div>
+                  <Panel
+                    header={<strong>{item.name}</strong>}
+                    footer={<date>
+                      <small>
+                        <Moment tz="America/Los_Angeles">
+                          {item.created_at}
+                        </Moment>
+                      </small>
+                    </date>}
+                  >
                     <Col>
                       <p>
                         <em>{item.review_body}</em>
@@ -186,11 +189,15 @@ class Profile extends Component {
           </Modal.Header>
           <Modal.Body>
             <p><a href={'mailto:' + this.state.email}><Glyphicon glyph="envelope" />  {this.state.email}</a></p>
-            <p><Glyphicon glyph="phone" />  ({this.state.phone.slice(0, 3)}) {this.state.phone.slice(3, 6)} - {this.state.phone.slice(6, 10)}</p>
+            <p>
+              <Glyphicon glyph="phone" />  ({this.state.phone.slice(0, 3)}) {this.state.phone.slice(3, 6)} - {this.state.phone.slice(6, 10)}
+            </p>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
               <a href="http://facebook.com" className="btn btn-social-icon btn-facebook"><i className="fa fa-facebook" /></a>
               <a className="btn btn-social-icon btn-github"><i className="fa fa-github" /></a>
-              <a className="btn btn-social-icon btn-google-plus"><i className="fa fa-google-plus" /></a>
+              <a className="btn btn-social-icon btn-google-plus">
+                <i className="fa fa-google-plus" />
+              </a>
               <a className="btn btn-social-icon btn-instagram"><i className="fa fa-instagram" /></a>
               <a className="btn btn-social-icon btn-linkedin"><i className="fa fa-linkedin" /></a>
               <a className="btn btn-social-icon btn-twitter"><i className="fa fa-twitter" /></a>
@@ -207,20 +214,36 @@ class Profile extends Component {
           </Modal.Header>
           <Modal.Body>
             {
-              this.state.eventObjArr.length
+              this.state.eventObjArr.length > 0
               ? this.state.eventObjArr.map(item =>
                 <Panel
                   header={<div>
                     <strong>{item.trail_name} </strong>
-                    <div><small><Moment tz="America/Los_Angeles">{item.event_date}</Moment></small></div>
+                    <div>
+                      <small>
+                        <Moment
+                          format="MM/DD/YYYY"
+                          tz="America/Los_Angeles"
+                        >
+                          {item.event_date}
+                        </Moment> {item.event_time}
+                      </small>
+                    </div>
                   </div>}
                 >
+                  <div style={{ height: '300px', border: '1px solid grey' }}>
+                    <GoogleMap
+                      lat={parseFloat(item.latitude, 10)} lng={parseFloat(item.longitude, 10)}
+                    />
+                  </div>
                   <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} className="pull-right" />
                   <p><strong>Max Participants:</strong> {item.max_participants}</p>
                   <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
                   <p><strong>Organizer Email:</strong> {item.email}</p>
                   <p>
-                    <strong>Organizer Phone:</strong> ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}</p>
+                    <strong>Organizer Phone: </strong>
+                    ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}
+                  </p>
                   <p><strong>Region:</strong> {item.region}</p>
                   <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
 

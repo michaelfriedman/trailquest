@@ -21,6 +21,8 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      event_date: '',
+      event_time: '',
       searchTerm: '',
       data: [],
       showModal: false,
@@ -33,7 +35,6 @@ export default class Search extends Component {
       showReviewButton: true,
       showEventButton: true,
       openEventForm: false,
-      event_date: moment(),
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
@@ -79,7 +80,7 @@ export default class Search extends Component {
                 reviewDetail: res.data,
               });
             });
-          this.setState({ open: !this.state.open, review_body: '' });
+          this.setState({ open: !this.state.open, review_body: '', showReviewButton: !this.state.showReviewButton });
         }
       })
       .catch((error) => {
@@ -91,17 +92,15 @@ export default class Search extends Component {
   handleCreateEventSubmit(event) {
     event.preventDefault();
     const trail_id = this.state.trailDetail.id;
-    const event_date_str = this.state.event_date._d
     const trail_name = this.state.trailDetail.name;
     const {
-       userId
+       userId, event_date, event_time
     } = this.state;
     const organizer_id = userId;
     const createEvent = {
-      event_date_str, organizer_id, trail_id, trail_name
+      event_date, event_time, organizer_id, trail_id, trail_name
     };
     console.log(createEvent)
-
     axios.post('events', createEvent)
       .then(res => {
         console.log(res)
@@ -192,7 +191,7 @@ export default class Search extends Component {
                   || this.state.trailDetail.latitude
                   || this.state.trailDetail.longitude
                   || parseFloat(this.state.trailDetail.current_rating) > 0
-                  || this.state.trailDetail.features !== ''
+                  || this.state.trailDetail.features !== '{}'
                     ? <Panel header="Trail Stats:">
                       <div>
                         {
@@ -238,7 +237,7 @@ export default class Search extends Component {
                           : null
                         }
                         {
-                          this.state.trailDetail.features !== undefined
+                          this.state.trailDetail.features !== undefined && this.state.trailDetail.features !== '{}'
                             ? <Col>
                               <strong>Features: </strong> {cleanupFeatures(this.state.trailDetail.features)}
                             </Col>
@@ -335,23 +334,34 @@ export default class Search extends Component {
                               />
                               <Row>
                                 <Form onSubmit={this.handleCreateEventSubmit}>
-                                  <Row>
+                                  <FormControl
+                                    type="date"
+                                    value={this.state.event_date} name="event_date"
+                                    onChange={this.handleChange}
+                                  />
+                                  <FormControl
+                                    type="time"
+                                    value={this.state.event_time} name="event_time"
+                                    onChange={this.handleChange}
+                                  />
+                                  <Button type="submit">Submit</Button>
+                                  {/* <Row>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
 
                                       <DatePickerComponent
                                         selected={this.state.startDate}
                                         onChange={this.handleChange} />
                                     </div>
-                                  </Row>
-                                  <Button
+                                    </Row>
+                                    <Button
                                     bsSize="small"
                                     type="submit"
-                                      className="center-block"
-                                      bsStyle="danger"
+                                    className="center-block"
+                                    bsStyle="danger"
                                     >
-                                      Create Event
-                                    </Button>
-                                  </Form>
+                                    Create Event
+                                  </Button> */}
+                                </Form>
                               </Row>
                             </Well>
                           </div>

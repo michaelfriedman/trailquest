@@ -4,7 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
-import GoogleMap from '../features/map/GoogleMap'
+import GoogleMap from '../features/map/GoogleMap';
 
 class Home extends Component {
   constructor(props) {
@@ -43,7 +43,6 @@ class Home extends Component {
       })
       : null;
     });
-    console.log(target.id);
     axios.get(`/reviews/trail/${target.id}`)
       .then(res => {
         this.setState({
@@ -114,9 +113,12 @@ class Home extends Component {
                       ? <Panel
                         className="map"
                         header="Map"
-                        >
+                      >
                         <div style={{ height: '300px' }}>
-                          <GoogleMap lat={parseFloat(this.state.data.latitude, 10)} lng={parseFloat(this.state.data.longitude, 10)} />
+                          <GoogleMap
+                            lat={parseFloat(this.state.data.latitude, 10)}
+                            lng={parseFloat(this.state.data.longitude, 10)}
+                          />
                         </div>
 
                       </Panel>
@@ -333,7 +335,13 @@ class Home extends Component {
                   <h3>Umtanum Creek</h3>
                   <p>Central Washington</p>
                   <p>
-                    <Button id="814" onClick={this.handleOpenModal} href="#" bsStyle="default">More Info</Button>
+                    <Button
+                      id="814"
+                      onClick={this.handleOpenModal}
+                      bsStyle="default"
+                    >
+                      More Info
+                    </Button>
                   </p>
                 </div>
               </div>
@@ -345,7 +353,13 @@ class Home extends Component {
                   <h3>Mount Muller</h3>
                   <p>Olympic Peninsula</p>
                   <p>
-                    <Button id="514" onClick={this.handleOpenModal} href="#" bsStyle="default">More Info</Button>
+                    <Button
+                      id="514"
+                      onClick={this.handleOpenModal}
+                      bsStyle="default"
+                    >
+                      More Info
+                    </Button>
                   </p>
                 </div>
               </div>
@@ -357,7 +371,13 @@ class Home extends Component {
                   <h3>Lily Point Park</h3>
                   <p>Puget Sound and Islands</p>
                   <p>
-                    <Button id="98" onClick={this.handleOpenModal} href="#" bsStyle="default">More Info</Button>
+                    <Button
+                      id="98"
+                      onClick={this.handleOpenModal}
+                      bsStyle="default"
+                    >
+                      More Info
+                    </Button>
                   </p>
                 </div>
               </div>
@@ -369,7 +389,13 @@ class Home extends Component {
                   <h3>Heather Lake</h3>
                   <p>North Cascades</p>
                   <p>
-                    <Button id="627" onClick={this.handleOpenModal} href="#" bsStyle="default">More Info</Button>
+                    <Button
+                      id="627"
+                      onClick={this.handleOpenModal}
+                      bsStyle="default"
+                    >
+                      More Info
+                    </Button>
                   </p>
                 </div>
               </div>
