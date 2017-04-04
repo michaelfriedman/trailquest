@@ -20,7 +20,7 @@ const Map = ({ lat, lng, onMapLoad, marker, onMapClick = noop, containerElementP
       googleMapElement={
         <GoogleMap
           ref={onMapLoad}
-          defaultZoom={9}
+          defaultZoom={12}
           defaultCenter={{ lat, lng }}
           onClick={onMapClick}
         >

@@ -30,6 +30,8 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 * Google Maps API
 * Cloudinary API
 * Axios
+* react-google-maps
+* react-datepicker
 ________
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

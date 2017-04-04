@@ -75,8 +75,8 @@ router.get('/events/user/:userId', (req, res, next) => {
 });
 
 router.post('/events', (req, res, next) => {
-  const { trail_id, max_participants, organizer_id, event_date, trail_name } = req.body;
-
+  const { event_date_str, organizer_id, trail_id, trail_name, max_participants } = req.body;
+  const event_date = event_date_str;
   knex('events')
     .insert({ trail_id, max_participants, organizer_id, event_date, trail_name }, '*')
     .then(event => {

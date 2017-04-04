@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
+import GoogleMap from '../features/map/GoogleMap'
 
 class Home extends Component {
   constructor(props) {
@@ -36,7 +37,6 @@ class Home extends Component {
     // eslint-disable-next-line array-callback-return
     this.state.data.map(item => {
       // eslint-disable-next-line no-unused-expressions
-      // item.features = item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
       parseInt(item.id) === parseInt(target.id)
       ? this.setState({
         data: item,
@@ -112,20 +112,13 @@ class Home extends Component {
                   {
                     this.state.data.latitude && this.state.data.longitude
                       ? <Panel
+                        className="map"
                         header="Map"
-                        style={{ backgroundImage: `url(https://maps.googleapis.com/maps/api/staticmap?center=${this.state.data.latitude},${this.state.data.longitude}&zoom=9&size=566x300&maptype=roadmap&markers=color:pink%7Clabel:T%7C${this.state.data.latitude},${this.state.data.longitude}&key=AIzaSyBE6RAZ1admSVqYY1ucInqavsapb4LbrQg)` }}
                         >
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
+                        <div style={{ height: '300px' }}>
+                          <GoogleMap lat={parseFloat(this.state.data.latitude, 10)} lng={parseFloat(this.state.data.longitude, 10)} />
+                        </div>
+
                       </Panel>
                       : null
                   }
@@ -402,6 +395,10 @@ class Home extends Component {
           }
            .larger {
             font-size: 5em;
+          }
+
+          .map .panel-body {
+            padding: 0px;
           }
         `}</style>
       </div>
