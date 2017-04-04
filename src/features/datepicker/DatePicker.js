@@ -14,7 +14,6 @@ class DatePickerComponent extends Component {
     this.state = {
       startDate: moment(),
     };
-    this.handleChange = this.handleChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
 
@@ -22,26 +21,25 @@ class DatePickerComponent extends Component {
     this.setState({
       startDate: date,
     });
-    console.log(this.state.startDate)
   }
 
   handleSelect(date) {
-    
+    this.setState({
+      startDate: date,
+    });
   }
 
   render() {
     return (
       <div>
         <DatePicker
-          className="center"
           selected={this.state.startDate}
-          onChange={this.handleChange}
-          onSelect={this.handleSelect}
-        />
+          onChange={this.handleChange.bind(this)} />
         <style jsx>{`
           .center {
             text-align: center;
           }
+
         `}</style>
       </div>
       )

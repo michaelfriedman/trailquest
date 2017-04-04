@@ -42,6 +42,7 @@ class Login extends Component {
     }
     if (this.state.password.length < 8) return 'error';
     if (this.state.password.length > 64) return 'error';
+    return () => {};
   }
 
   canBeSubmitted() {
@@ -88,8 +89,8 @@ class Login extends Component {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
-        // alert('Unknown Email Or Password')
       });
   }
 
@@ -142,8 +143,8 @@ class Login extends Component {
                   <FormGroup>
                     <div className="col-sm-offset-3 col-sm-9">
                       <div className="checkbox">
-                        <label>
-                          <input type="checkbox" />
+                        <label htmlFor="remember">
+                          <input name="remember" type="checkbox" />
                           Remember me
                         </label>
                       </div>
