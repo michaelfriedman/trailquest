@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
-import { Button, Image, Panel } from 'react-bootstrap';
+import { Button, Image, Panel, Collapse, Well, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import Moment from 'react-moment';
 import GoogleMap from '../features/map/GoogleMap';
@@ -12,9 +12,15 @@ class Events extends Component {
     super(props);
     this.state = {
       data: [],
+      openDirections: false,
       openEventsTrailDescription: false,
+      open: false,
+      showModal: false,
+      trailDetails: '',
     };
     this.handleRegistration = this.handleRegistration.bind(this);
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
   }
 
   componentWillMount() {
@@ -31,6 +37,18 @@ class Events extends Component {
       });
   }
 
+  close() {
+    this.setState({ showModal: false, trailDetails: '' });
+  }
+
+  open({ target }) {
+    this.state.data.map(item => {
+      if (Number.parseInt(item.id, 10) === Number.parseInt(target.id, 10)) {
+        this.setState({ showModal: true, trailDetails: item });
+      }
+    });
+  }
+
   handleRegistration({ target }) {
     const event_id = target.id;
     const { userId } = this.state;
@@ -44,7 +62,165 @@ class Events extends Component {
   }
 
   render() {
+    { console.log(this.state.data); }
     return (
+      <div>
+        <div>
+          <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal.Header closeButton>
+              <Modal.Title>{this.state.trailDetails.trail_name} </Modal.Title>
+              <div>
+                <strong></strong>
+                <div><small><Moment
+                  format="MM/DD/YYYY"
+                  tz="America/Los_Angeles"
+                >
+                  {this.state.trailDetails.event_date}
+                </Moment> <time>{this.state.trailDetails.event_time}</time></small>
+                </div>
+              </div>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="container">
+                <div>
+                  { !this.state.showModal
+                    ? <Button
+                      id={this.state.trailDetails.event_id} onClick={this.open}>Event Details</Button>
+                    : null
+                  }
+                  {
+                      this.state.trailDetails.latitude && this.state.trailDetails.longitude
+                        ? <div style={{ height: '300px', border: '1px solid grey' }}>
+                          <GoogleMap
+                            lat={parseFloat(this.state.trailDetails.latitude, 10)}
+                            lng={parseFloat(this.state.trailDetails.longitude, 10)}
+                          />
+                        </div>
+                        : null
+                    }
+                    { this.state.trailDetails.first_name || this.state.trailDetails.last_name
+                      ? <p>
+                        <strong>Event Organizer: </strong>
+                        {this.state.trailDetails.first_name} {this.state.trailDetails.last_name}
+                      </p>
+                    : null
+                    }
+                    { this.state.trailDetails.profile_photo_url
+                      ? <div className="pull-right">
+                        <Image circle src={this.state.trailDetails.profile_photo_url} style={{ height: '100px', width: '100px', border: '1px solid black' }} />
+                        { this.state.trailDetails.first_name || this.state.trailDetails.last_name
+                        ? <p>{this.state.trailDetails.first_name} {this.state.trailDetails.last_name}</p>
+                        : null
+                      }
+                      </div>
+                    : null
+                  }
+
+                    { this.state.trailDetails.max_participants
+                      ? <p>
+                        <strong>Max Participants: </strong>
+                        {this.state.trailDetails.max_participants}
+                      </p>
+                        : null
+                    }
+                    { this.state.trailDetails.phone
+                      ? <p>
+                        <strong>Organizer Phone: </strong>
+                        ({this.state.trailDetails.phone.slice(0, 3)}) {this.state.trailDetails.phone.slice(3, 6)} - {this.state.trailDetails.phone.slice(6, 10)}
+                      </p>
+                    : null
+                  }
+                    { this.state.trailDetails.email
+                      ? <p><strong>Organizer Email:</strong> {this.state.trailDetails.email}</p>
+                      : null
+                    }
+                    {
+                      this.state.trailDetails.current_rating
+                      ? <p>
+                        <strong>Current Rating: </strong> {this.state.trailDetails.current_rating}
+                      </p>
+                      : null
+                    }
+                    {
+                      this.state.trailDetails.features
+                      ? cleanupFeatures(this.state.trailDetails.features)
+                      : null
+                    }
+
+                    { this.state.trailDetails.distance
+                      ? <p><strong>Distance:</strong> {this.state.trailDetails.distance}</p>
+                      : null
+                    }
+                    { this.state.trailDetails.highest_point
+                      ? <p><strong>Highest Point:</strong> {this.state.trailDetails.highest_point}</p>
+                      : null
+                    }
+
+                    { this.state.trailDetails.elevation_gain
+                      ? <p><strong>Elevation Gain:</strong> {this.state.trailDetails.elevation_gain}</p>
+                      : null
+                    }
+                    { this.state.trailDetails.region
+                      ? <p><strong>Region:</strong> {this.state.trailDetails.region}</p>
+                      : null
+                    }
+                    { this.state.trailDetails.trail_rating
+                      ? <p><strong>Trail Rating:</strong> {this.state.trailDetails.current_rating}</p>
+                      : null
+                    }
+                    { this.state.trailDetails.driving_directions
+                      ? <p>
+                        <strong>Driving Directions:</strong>
+                        <div style={{ display: 'inline '}}>
+              <Button bsSize="xsmall" onClick={ ()=> this.setState({ openDirections: !this.state.openDirections })}>
+                Directions
+              </Button>
+              <Collapse in={this.state.openDirections}>
+                <div>
+                  <Well>
+                    {this.state.trailDetails.driving_directions}
+                  </Well>
+                </div>
+              </Collapse>
+            </div>
+                      </p>
+                    : null
+                  }
+                    { this.state.trailDetails.trail_description
+                      ? <p>
+                        <strong>Trail Description: </strong>
+                        <div style={{display: 'inline'}}>
+              <Button bsSize="xsmall" onClick={ ()=> this.setState({ open: !this.state.open })}>
+                Details
+              </Button>
+              <Collapse in={this.state.open}>
+                <div>
+                  <Well>
+                    {this.state.trailDetails.trail_description}
+                  </Well>
+                </div>
+              </Collapse>
+            </div>
+                      </p>
+                    : null
+                  }
+                </div>
+          </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div style={{ display: 'flex', justifyContent: 'center' }}><Button
+                      bsStyle="success"
+                      bsSize="small"
+                      id={this.state.trailDetails.event_id}
+                      onClick={this.handleRegistration}
+                    >
+                      Register
+                    </Button>
+                    <Button bsStyle="danger" onClick={this.close}>Close</Button>
+                    </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
       <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
@@ -72,6 +248,7 @@ class Events extends Component {
               </Button>
               </div>}
             >
+              <Button id={item.id} onClick={this.open}>Event Details</Button>
               {
                 item.latitude && item.longitude
                   ? <div style={{ height: '300px', border: '1px solid grey' }}>
@@ -81,83 +258,6 @@ class Events extends Component {
                   </div>
                   : null
               }
-              { item.first_name || item.last_name
-                ? <p>
-                  <strong>Event Organizer: </strong>
-                  {item.first_name} {item.last_name}
-                </p>
-              : null
-              }
-              { item.profile_photo_url
-                ? <div className="pull-right">
-                  <Image circle src={item.profile_photo_url} style={{ height: '100px', width: '100px', border: '1px solid black' }} />
-                  { item.first_name || item.last_name
-                  ? <p>{item.first_name} {item.last_name}</p>
-                  : null
-                }
-                </div>
-              : null
-            }
-              { item.max_participants
-                ? <p>
-                  <strong>Max Participants: </strong>
-                  {item.max_participants}
-                </p>
-                  : null
-              }
-              { item.phone
-                ? <p>
-                  <strong>Organizer Phone: </strong>
-                  ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}
-                </p>
-              : null
-            }
-              { item.email
-                ? <p><strong>Organizer Email:</strong> {item.email}</p>
-                : null
-              }
-              { item.distance
-                ? <p><strong>Distance:</strong> {item.distance}</p>
-                : null
-              }
-              { item.highest_point
-                ? <p><strong>Highest Point:</strong> {item.highest_point}</p>
-                : null
-              }
-              { item.features !== '{}'
-                ? <p>Features: {cleanupFeatures(item.features)}</p>
-                : null
-              }
-              { item.latitude && item.longitude
-                ? <p><strong>Coordinates:</strong> {item.latitude}, {item.longitude}</p>
-                : null
-              }
-              { item.elevation_gain
-                ? <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
-                : null
-              }
-              { item.region
-                ? <p><strong>Region:</strong> {item.region}</p>
-                : null
-              }
-              { item.trail_rating
-                ? <p><strong>Trail Rating:</strong> {item.current_rating}</p>
-                : null
-              }
-              { item.driving_directions
-                ? <p>
-                  <strong>Driving Directions:</strong>
-                  <div>{item.driving_directions}</div>
-                </p>
-              : null
-            }
-              { item.trail_description
-                ? <p>
-                  <strong>Trail Description: </strong>
-                  <div>{item.trail_description}</div>
-                </p>
-              : null
-            }
             </Panel>
           </div>,
         )
@@ -171,6 +271,7 @@ class Events extends Component {
 
         `}</style>
       </div>
+    </div>
     );
   }
 }

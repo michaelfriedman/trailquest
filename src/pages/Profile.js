@@ -237,6 +237,7 @@ class Profile extends Component {
                     />
                   </div>
                   <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} className="pull-right" />
+                  <div style={{ clear: 'both'}}><p className="pull-right">{item.first_name} {item.last_name}</p></div>
                   <p><strong>Max Participants:</strong> {item.max_participants}</p>
                   <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
                   <p><strong>Organizer Email:</strong> {item.email}</p>
