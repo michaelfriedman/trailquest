@@ -62,7 +62,6 @@ class Events extends Component {
   }
 
   render() {
-    { console.log(this.state.data); }
     return (
       <div>
         <div>
@@ -70,7 +69,6 @@ class Events extends Component {
             <Modal.Header closeButton>
               <Modal.Title>{this.state.trailDetails.trail_name} </Modal.Title>
               <div>
-                <strong></strong>
                 <div><small><Moment
                   format="MM/DD/YYYY"
                   tz="America/Los_Angeles"
@@ -83,14 +81,10 @@ class Events extends Component {
             <Modal.Body>
               <div className="container">
                 <div>
-                  { !this.state.showModal
-                    ? <Button
-                      id={this.state.trailDetails.event_id} onClick={this.open}>Event Details</Button>
-                    : null
-                  }
+
                   {
                       this.state.trailDetails.latitude && this.state.trailDetails.longitude
-                        ? <div style={{ height: '300px', border: '1px solid grey' }}>
+                        ? <div className="img-responsive" style={{ height: '300px', border: '1px solid grey' }}>
                           <GoogleMap
                             lat={parseFloat(this.state.trailDetails.latitude, 10)}
                             lng={parseFloat(this.state.trailDetails.longitude, 10)}
@@ -98,130 +92,145 @@ class Events extends Component {
                         </div>
                         : null
                     }
-                    { this.state.trailDetails.first_name || this.state.trailDetails.last_name
+                  { this.state.trailDetails.first_name || this.state.trailDetails.last_name
                       ? <p>
                         <strong>Event Organizer: </strong>
                         {this.state.trailDetails.first_name} {this.state.trailDetails.last_name}
                       </p>
                     : null
                     }
-                    { this.state.trailDetails.profile_photo_url
+                  { this.state.trailDetails.profile_photo_url
                       ? <div className="pull-right">
                         <Image circle src={this.state.trailDetails.profile_photo_url} style={{ height: '100px', width: '100px', border: '1px solid black' }} />
                         { this.state.trailDetails.first_name || this.state.trailDetails.last_name
-                        ? <p>{this.state.trailDetails.first_name} {this.state.trailDetails.last_name}</p>
+                        ? <p>
+                          {this.state.trailDetails.first_name} {this.state.trailDetails.last_name}
+                        </p>
                         : null
                       }
                       </div>
                     : null
                   }
 
-                    { this.state.trailDetails.max_participants
+                  { this.state.trailDetails.max_participants
                       ? <p>
                         <strong>Max Participants: </strong>
                         {this.state.trailDetails.max_participants}
                       </p>
                         : null
                     }
-                    { this.state.trailDetails.phone
+                  { this.state.trailDetails.phone
                       ? <p>
                         <strong>Organizer Phone: </strong>
                         ({this.state.trailDetails.phone.slice(0, 3)}) {this.state.trailDetails.phone.slice(3, 6)} - {this.state.trailDetails.phone.slice(6, 10)}
                       </p>
                     : null
                   }
-                    { this.state.trailDetails.email
+                  { this.state.trailDetails.email
                       ? <p><strong>Organizer Email:</strong> {this.state.trailDetails.email}</p>
                       : null
                     }
-                    {
+                  {
                       this.state.trailDetails.current_rating
                       ? <p>
                         <strong>Current Rating: </strong> {this.state.trailDetails.current_rating}
                       </p>
                       : null
                     }
-                    {
+                  {
                       this.state.trailDetails.features
-                      ? cleanupFeatures(this.state.trailDetails.features)
+                      ? 'Features: ' + cleanupFeatures(this.state.trailDetails.features)
                       : null
                     }
 
-                    { this.state.trailDetails.distance
+                  { this.state.trailDetails.distance
                       ? <p><strong>Distance:</strong> {this.state.trailDetails.distance}</p>
                       : null
                     }
-                    { this.state.trailDetails.highest_point
-                      ? <p><strong>Highest Point:</strong> {this.state.trailDetails.highest_point}</p>
+                  { this.state.trailDetails.highest_point
+                      ? <p><strong>Highest Point: </strong>
+                        {this.state.trailDetails.highest_point}</p>
                       : null
                     }
 
-                    { this.state.trailDetails.elevation_gain
-                      ? <p><strong>Elevation Gain:</strong> {this.state.trailDetails.elevation_gain}</p>
+                  { this.state.trailDetails.elevation_gain
+                      ? <p><strong>Elevation Gain: </strong>
+                        {this.state.trailDetails.elevation_gain}</p>
                       : null
                     }
-                    { this.state.trailDetails.region
+                  { this.state.trailDetails.region
                       ? <p><strong>Region:</strong> {this.state.trailDetails.region}</p>
                       : null
                     }
-                    { this.state.trailDetails.trail_rating
-                      ? <p><strong>Trail Rating:</strong> {this.state.trailDetails.current_rating}</p>
+                  { this.state.trailDetails.trail_rating
+                      ? <p><strong>Trail Rating: </strong>
+                        {this.state.trailDetails.current_rating}</p>
                       : null
                     }
-                    { this.state.trailDetails.driving_directions
+                  { this.state.trailDetails.driving_directions
                       ? <p>
                         <strong>Driving Directions:</strong>
-                        <div style={{ display: 'inline '}}>
-              <Button bsSize="xsmall" onClick={ ()=> this.setState({ openDirections: !this.state.openDirections })}>
-                Directions
-              </Button>
-              <Collapse in={this.state.openDirections}>
-                <div>
-                  <Well>
-                    {this.state.trailDetails.driving_directions}
-                  </Well>
-                </div>
-              </Collapse>
-            </div>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              openDirections: !this.state.openDirections,
+                            })}
+                          >
+                            Directions
+                          </Button>
+                          <Collapse in={this.state.openDirections}>
+                            <div>
+                              <Well>
+                                {this.state.trailDetails.driving_directions}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
                       </p>
                     : null
                   }
-                    { this.state.trailDetails.trail_description
+                  { this.state.trailDetails.trail_description
                       ? <p>
                         <strong>Trail Description: </strong>
-                        <div style={{display: 'inline'}}>
-              <Button bsSize="xsmall" onClick={ ()=> this.setState({ open: !this.state.open })}>
-                Details
-              </Button>
-              <Collapse in={this.state.open}>
-                <div>
-                  <Well>
-                    {this.state.trailDetails.trail_description}
-                  </Well>
-                </div>
-              </Collapse>
-            </div>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              open: !this.state.open,
+                            })}
+                          >
+                            Details
+                          </Button>
+                          <Collapse in={this.state.open}>
+                            <div>
+                              <Well>
+                                {this.state.trailDetails.trail_description}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
                       </p>
                     : null
                   }
                 </div>
-          </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <div style={{ display: 'flex', justifyContent: 'center' }}><Button
-                      bsStyle="success"
-                      bsSize="small"
-                      id={this.state.trailDetails.event_id}
-                      onClick={this.handleRegistration}
-                    >
-                      Register
-                    </Button>
-                    <Button bsStyle="danger" onClick={this.close}>Close</Button>
-                    </div>
-          </Modal.Footer>
-        </Modal>
-      </div>
-      <div className="container">{
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <div style={{ display: 'flex', justifyContent: 'center' }}><Button
+                bsStyle="success"
+                bsSize="small"
+                id={this.state.trailDetails.id}
+                onClick={this.handleRegistration}
+              >
+               Register
+              </Button>
+                <Button bsStyle="danger" onClick={this.close}>Close</Button>
+              </div>
+            </Modal.Footer>
+          </Modal>
+        </div>
+        <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
           <div>
@@ -238,17 +247,12 @@ class Events extends Component {
                   </div>
                 </div>
               }
-              footer={<div style={{ display: 'flex', justifyContent: 'center' }}><Button
-                bsStyle="success"
-                bsSize="small"
-                id={item.id}
-                onClick={this.handleRegistration}
-              >
-                Register
-              </Button>
+              footer={<div style={{ display: 'flex', justifyContent: 'center' }}>{ !this.state.showModal
+                    ? <Button id={item.id} onClick={this.open}>Event Details</Button>
+                    : null
+                  }
               </div>}
             >
-              <Button id={item.id} onClick={this.open}>Event Details</Button>
               {
                 item.latitude && item.longitude
                   ? <div style={{ height: '300px', border: '1px solid grey' }}>
@@ -263,15 +267,14 @@ class Events extends Component {
         )
         : null
       }
-        <style jsx>{`
-        @import url('https://fonts.googleapis.com/css?family=Raleway');
-          body {
-              font-family: 'Raleway', sans-serif;
-            }
-
+          <style jsx>{`
+            @import url('https://fonts.googleapis.com/css?family=Raleway');
+              body {
+                  font-family: 'Raleway', sans-serif;
+                }
         `}</style>
+        </div>
       </div>
-    </div>
     );
   }
 }

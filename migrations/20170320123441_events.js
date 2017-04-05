@@ -5,7 +5,7 @@ exports.up = knex => knex.schema.createTable('events', (table) => {
   table.integer('organizer_id').notNullable().defaultTo(0);
   table.string('event_date');
   table.string('event_time');
-  table.integer('max_participants');
+  table.integer('max_participants').defaultTo(4);
   table.timestamps(true, true);
 });
 

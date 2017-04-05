@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
 import { Button, Form, FormControl, Table, Modal, Collapse, Well, Glyphicon, Image, Panel, FormGroup, ControlLabel, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
 import GoogleMap from '../features/map/GoogleMap';
-import moment from 'moment';
-
 
 
 const cleanupFeatures = features => features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
@@ -93,18 +91,18 @@ export default class Search extends Component {
     const trail_id = this.state.trailDetail.id;
     const trail_name = this.state.trailDetail.name;
     const {
-       userId, event_date, event_time
+       userId, event_date, event_time,
     } = this.state;
     const organizer_id = userId;
     const createEvent = {
-      event_date, event_time, organizer_id, trail_id, trail_name
+      event_date, event_time, organizer_id, trail_id, trail_name,
     };
-    console.log(createEvent)
+    console.log(createEvent);
     axios.post('events', createEvent)
       .then(res => {
-        console.log(res)
-      })
-      browserHistory.push('/events')
+        console.log(res);
+      });
+    browserHistory.push('/events');
   }
 
   handleSelectChange({ target }) {
@@ -167,7 +165,7 @@ export default class Search extends Component {
               {
                 this.state.trailDetail.thumbnail !== ''
                   ? <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '550px', maxHeight: '300px' }}>
-                    <Image rounded responsive src={this.state.trailDetail.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%' }} />
+                    <Image rounded src={this.state.trailDetail.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%', minHeight: '200px', width: '100%' }} />
                   </div>
                   : null
               }
@@ -177,7 +175,7 @@ export default class Search extends Component {
                     ? <Panel
                       className="map"
                       header={this.state.trailDetail.name}
-                      >
+                    >
                       <div style={{ height: '300px' }}>
                         <GoogleMap lat={parseFloat(this.state.trailDetail.latitude, 10)} lng={parseFloat(this.state.trailDetail.longitude, 10)} />
                       </div>
@@ -324,6 +322,7 @@ export default class Search extends Component {
                           <div>
                             <Well>
                               <Glyphicon
+                                style={{ marginBottom: '1%' }}
                                 className="pull-right pointer"
                                 glyph="remove"
                                 onClick={() => this.setState({
@@ -332,19 +331,23 @@ export default class Search extends Component {
                                 })}
                               />
                               <Row>
-                                <Form onSubmit={this.handleCreateEventSubmit}>
+                                <Col>
+                                  <Form onSubmit={this.handleCreateEventSubmit}>
                                   <FormControl
+                                    style={{ marginBottom: '1%' }}
                                     type="date"
                                     value={this.state.event_date} name="event_date"
                                     onChange={this.handleChange}
                                   />
                                   <FormControl
+                                    style={{ marginTop: '1%' }}
                                     type="time"
                                     value={this.state.event_time} name="event_time"
                                     onChange={this.handleChange}
                                   />
-                                  <Button type="submit">Submit</Button>
+                                  <Button bsSize="small" bsStyle="danger" style={{ marginTop: '1%' }} type="submit">Submit</Button>
                                 </Form>
+                                </Col>
                               </Row>
                             </Well>
                           </div>

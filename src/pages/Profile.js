@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Moment from 'react-moment';
-import { Image, Panel, Col, Well, Modal, Button, Glyphicon } from 'react-bootstrap';
+import { Image, Panel, Col, Well, Modal, Button, Glyphicon, Collapse } from 'react-bootstrap';
 import GoogleMap from '../features/map/GoogleMap';
 
 class Profile extends Component {
@@ -97,7 +97,6 @@ class Profile extends Component {
 
   render() {
     return (
-
       <div className="container">
         <Well style={{ backgroundImage: 'url(http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,h_291,q_20,w_1140/v1491267783/AdobeStock_93889805_cn6fbz.jpg)' }}>
           <center>
@@ -214,53 +213,96 @@ class Profile extends Component {
           </Modal.Header>
           <Modal.Body>
             {
-              this.state.eventObjArr.length > 0
-              ? this.state.eventObjArr.map(item =>
-                <Panel
-                  header={<div>
-                    <strong>{item.trail_name} </strong>
-                    <div>
-                      <small>
-                        <Moment
-                          format="MM/DD/YYYY"
-                          tz="America/Los_Angeles"
-                        >
-                          {item.event_date}
-                        </Moment> {item.event_time}
-                      </small>
-                    </div>
-                  </div>}
-                >
-                  <div style={{ height: '300px', border: '1px solid grey' }}>
-                    <GoogleMap
-                      lat={parseFloat(item.latitude, 10)} lng={parseFloat(item.longitude, 10)}
-                    />
-                  </div>
-                  <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px' }} className="pull-right" />
-                  <div style={{ clear: 'both'}}><p className="pull-right">{item.first_name} {item.last_name}</p></div>
-                  <p><strong>Max Participants:</strong> {item.max_participants}</p>
-                  <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
-                  <p><strong>Organizer Email:</strong> {item.email}</p>
-                  <p>
-                    <strong>Organizer Phone: </strong>
-                    ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}
-                  </p>
-                  <p><strong>Region:</strong> {item.region}</p>
-                  <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
+             this.state.eventObjArr.length > 0
+             ? this.state.eventObjArr.map(item =>
+               <Panel
+                 header={<div>
+                   <strong>{item.trail_name} </strong>
+                   <div>
+                     <small>
+                       <Moment
+                         format="MM/DD/YYYY"
+                         tz="America/Los_Angeles"
+                       >
+                         {item.event_date}
+                       </Moment> {item.event_time}
+                     </small>
+                   </div>
+                 </div>}
+               >
+                 <div style={{ height: '300px', border: '1px solid grey' }}>
+                   <GoogleMap
+                     lat={parseFloat(item.latitude, 10)} lng={parseFloat(item.longitude, 10)}
+                   />
+                 </div>
+                 <div style={{ display: 'flex', justifyContent: 'center' }}>
+                 <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px', marginTop: '1%' }} />
+               </div>
+               <div style={{display: 'flex', justifyContent: 'center'}}><p>{item.first_name} {item.last_name}</p></div>
 
-                  <p><strong>Coordinates:</strong> {item.latitude}, {item.longitude}</p>
-                  <p><strong>Features:</strong> {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
-                  <p><strong>Highest Point:</strong> {item.highest_point}</p>
-                  <p><strong>Driving Directions:</strong> <div>{item.driving_directions}</div></p>
-                  <p>
-                    <strong>Trail Description: </strong>
-                    <div>{item.trail_description}</div>
-                  </p>
-                </Panel>,
-              )
-              : null
-            }
-          </Modal.Body>
+                 <p><strong>Max Participants:</strong> {item.max_participants}</p>
+                 <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
+                 <p><strong>Organizer Email:</strong> {item.email}</p>
+                 <p>
+                   <strong>Organizer Phone: </strong>
+                   ({item.phone.slice(0, 3)}) {item.phone.slice(3, 6)} - {item.phone.slice(6, 10)}
+                 </p>
+                 <p><strong>Region:</strong> {item.region}</p>
+                 <p><strong>Elevation Gain:</strong> {item.elevation_gain}</p>
+                 <p><strong>Coordinates:</strong> {item.latitude}, {item.longitude}</p>
+                 <p><strong>Features:</strong> {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
+                 <p><strong>Highest Point:</strong> {item.highest_point}</p>
+                 { item.driving_directions
+                      ? <p>
+                        <strong>Driving Directions:</strong>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              openDirections: !this.state.openDirections,
+                            })}
+                          >
+                            Directions
+                          </Button>
+                          <Collapse in={this.state.openDirections}>
+                            <div>
+                              <Well>
+                                {item.driving_directions}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
+                      </p>
+                    : null
+                  }
+                  { item.trail_description
+                      ? <p>
+                        <strong>Trail Description: </strong>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              open: !this.state.open,
+                            })}
+                          >
+                            Details
+                          </Button>
+                          <Collapse in={this.state.open}>
+                            <div>
+                              <Well>
+                                {item.trail_description}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
+                      </p>
+                    : null
+                  }
+       </Panel>,
+     )
+     : null
+   }
+ </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="danger" onClick={this.closeEvents}>Close</Button>
           </Modal.Footer>
