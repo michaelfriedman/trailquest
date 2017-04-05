@@ -5,7 +5,6 @@ import axios from 'axios';
 import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
 import GoogleMap from '../features/map/GoogleMap';
-import DatePickerComponent from '../features/datepicker/DatePicker';
 import moment from 'moment';
 
 
@@ -345,22 +344,6 @@ export default class Search extends Component {
                                     onChange={this.handleChange}
                                   />
                                   <Button type="submit">Submit</Button>
-                                  {/* <Row>
-                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-
-                                      <DatePickerComponent
-                                        selected={this.state.startDate}
-                                        onChange={this.handleChange} />
-                                    </div>
-                                    </Row>
-                                    <Button
-                                    bsSize="small"
-                                    type="submit"
-                                    className="center-block"
-                                    bsStyle="danger"
-                                    >
-                                    Create Event
-                                  </Button> */}
                                 </Form>
                               </Row>
                             </Well>
