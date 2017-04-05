@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
 
 router.get('/users_events/user/:userId', (req, res, next) => {
   knex('users_events')
-    .where('users_events.user_id', req.params.userId)
+    .where('users_events.user_id', Number.parseInt(req.params.userId, 10))
     .then((response) => {
 
       res.send(response);
@@ -41,6 +41,7 @@ router.get('/users_events/trail/:trail_id', (req, res, next) => {
 router.post('/users_events', (req, res, next) => {
   const { event_id, user_id } = req.body;
   const attendee = { event_id, user_id };
+  console.log(attendee)
   console.log(event_id, user_id);
   knex('users_events')
     .insert(attendee, '*')
