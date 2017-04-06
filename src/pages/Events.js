@@ -23,7 +23,7 @@ class Events extends Component {
     this.close = this.close.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     axios.get('/users/id')
       .then(res => {
         const userId = res.data.id;
@@ -84,12 +84,18 @@ class Events extends Component {
 
                   {
                       this.state.trailDetails.latitude && this.state.trailDetails.longitude
-                        ? <div className="img-responsive" style={{ height: '300px', border: '1px solid grey' }}>
+                        ? <Panel
+                            className="map"
+                            header={this.state.trailDetails.trail_name}
+                            style={{ maxWidth: '560px'}}>
+                          <div style={{ height: '300px' }}>
                           <GoogleMap
                             lat={parseFloat(this.state.trailDetails.latitude, 10)}
                             lng={parseFloat(this.state.trailDetails.longitude, 10)}
                           />
                         </div>
+                      </Panel>
+
                         : null
                     }
                   { this.state.trailDetails.first_name || this.state.trailDetails.last_name
@@ -271,6 +277,10 @@ class Events extends Component {
             @import url('https://fonts.googleapis.com/css?family=Raleway');
               body {
                   font-family: 'Raleway', sans-serif;
+                }
+
+                .map .panel-body {
+                  padding: 0px;
                 }
         `}</style>
         </div>
