@@ -177,7 +177,10 @@ export default class Search extends Component {
                       header={this.state.trailDetail.name}
                     >
                       <div style={{ height: '300px' }}>
-                        <GoogleMap lat={parseFloat(this.state.trailDetail.latitude, 10)} lng={parseFloat(this.state.trailDetail.longitude, 10)} />
+                        <GoogleMap
+                          lat={parseFloat(this.state.trailDetail.latitude, 10)}
+                          lng={parseFloat(this.state.trailDetail.longitude, 10)}
+                        />
                       </div>
 
                     </Panel>
@@ -201,14 +204,16 @@ export default class Search extends Component {
                         {
                           this.state.trailDetail.elevation_gain
                             ? <Col>
-                              <strong>Elevation Gain: </strong> {this.state.trailDetail.elevation_gain}
+                              <strong>Elevation Gain: </strong>
+                              {this.state.trailDetail.elevation_gain}
                             </Col>
                           : null
                         }
                         {
                           this.state.trailDetail.highest_point
                             ? <Col>
-                              <strong>Highest Point: </strong> {this.state.trailDetail.highest_point}
+                              <strong>Highest Point: </strong>
+                              {this.state.trailDetail.highest_point}
                             </Col>
                           : null
                         }
@@ -236,27 +241,60 @@ export default class Search extends Component {
                         {
                           this.state.trailDetail.features !== undefined && this.state.trailDetail.features !== '{}'
                             ? <Col>
-                              <strong>Features: </strong> {cleanupFeatures(this.state.trailDetail.features)}
+                              <strong>Features: </strong>
+                              {cleanupFeatures(this.state.trailDetail.features)}
                             </Col>
                           : null
                         }
+                        { this.state.trailDetail.trail_description
+                      ? <p>
+                        <strong>Trail Description: </strong>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              open: !this.state.open,
+                            })}
+                          >
+                            Details
+                          </Button>
+                          <Collapse in={this.state.open}>
+                            <div>
+                              <Well>
+                                {this.state.trailDetail.trail_description}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
+                      </p>
+                    : null
+                  }
+                        { this.state.trailDetail.driving_directions
+                        ? <p>
+                          <strong>Driving Directions:</strong>
+                          <div style={{ display: 'inline' }}>
+                            <Button
+                              bsSize="xsmall"
+                              onClick={() => this.setState({
+                                openDirections: !this.state.openDirections,
+                              })}
+                            >
+                              Directions
+                            </Button>
+                            <Collapse in={this.state.openDirections}>
+                              <div>
+                                <Well>
+                                  {this.state.trailDetail.driving_directions}
+                                </Well>
+                              </div>
+                            </Collapse>
+                          </div>
+                        </p>
+                      : null
+                    }
                       </div>
                     </Panel>
                   : null
-                }
-                {
-                  this.state.trailDetail.trail_description !== ''
-                    ? <Panel header="Trail Description:">
-                      {this.state.trailDetail.trail_description}
-                    </Panel>
-                    : null
-                }
-                {
-                  this.state.trailDetail.driving_directions !== ''
-                    ? <Panel header="Driving Directions:">
-                      {this.state.trailDetail.driving_directions}
-                    </Panel>
-                    : null
                 }
                 {
                     this.props.isLoggedIn
@@ -333,20 +371,26 @@ export default class Search extends Component {
                               <Row>
                                 <Col>
                                   <Form onSubmit={this.handleCreateEventSubmit}>
-                                  <FormControl
-                                    style={{ marginBottom: '1%' }}
-                                    type="date"
-                                    value={this.state.event_date} name="event_date"
-                                    onChange={this.handleChange}
-                                  />
-                                  <FormControl
-                                    style={{ marginTop: '1%' }}
-                                    type="time"
-                                    value={this.state.event_time} name="event_time"
-                                    onChange={this.handleChange}
-                                  />
-                                  <Button bsSize="small" bsStyle="danger" style={{ marginTop: '1%' }} type="submit">Submit</Button>
-                                </Form>
+                                    <FormControl
+                                      style={{ marginBottom: '1%' }}
+                                      type="date"
+                                      value={this.state.event_date} name="event_date"
+                                      onChange={this.handleChange}
+                                    />
+                                    <FormControl
+                                      style={{ marginTop: '1%' }}
+                                      type="time"
+                                      value={this.state.event_time} name="event_time"
+                                      onChange={this.handleChange}
+                                    />
+                                    <Button
+                                      bsSize="small"
+                                      bsStyle="danger"
+                                      style={{ marginTop: '1%' }} type="submit"
+                                    >
+                                    Submit
+                                  </Button>
+                                  </Form>
                                 </Col>
                               </Row>
                             </Well>
