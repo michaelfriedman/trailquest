@@ -8,8 +8,8 @@ exports.seed = (knex) => knex('users').del()
         hashed_password: '$2a$12$PDaSkiV/jhN4ARdA7ghzYOOiq4.0xRnsueZEW5sUKPp0XtFQIU/9y',
         profile_photo_url: 'https://res.cloudinary.com/dk5dqve4y/image/upload/v1488319564/cfpvbwxgociczr8nifqu.jpg',
         phone: '2069999437',
-        created_at: new Date('2016-06-29 14:26:16 UTC'),
-        updated_at: new Date('2016-06-29 14:26:16 UTC'),
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
         id: 2,
@@ -19,8 +19,8 @@ exports.seed = (knex) => knex('users').del()
         hashed_password: '$2a$12$PDaSkiV/jhN4ARdA7ghzYOOiq4.0xRnsueZEW5sUKPp0XtFQIU/9y',
         profile_photo_url: 'https://res.cloudinary.com/dk5dqve4y/image/upload/v1488319564/cfpvbwxgociczr8nifqu.jpg',
         phone: '2069999439',
-        created_at: new Date('2017-01-03 09:26:16 UTC'),
-        updated_at: new Date('2017-01-03 09:26:16 UTC'),
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
         id: 3,
@@ -30,8 +30,8 @@ exports.seed = (knex) => knex('users').del()
         hashed_password: '$2a$12$PDaSkiV/jhN4ARdA7ghzYOOiq4.0xRnsueZEW5sUKPp0XtFQIU/9y',
         profile_photo_url: 'http://res.cloudinary.com/dk5dqve4y/image/upload/v1490921919/m5gyuwksqiqwyahyvvzj.jpg',
         phone: '2069999438',
-        created_at: new Date('2017-03-03 09:26:16 UTC'),
-        updated_at: new Date('2017-03-03 09:26:16 UTC'),
+        created_at: new Date(),
+        updated_at: new Date(),
       },
     ]))
     .then(() => knex.raw("SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));"));
