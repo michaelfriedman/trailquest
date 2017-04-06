@@ -32,6 +32,8 @@ export default class Search extends Component {
       showReviewButton: true,
       showEventButton: true,
       openEventForm: false,
+      openDirections: false,
+      openDescription: false,
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onSearchTermChange = this.onSearchTermChange.bind(this);
@@ -253,12 +255,12 @@ export default class Search extends Component {
                           <Button
                             bsSize="xsmall"
                             onClick={() => this.setState({
-                              open: !this.state.open,
+                              openDescription: !this.state.openDescription,
                             })}
                           >
                             Details
                           </Button>
-                          <Collapse in={this.state.open}>
+                          <Collapse in={this.state.openDescription}>
                             <div>
                               <Well>
                                 {this.state.trailDetail.trail_description}
