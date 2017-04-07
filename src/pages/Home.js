@@ -6,6 +6,8 @@ import Moment from 'react-moment';
 import Loading from '../features/loading/Loading';
 import GoogleMap from '../features/map/GoogleMap';
 
+const cleanupFeatures = features => features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,9 @@ class Home extends Component {
       showModal: false,
       reviewIsLoading: true,
       showReviewButton: true,
+      openTrail: {},
+      openTrailDescription: false,
+      openDirections: false,
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -33,13 +38,12 @@ class Home extends Component {
       });
   }
   handleOpenModal({ target }) {
-    this.setState({ showModal: true });
     // eslint-disable-next-line array-callback-return
     this.state.data.map(item => {
       // eslint-disable-next-line no-unused-expressions
       parseInt(item.id) === parseInt(target.id)
       ? this.setState({
-        data: item,
+        openTrail: item,
       })
       : null;
     });
@@ -48,12 +52,13 @@ class Home extends Component {
         this.setState({
           reviewDetail: res.data,
           reviewIsLoading: false,
+          showModal: true
         });
       });
   }
 
   handleCloseModal() {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, openTrail: {} });
   }
 
   handleReviewSubmit(event) {
@@ -89,125 +94,148 @@ class Home extends Component {
           <div>
             <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
               <Modal.Header closeButton>
-                <Modal.Title>{this.state.data.name}</Modal.Title>
+                <Modal.Title>{this.state.openTrail.name}</Modal.Title>
                 <div>
                   <Image
                     className="pull-right"
                     responsive
-                    src={this.state.data.region_image}
+                    src={this.state.openTrail.region_image}
                   />
                 </div>
-                <b>{this.state.data.region}</b>
+                <b>{this.state.openTrail.region}</b>
               </Modal.Header>
               <Modal.Body>
                 {
-                  this.state.data.thumbnail !== ''
+                  this.state.openTrail.thumbnail !== ''
                     ? <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '550px', maxHeight: '300px' }}>
-                      <Image rounded responsive src={this.state.data.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%' }} />
+                      <Image rounded responsive src={this.state.openTrail.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%' }} />
                     </div>
                     : null
                 }
                 <div>
                   {
-                    this.state.data.latitude && this.state.data.longitude
+                    this.state.openTrail.latitude && this.state.openTrail.longitude
                       ? <Panel
                         className="map"
                         header="Map"
                       >
                         <div style={{ height: '300px' }}>
                           <GoogleMap
-                            lat={parseFloat(this.state.data.latitude, 10)}
-                            lng={parseFloat(this.state.data.longitude, 10)}
+                            lat={parseFloat(this.state.openTrail.latitude, 10)}
+                            lng={parseFloat(this.state.openTrail.longitude, 10)}
                           />
                         </div>
 
                       </Panel>
                       : null
                   }
-                  { this.state.data.distance || this.state.data.elevation_gain ||
-                    this.state.data.highest_point
-                    || this.state.data.latitude
-                    || this.state.data.longitude
-                    || parseFloat(this.state.data.current_rating) > 0
-                    || this.state.data.features !== ''
+                  { this.state.openTrail.distance || this.state.openTrail.elevation_gain ||
+                    this.state.openTrail.highest_point
+                    || this.state.openTrail.latitude
+                    || this.state.openTrail.longitude
+                    || parseFloat(this.state.openTrail.current_rating) > 0
+                    || this.state.openTrail.features !== ''
                       ? <Panel header="Trail Stats:">
                         <div>
                           {
-                            this.state.data.distance
-                              ? <Col>
-                                Distance: {this.state.data.distance}
+                            this.state.openTrail.distance
+                              && <Col>
+                                <strong>Distance: </strong>{this.state.openTrail.distance}
                               </Col>
-                            : null
                           }
                           {
-                            this.state.data.elevation_gain
-                              ? <Col>
-                                Elevation Gain: {this.state.data.elevation_gain}
+                            this.state.openTrail.elevation_gain
+                              && <Col>
+                                <strong>Elevation Gain: </strong>{this.state.openTrail.elevation_gain}
                               </Col>
-                            : null
                           }
                           {
-                            this.state.data.highest_point
-                              ? <Col>
-                                Highest Point: {this.state.data.highest_point}
+                            this.state.openTrail.highest_point
+                              && <Col>
+                                <strong>Highest Point: </strong>{this.state.openTrail.highest_point}
                               </Col>
-                            : null
                           }
                           {
-                            this.state.data.latitude
-                              ? <Col>
-                                Latitude: {this.state.data.latitude}
+                            this.state.openTrail.latitude
+                              && <Col>
+                                <strong>Latitude: </strong>{this.state.openTrail.latitude}
                               </Col>
-                            : null
                           }
                           {
-                            this.state.data.longitude
-                              ? <Col>
-                                Longitude: {this.state.data.longitude}
+                            this.state.openTrail.longitude
+                              && <Col>
+                                <strong>Longitude: </strong>{this.state.openTrail.longitude}
                               </Col>
-                            : null
                           }
                           {
-                            parseFloat(this.state.data.current_rating) > 0
-                              ? <Col>
-                                Star Rating: {this.state.data.current_rating}
+                            parseFloat(this.state.openTrail.current_rating) > 0
+                              && <Col>
+                                <strong>Star Rating: </strong>{this.state.openTrail.current_rating}
                               </Col>
-                            : null
                           }
                           {
-                            this.state.data.features !== ''
-                              ? <Col>
-                                Features: {this.state.data.features}
-                              </Col>
-                            : null
-                          }
+                          this.state.openTrail.features !== undefined && this.state.openTrail.features !== '{}'
+                            && <Col>
+                              <strong>Features: </strong>
+                              {cleanupFeatures(this.state.openTrail.features)}
+                            </Col>
+                        }
+                          { this.state.openTrail.trail_description !== ''
+                      && <p>
+                        <strong>Trail Description: </strong>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              openTrailDescription: !this.state.openTrailDescription,
+                            })}
+                          >
+                            Details
+                          </Button>
+                          <Collapse in={this.state.openTrailDescription}>
+                            <div>
+                              <Well>
+                                {this.state.openTrail.trail_description}
+                              </Well>
+                            </div>
+                          </Collapse>
                         </div>
-                      </Panel>
-                    : null
+                      </p>
                   }
-                  {
-                    this.state.data.trail_description !== ''
-                      ? <Panel header="Trail Description:">
-                        {this.state.data.trail_description}
-                      </Panel>
-                      : null
+                        </div>
+                        { this.state.openTrail.driving_directions
+                      && <p>
+                        <strong>Driving Directions:</strong>
+                        <div style={{ display: 'inline' }}>
+                          <Button
+                            bsSize="xsmall"
+                            onClick={() => this.setState({
+                              openDirections: !this.state.openDirections,
+                            })}
+                          >
+                            Directions
+                          </Button>
+                          <Collapse in={this.state.openDirections}>
+                            <div>
+                              <Well>
+                                {this.state.openTrail.driving_directions}
+                              </Well>
+                            </div>
+                          </Collapse>
+                        </div>
+                      </p>
                   }
-                  {
-                    this.state.data.driving_directions !== ''
-                      ? <Panel header="Driving Directions:">
-                        {this.state.data.driving_directions}
                       </Panel>
                       : null
                   }
                   {
                       this.props.isLoggedIn
-                        ? <div style={{ textAlign: 'center' }}>
+                        && <div style={{ textAlign: 'center' }}>
                           {
                             this.state.showReviewButton
-                              ? <Button bsStyle="danger" bsSize="small" style={{ margin: '1%', marginBottom: '3%' }} onClick={() => this.setState({ open: !this.state.open, showReviewButton: !this.state.showReviewButton })}>
+                              && <Button bsStyle="danger" bsSize="small" style={{ margin: '1%', marginBottom: '3%' }} onClick={() => this.setState({ open: !this.state.open, showReviewButton: !this.state.showReviewButton })}>
                                 Review Trail
                               </Button>
-                              : null
                           }
                           <Collapse in={this.state.open}>
                             <div>
@@ -250,33 +278,32 @@ class Home extends Component {
                             </div>
                           </Collapse>
                         </div>
-                          : null
                   }
                   {
-                    this.state.reviewDetail.length
-                      ? <Panel header="Reviews">
-                        { this.state.reviewIsLoading
-                          ? <Loading />
-                          : this.state.reviewDetail.map(item =>
-                            <div>
-                              <Col xs={12} md={8}>
-                                <p>
-                                  <em>{item.review_body}</em>
-                                </p>
-                              </Col>
-                              <Col xs={6} md={4}>
-                                <date>
-                                  <Moment tz="America/Los_Angeles">
-                                    {item.created_at}
-                                  </Moment>
-                                </date>
-                                <p><strong>{item.first_name}</strong></p>
-                              </Col>
-                            </div>,
-                          )}
-                      </Panel>
-                      : null
-                  }
+                  this.state.reviewDetail.length
+                    ? <Panel header="Reviews">
+                      { this.state.reviewIsLoading
+                        ? <Loading />
+                        : this.state.reviewDetail.map(item =>
+                          <div>
+                            <Col xs={12} md={8}>
+                              <p>
+                                <em>{item.review_body}</em>
+                              </p>
+                            </Col>
+                            <Col xs={6} md={4}>
+                              <date>
+                                <Moment tz="America/Los_Angeles">
+                                  {item.created_at}
+                                </Moment>
+                              </date>
+                              <p><strong>{item.first_name}</strong></p>
+                            </Col>
+                          </div>,
+                        )}
+                    </Panel>
+                    : null
+                }
                 </div>
               </Modal.Body>
               <Modal.Footer>
@@ -409,7 +436,7 @@ class Home extends Component {
             </Row>
           </footer>
         </div>
-        <style jsx>{`
+        <style>{`
           @import url('https://fonts.googleapis.com/css?family=Lobster+Two');
           @import url('https://fonts.googleapis.com/css?family=Raleway');
 
@@ -435,5 +462,5 @@ class Home extends Component {
 export default Home;
 
 Home.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool,
 };

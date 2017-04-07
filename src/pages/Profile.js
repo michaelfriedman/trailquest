@@ -253,7 +253,7 @@ class Profile extends Component {
                  <p><strong>Features:</strong> {item.features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ')}</p>
                  <p><strong>Highest Point:</strong> {item.highest_point}</p>
                  { item.driving_directions
-                      ? <p>
+                      && <p>
                         <strong>Driving Directions:</strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -273,7 +273,6 @@ class Profile extends Component {
                           </Collapse>
                         </div>
                       </p>
-                    : null
                   }
                  { item.trail_description
                       ? <p>

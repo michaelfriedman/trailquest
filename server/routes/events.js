@@ -1,8 +1,7 @@
 const express = require('express');
 const knex = require('../../knex');
 const jwt = require('jsonwebtoken');
-// const boom = require('boom');
-
+const boom = require('boom');
 const router = express.Router();
 
 const auth = (req, res, next) => {
