@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button, Col, Jumbotron, Row, Glyphicon, Modal, Image, Panel, Collapse, Well, FormGroup, Form, ControlLabel, FormControl } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import axios from 'axios';
@@ -433,3 +433,7 @@ class Home extends Component {
 }
 
 export default Home;
+
+Home.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};

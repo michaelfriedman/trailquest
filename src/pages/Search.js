@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { Button, Form, FormControl, Table, Modal, Collapse, Well, Glyphicon, Image, Panel, FormGroup, ControlLabel, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
@@ -99,11 +99,11 @@ export default class Search extends Component {
     const createEvent = {
       event_date, event_time, organizer_id, trail_id, trail_name,
     };
-    console.log(createEvent);
     axios.post('events', createEvent)
       .then(res => {
         console.log(res);
-      });
+      })
+      .catch(error => console.error(error));
     browserHistory.push('/events');
   }
 
@@ -532,3 +532,7 @@ export default class Search extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};

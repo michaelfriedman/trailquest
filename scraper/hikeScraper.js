@@ -15,7 +15,7 @@ const scrape = (url, data) => new Promise((resolve, reject) => {
       } else if (k === 'features') {
         const hikeFeatures = $('#hike-features').children();
         const featuresList = [];
-        for (let i = 0; i < hikeFeatures.length - 1; i++) {
+        for (let i = 0; i < hikeFeatures.length - 1; i += 1) {
           featuresList.push(hikeFeatures[i].attribs['data-title']);
         }
         pageData[k] = featuresList;
@@ -58,13 +58,13 @@ const scrapeHikes = hikeList => hikeList.map(hike => scrape(hike, {
       const array = $('.listitem-title');
       const hikeList = [];
 
-      for (let i = 0; i < array.length; i++) {
+      for (let i = 0; i < array.length; i += 1) {
         hikeList.push(array[i].attribs.href);
       }
 
       const promises = scrapeHikes(hikeList);
 
-      Promise.all(promises).then(hikeData => {
+      Promise.all(promises).then((hikeData) => {
         // eslint-disable-next-line no-console
         console.log(...hikeData);
       });
