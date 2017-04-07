@@ -46,6 +46,7 @@ class Events extends Component {
       if (Number.parseInt(item.id, 10) === Number.parseInt(target.id, 10)) {
         this.setState({ showModal: true, trailDetails: item });
       }
+      return () => {};
     });
   }
 
@@ -81,10 +82,9 @@ class Events extends Component {
             <Modal.Body>
               <div className="container">
                 <div>
-
                   {
                       this.state.trailDetails.latitude && this.state.trailDetails.longitude
-                        ? <Panel
+                        && <Panel
                           className="map"
                           header={this.state.trailDetails.trail_name}
                           style={{ maxWidth: '560px' }}
@@ -96,44 +96,37 @@ class Events extends Component {
                             />
                           </div>
                         </Panel>
-
-                        : null
                     }
-                  { this.state.trailDetails.first_name || this.state.trailDetails.last_name
-                      ? <p>
+                  { this.state.trailDetails.first_name && this.state.trailDetails.last_name
+                      && <p>
                         <strong>Event Organizer: </strong>
                         {this.state.trailDetails.first_name} {this.state.trailDetails.last_name}
                       </p>
-                    : null
                     }
                   { this.state.trailDetails.profile_photo_url
-                      ? <div className="pull-right">
+                      && <div className="pull-right">
                         <Image circle src={this.state.trailDetails.profile_photo_url} style={{ height: '100px', width: '100px', border: '1px solid black' }} />
-                        { this.state.trailDetails.first_name || this.state.trailDetails.last_name
-                        ? <p>
+                        { this.state.trailDetails.first_name && this.state.trailDetails.last_name
+                        && <p>
                           {this.state.trailDetails.first_name} {this.state.trailDetails.last_name}
                         </p>
-                        : null
                       }
                       </div>
-                    : null
                   }
 
                   { this.state.trailDetails.max_participants
-                      ? <p>
+                      && <p>
                         <strong>Max Participants: </strong>
                         {this.state.trailDetails.max_participants}
                       </p>
-                        : null
                     }
                   { this.state.trailDetails.phone
-                      ? <p>
+                      && <div>
                         <strong>Organizer Phone: </strong>
                         <span>
                           ({this.state.trailDetails.phone.slice(0, 3)}) {this.state.trailDetails.phone.slice(3, 6)} - {this.state.trailDetails.phone.slice(6, 10)}
                         </span>
-                      </p>
-                    : null
+                      </div>
                   }
                   { this.state.trailDetails.email
                       ? <p><strong>Organizer Email:</strong> {this.state.trailDetails.email}</p>
@@ -148,7 +141,7 @@ class Events extends Component {
                     }
                   {
                       this.state.trailDetails.features
-                      ? `Features:  + ${cleanupFeatures(this.state.trailDetails.features)}`
+                      ? `Features: ${cleanupFeatures(this.state.trailDetails.features)}`
                       : null
                     }
 
@@ -177,7 +170,7 @@ class Events extends Component {
                       : null
                     }
                   { this.state.trailDetails.driving_directions
-                      ? <p>
+                      && <div>
                         <strong>Driving Directions:</strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -196,11 +189,10 @@ class Events extends Component {
                             </div>
                           </Collapse>
                         </div>
-                      </p>
-                    : null
+                      </div>
                   }
                   { this.state.trailDetails.trail_description
-                      ? <p>
+                      && <div>
                         <strong>Trail Description: </strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -219,8 +211,7 @@ class Events extends Component {
                             </div>
                           </Collapse>
                         </div>
-                      </p>
-                    : null
+                      </div>
                   }
                 </div>
               </div>
@@ -242,7 +233,7 @@ class Events extends Component {
         <div className="container">{
         this.state.data.length
         ? this.state.data.map(item =>
-          <div>
+          <div key={item.id}>
             <Panel
               header={
                 <div>
@@ -276,7 +267,7 @@ class Events extends Component {
         )
         : null
       }
-          <style jsx>{`
+          <style>{`
             @import url('https://fonts.googleapis.com/css?family=Raleway');
               body {
                   font-family: 'Raleway', sans-serif;

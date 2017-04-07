@@ -11,14 +11,19 @@ class NavbarComponent extends Component {
     this.state = {
       isLoggedIn: false,
       userId: 0,
+      user: {},
     };
     this.updateUser = this.updateUser.bind(this);
     this.handleSignout = this.handleSignout.bind(this);
     this.updateLoggedIn = this.updateLoggedIn.bind(this);
-    this.cleanupFeatures = this.cleanupFeatures.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    axios.get('/users/id')
+      .then(res => {
+        this.setState({ user: res.data });
+      })
+      .catch(error => console.error(error));
     axios.get('/token')
       .then((res) => {
         if (res.data) {
@@ -26,7 +31,8 @@ class NavbarComponent extends Component {
             isLoggedIn: true,
           });
         }
-      });
+      })
+      .catch(error => console.error(error));
   }
 
   updateLoggedIn(newLoggedIn) {
@@ -47,10 +53,6 @@ class NavbarComponent extends Component {
       isLoggedIn: false,
     });
   }
-  
-  cleanupFeatures (features) {
-    return features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
-  } 
 
   render() {
     return (
@@ -106,6 +108,7 @@ class NavbarComponent extends Component {
         `}</style>
         {React.cloneElement(
           this.props.children, {
+            user: this.state.user,
             userId: this.state.userId,
             updateUser: this.state.updateUser,
             isLoggedIn: this.state.isLoggedIn,

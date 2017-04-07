@@ -26,6 +26,7 @@ class Home extends Component {
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
@@ -37,11 +38,18 @@ class Home extends Component {
         this.setState({ data: featured });
       });
   }
+
+  handleChange({ target }) {
+    if (target.name) {
+      this.setState({ [target.name]: target.value });
+    }
+  }
+
   handleOpenModal({ target }) {
     // eslint-disable-next-line array-callback-return
     this.state.data.map(item => {
       // eslint-disable-next-line no-unused-expressions
-      parseInt(item.id) === parseInt(target.id)
+      parseInt(item.id, 10) === parseInt(target.id, 10)
       ? this.setState({
         openTrail: item,
       })
@@ -52,7 +60,7 @@ class Home extends Component {
         this.setState({
           reviewDetail: res.data,
           reviewIsLoading: false,
-          showModal: true
+          showModal: true,
         });
       });
   }
@@ -61,17 +69,16 @@ class Home extends Component {
     this.setState({ showModal: false, openTrail: {} });
   }
 
-  handleReviewSubmit(event) {
+  handleReviewSubmit(event, userId) {
     event.preventDefault();
+    const user_id = this.props.user.id;
     const { review_body } = this.state;
-    const trail_id = this.state.data.id;
-    const user_id = this.state.userId;
+    const trail_id = this.state.openTrail.id;
     const review = { review_body, trail_id, user_id };
-
     axios.post('/reviews', review)
       .then(res => {
         if (res.status === 200) {
-          axios.get(`/reviews/trail/${this.state.trailDetail.id}`)
+          axios.get(`/reviews/trail/${this.state.openTrail.id}`)
             .then(res => {
               this.setState({
                 reviewDetail: res.data,
@@ -107,15 +114,14 @@ class Home extends Component {
               <Modal.Body>
                 {
                   this.state.openTrail.thumbnail !== ''
-                    ? <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '550px', maxHeight: '300px' }}>
+                    && <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '550px', maxHeight: '300px' }}>
                       <Image rounded responsive src={this.state.openTrail.thumbnail} style={{ border: '1px solid grey', marginBottom: '3%' }} />
                     </div>
-                    : null
                 }
                 <div>
                   {
                     this.state.openTrail.latitude && this.state.openTrail.longitude
-                      ? <Panel
+                      && <Panel
                         className="map"
                         header="Map"
                       >
@@ -127,13 +133,12 @@ class Home extends Component {
                         </div>
 
                       </Panel>
-                      : null
                   }
                   { this.state.openTrail.distance || this.state.openTrail.elevation_gain ||
                     this.state.openTrail.highest_point
                     || this.state.openTrail.latitude
                     || this.state.openTrail.longitude
-                    || parseFloat(this.state.openTrail.current_rating) > 0
+                    || parseFloat(this.state.openTrail.current_rating, 10) > 0
                     || this.state.openTrail.features !== ''
                       ? <Panel header="Trail Stats:">
                         <div>
@@ -146,7 +151,8 @@ class Home extends Component {
                           {
                             this.state.openTrail.elevation_gain
                               && <Col>
-                                <strong>Elevation Gain: </strong>{this.state.openTrail.elevation_gain}
+                                <strong>Elevation Gain: </strong>
+                                {this.state.openTrail.elevation_gain}
                               </Col>
                           }
                           {
@@ -168,7 +174,7 @@ class Home extends Component {
                               </Col>
                           }
                           {
-                            parseFloat(this.state.openTrail.current_rating) > 0
+                            parseFloat(this.state.openTrail.current_rating, 10) > 0
                               && <Col>
                                 <strong>Star Rating: </strong>{this.state.openTrail.current_rating}
                               </Col>
@@ -181,7 +187,7 @@ class Home extends Component {
                             </Col>
                         }
                           { this.state.openTrail.trail_description !== ''
-                      && <p>
+                      && <div>
                         <strong>Trail Description: </strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -200,11 +206,11 @@ class Home extends Component {
                             </div>
                           </Collapse>
                         </div>
-                      </p>
+                      </div>
                   }
                         </div>
                         { this.state.openTrail.driving_directions
-                      && <p>
+                      && <div>
                         <strong>Driving Directions:</strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -223,7 +229,7 @@ class Home extends Component {
                             </div>
                           </Collapse>
                         </div>
-                      </p>
+                      </div>
                   }
                       </Panel>
                       : null
@@ -285,7 +291,7 @@ class Home extends Component {
                       { this.state.reviewIsLoading
                         ? <Loading />
                         : this.state.reviewDetail.map(item =>
-                          <div>
+                          <div key={item.id}>
                             <Col xs={12} md={8}>
                               <p>
                                 <em>{item.review_body}</em>

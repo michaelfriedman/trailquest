@@ -16,7 +16,7 @@ const auth = (req, res, next) => {
   });
 };
 
-router.get('/reviews', (_req, res, next) => {
+router.get('/reviews', auth, (_req, res, next) => {
   knex('reviews')
     .then((rows) => {
       const reviews = rows;
@@ -29,7 +29,7 @@ router.get('/reviews', (_req, res, next) => {
 });
 
 // eslint-disable-next-line consistent-return
-router.get('/reviews/:id', (req, res, next) => {
+router.get('/reviews/:id', auth, (req, res, next) => {
   // eslint-disable-next-line radix
   const id = Number.parseInt(req.params.id);
 
@@ -54,7 +54,7 @@ router.get('/reviews/:id', (req, res, next) => {
     });
 });
 
-router.get('/reviews/user/:userId', (req, res, next) => {
+router.get('/reviews/user/:userId', auth, (req, res, next) => {
   // eslint-disable-next-line camelcase
   const user_id = req.params.userId;
 
@@ -75,7 +75,7 @@ router.get('/reviews/user/:userId', (req, res, next) => {
     });
 });
 
-router.get('/reviews/trail/:id', (req, res, next) => {
+router.get('/reviews/trail/:id', auth, (req, res, next) => {
   // eslint-disable-next-line radix
   const id = Number.parseInt(req.params.id);
 
@@ -100,7 +100,7 @@ router.get('/reviews/trail/:id', (req, res, next) => {
     });
 });
 
-router.post('/reviews', (req, res, next) => {
+router.post('/reviews', auth, (req, res, next) => {
   const { trail_id, user_id, review_body } = req.body;
 
   knex('reviews')
