@@ -15,6 +15,7 @@ class NavbarComponent extends Component {
     this.updateUser = this.updateUser.bind(this);
     this.handleSignout = this.handleSignout.bind(this);
     this.updateLoggedIn = this.updateLoggedIn.bind(this);
+    this.cleanupFeatures = this.cleanupFeatures.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +47,10 @@ class NavbarComponent extends Component {
       isLoggedIn: false,
     });
   }
+  
+  cleanupFeatures (features) {
+    return features.replace(/{/, '').replace(/}/, '').replace(/"/g, '').replace(/,/g, ', ');
+  } 
 
   render() {
     return (
@@ -90,7 +95,7 @@ class NavbarComponent extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <style jsx>{`
+        <style>{`
           @import url('https://fonts.googleapis.com/css?family=Lobster+Two');
           .lobster {
             font-family: 'Lobster Two', cursive;

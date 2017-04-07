@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import request from 'superagent';
@@ -27,9 +27,7 @@ function validate(first_name, last_name, email, password, password_confirm, phon
 class Registration extends Component {
   constructor(props) {
     super(props);
-    Registration.propTypes = {
-      updateLoggedIn: React.PropTypes.func,
-    };
+
     this.state = {
       first_name: '',
       last_name: '',
@@ -476,3 +474,7 @@ class Registration extends Component {
   }
 
 export default Registration;
+
+Registration.propTypes = {
+  updateLoggedIn: PropTypes.func.isRequired,
+};
