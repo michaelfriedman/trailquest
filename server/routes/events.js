@@ -1,6 +1,8 @@
 const express = require('express');
 const knex = require('../../knex');
 const jwt = require('jsonwebtoken');
+// const boom = require('boom');
+
 const router = express.Router();
 
 const auth = (req, res, next) => {
@@ -58,7 +60,7 @@ router.get('/events/', (req, res, next) => {
     .then((events) => {
       events.map(item => {
         delete item.hashed_password;
-      })
+      });
       res.send(events);
     })
     .catch((err) => {

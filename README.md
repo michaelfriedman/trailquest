@@ -1,7 +1,7 @@
 # TrailQuest
 
 ## License
-SEE LICENSE
+SEE 'LICENSE' (MIT)
 
 ## Data Scraping
 
@@ -11,13 +11,14 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 
 [Custom Web Scraper](https://github.com/michaelfriedman/capstone-g40/blob/master/scraper/hikeScraper.js "hikeScraper.js")
 
-## Built With
+## Technology Stack
 * React
 * react-router
 * Node
 * Express
 * Knex
 * PostgreSQL
+* Deployed on Heroku
 
 
 ## Dependencies
@@ -25,6 +26,7 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 * morgan
 * body-parser
 * jsonwebtoken
+* boom
 * cookie-parser
 * react-bootstrap
 * Google Maps API
@@ -32,6 +34,9 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 * Axios
 * react-google-maps
 * react-datepicker
+
+## Issues & Contributions
+
 ________
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

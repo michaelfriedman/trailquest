@@ -85,16 +85,17 @@ class Events extends Component {
                   {
                       this.state.trailDetails.latitude && this.state.trailDetails.longitude
                         ? <Panel
-                            className="map"
-                            header={this.state.trailDetails.trail_name}
-                            style={{ maxWidth: '560px'}}>
+                          className="map"
+                          header={this.state.trailDetails.trail_name}
+                          style={{ maxWidth: '560px' }}
+                        >
                           <div style={{ height: '300px' }}>
-                          <GoogleMap
-                            lat={parseFloat(this.state.trailDetails.latitude, 10)}
-                            lng={parseFloat(this.state.trailDetails.longitude, 10)}
-                          />
-                        </div>
-                      </Panel>
+                            <GoogleMap
+                              lat={parseFloat(this.state.trailDetails.latitude, 10)}
+                              lng={parseFloat(this.state.trailDetails.longitude, 10)}
+                            />
+                          </div>
+                        </Panel>
 
                         : null
                     }
@@ -128,7 +129,9 @@ class Events extends Component {
                   { this.state.trailDetails.phone
                       ? <p>
                         <strong>Organizer Phone: </strong>
-                        ({this.state.trailDetails.phone.slice(0, 3)}) {this.state.trailDetails.phone.slice(3, 6)} - {this.state.trailDetails.phone.slice(6, 10)}
+                        <span>
+                          ({this.state.trailDetails.phone.slice(0, 3)}) {this.state.trailDetails.phone.slice(3, 6)} - {this.state.trailDetails.phone.slice(6, 10)}
+                        </span>
                       </p>
                     : null
                   }
@@ -145,7 +148,7 @@ class Events extends Component {
                     }
                   {
                       this.state.trailDetails.features
-                      ? 'Features: ' + cleanupFeatures(this.state.trailDetails.features)
+                      ? `Features:  + ${cleanupFeatures(this.state.trailDetails.features)}`
                       : null
                     }
 

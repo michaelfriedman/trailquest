@@ -236,9 +236,9 @@ class Profile extends Component {
                    />
                  </div>
                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                 <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px', marginTop: '1%' }} />
-               </div>
-               <div style={{display: 'flex', justifyContent: 'center'}}><p>{item.first_name} {item.last_name}</p></div>
+                   <Image thumbnail src={item.profile_photo_url} style={{ height: '100px', width: '100px', marginTop: '1%' }} />
+                 </div>
+                 <div style={{ display: 'flex', justifyContent: 'center' }}><p>{item.first_name} {item.last_name}</p></div>
 
                  <p><strong>Max Participants:</strong> {item.max_participants}</p>
                  <p><strong>Organizer:</strong> {item.first_name} {item.last_name}</p>
@@ -275,7 +275,7 @@ class Profile extends Component {
                       </p>
                     : null
                   }
-                  { item.trail_description
+                 { item.trail_description
                       ? <p>
                         <strong>Trail Description: </strong>
                         <div style={{ display: 'inline' }}>
@@ -298,11 +298,11 @@ class Profile extends Component {
                       </p>
                     : null
                   }
-       </Panel>,
+               </Panel>,
      )
      : null
    }
- </Modal.Body>
+          </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="danger" onClick={this.closeEvents}>Close</Button>
           </Modal.Footer>
