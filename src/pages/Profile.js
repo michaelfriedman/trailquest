@@ -154,8 +154,8 @@ class Profile extends Component {
           </Modal.Header>
           <Modal.Body>
             { this.state.review_body
-              ? this.state.review_body.map(item =>
-                <div>
+              && this.state.review_body.map(item =>
+                <div key={item.id}>
                   <Panel
                     header={<strong>{item.name}</strong>}
                     footer={<date>
@@ -174,7 +174,6 @@ class Profile extends Component {
                     </Col>
                   </Panel>
                 </div>)
-                : null
             }
           </Modal.Body>
           <Modal.Footer>
@@ -308,7 +307,7 @@ class Profile extends Component {
 
 
         </Modal>
-        <style jsx>{`
+        <style>{`
           @import url('https://fonts.googleapis.com/css?family=Raleway');
           .btn-social{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn-social :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
           .btn-social.btn-lg{padding-left:61px}.btn-social.btn-lg :first-child{line-height:45px;width:45px;font-size:1.8em}

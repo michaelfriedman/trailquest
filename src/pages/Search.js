@@ -44,7 +44,7 @@ export default class Search extends Component {
     this.handleCreateEventSubmit = this.handleCreateEventSubmit.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     axios.get('/trails/region/Puget%20Sound%20and%20Islands')
       .then(res => {
         this.setState({
@@ -101,8 +101,9 @@ export default class Search extends Component {
     };
     axios.post('events', createEvent)
       .then(res => {
-        console.log(res);
+        console.log('Request for community events was responded to successfully.')
       })
+      // eslint-disable-next-line no-console
       .catch(error => console.error(error));
     browserHistory.push('/events');
   }
@@ -249,7 +250,7 @@ export default class Search extends Component {
                           : null
                         }
                         { this.state.trailDetail.trail_description
-                      ? <p>
+                      ? <div>
                         <strong>Trail Description: </strong>
                         <div style={{ display: 'inline' }}>
                           <Button
@@ -268,11 +269,11 @@ export default class Search extends Component {
                             </div>
                           </Collapse>
                         </div>
-                      </p>
+                      </div>
                     : null
                   }
                         { this.state.trailDetail.driving_directions
-                        ? <p>
+                        && <div>
                           <strong>Driving Directions:</strong>
                           <div style={{ display: 'inline' }}>
                             <Button
@@ -291,8 +292,7 @@ export default class Search extends Component {
                               </div>
                             </Collapse>
                           </div>
-                        </p>
-                      : null
+                        </div>
                     }
                       </div>
                     </Panel>
@@ -408,7 +408,7 @@ export default class Search extends Component {
                       { this.state.reviewIsLoading
                         ? <Loading />
                         : this.state.reviewDetail.map(item =>
-                          <div>
+                          <div key={item.id}>
                             <Col xs={12} md={8}>
                               <p>
                                 <em>{item.review_body}</em>
@@ -509,7 +509,7 @@ export default class Search extends Component {
             </tbody>
           </Table>
         }
-        <style jsx>{`
+        <style>{`
           @import url('https://fonts.googleapis.com/css?family=Raleway');
           body {
               font-family: 'Raleway', sans-serif;
@@ -534,5 +534,5 @@ export default class Search extends Component {
 }
 
 Search.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool,
 };

@@ -176,7 +176,7 @@ class Login extends Component {
             </div>
           </div>
         </div>
-        <style jsx>{`
+        <style>{`
                 body {
                   background: url("bg.png") no-repeat center center fixed;
                   -webkit-background-size: cover;

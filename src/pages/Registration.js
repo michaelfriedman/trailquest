@@ -349,7 +349,7 @@ class Registration extends Component {
             </Form>
           </div>
         </div>
-        <style jsx>{`
+        <style>{`
           #playground-container {
             height: 500px;
             overflow: hidden !important;
@@ -476,5 +476,5 @@ class Registration extends Component {
 export default Registration;
 
 Registration.propTypes = {
-  updateLoggedIn: PropTypes.func.isRequired,
+  updateLoggedIn: PropTypes.func,
 };
