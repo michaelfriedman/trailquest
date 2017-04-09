@@ -89,9 +89,8 @@ class NavbarComponent extends Component {
               }
               {
                   !this.state.isLoggedIn
-                    ? <LinkContainer to={{ pathname: '/login' }}><NavItem>Login </NavItem>
+                    && <LinkContainer to={{ pathname: '/login' }}><NavItem>Login </NavItem>
                     </LinkContainer>
-                  : null
               }
 
             </Nav>
