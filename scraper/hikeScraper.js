@@ -3,9 +3,9 @@ const req = require('tinyreq');
 
 const scrape = (url, data) => new Promise((resolve, reject) => {
   req(url, (err, body) => {
-    // if (!url) return reject(new Error('Missing URL'));
-    // if (!data) return reject(new Error('Missing data'));
-    // if (err) return reject(err);
+    if (!url) return reject(new Error('Missing URL'));
+    if (!data) return reject(new Error('Missing data'));
+    if (err) return reject(err);
 
     const $ = cheerio.load(body);
     const pageData = {};
@@ -52,7 +52,7 @@ const scrapeHikes = hikeList => hikeList.map(hike => scrape(hike, {
   for (let i = 0; i <= 3360; i += 30) {
     const base = `https://www.wta.org/go-hiking/hikes?b_start:int=${i}`;
     req(base, (err, body) => {
-      // if (err) console.error(`Error getting ${base}`);
+      if (err) console.error(`Error getting ${base}`);
 
       const $ = cheerio.load(body);
       const array = $('.listitem-title');
