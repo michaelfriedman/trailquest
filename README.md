@@ -17,7 +17,7 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 * react-router
 ![React Router Logo](https://camo.githubusercontent.com/f63754b8412368e820601967af6dea84312b925b/68747470733a2f2f7265616374747261696e696e672e636f6d2f72656163742d726f757465722f616e64726f69642d6368726f6d652d313434783134342e706e67 "React Router Logo")
 * Node
-![Node Logo](http://www.hexacta.com/wp-content/uploads/2015/12/node.png =100x100 "Node Logo")
+![Node Logo](http://www.hexacta.com/wp-content/uploads/2015/12/node.png =100x100)
 * React
 * react-router
 * Node
