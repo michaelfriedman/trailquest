@@ -12,7 +12,7 @@
 ![Mobile Login](http://i.imgur.com/aMmaU1d.png)
 ![Mobile Review](http://i.imgur.com/mPphLlG.png)
 ![Mobile Review Submitted](http://i.imgur.com/H25k40Y.png)
-![Mobile Create Group Hike](http://i.imgur.com/6sJT0KT.png)
+![Mobile Create Group Hike](http://i.imgur.com/6sJT0KT.png?1))
 ## Data Scraper & TrailQuest API
 
 There was not enough robust data available on Washington State trails available in a public API for me to build this project. All of the data made available in this application was gathered using a custom web scraping program that I wrote in Node using an NPM package called Cheerio.
