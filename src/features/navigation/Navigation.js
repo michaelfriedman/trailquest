@@ -23,6 +23,7 @@ class NavbarComponent extends Component {
       .then(res => {
         this.setState({ user: res.data });
       })
+      // eslint-disable-next-line no-console
       .catch(error => console.error(error));
     axios.get('/token')
       .then((res) => {
@@ -32,6 +33,7 @@ class NavbarComponent extends Component {
           });
         }
       })
+      // eslint-disable-next-line no-console
       .catch(error => console.error(error));
   }
 
@@ -89,8 +91,9 @@ class NavbarComponent extends Component {
               }
               {
                   !this.state.isLoggedIn
-                    && <LinkContainer to={{ pathname: '/login' }}><NavItem>Login </NavItem>
+                    ? <LinkContainer to={{ pathname: '/login' }}><NavItem>Login </NavItem>
                     </LinkContainer>
+                  : null
               }
 
             </Nav>
