@@ -2,32 +2,44 @@
 
 # TrailQuest
 
-## License
-SEE 'LICENSE' (MIT)
+## Screenshots
+![Mobile Landing](http://i.imgur.com/kqR9b6K.png)
+![Mobile Landing Below Fold](http://i.imgur.com/7koWgca.png)
+![Mobile Landing Open Modal](http://i.imgur.com/OYikzHc.png)
+![Mobile Landing Open Modal Below Fold](http://i.imgur.com/wvL9dmE.png)
+![Mobile Search Menu Open](http://i.imgur.com/x5PGbVa.png)
+![Mobile Registration](http://i.imgur.com/nk10R2L.png)
+![Mobile Login](http://i.imgur.com/aMmaU1d.png)
+![Mobile Review](http://i.imgur.com/mPphLlG.png)
+![Mobile Review Submitted](http://i.imgur.com/H25k40Y.png)
+![Mobile Create Group Hike](http://i.imgur.com/6sJT0KT.png)
+## Data Scraper & TrailQuest API
 
-## Data Scraping
+There was not enough robust data available on Washington State trails available in a public API for me to build this project. All of the data made available in this application was gathered using a custom web scraping program that I wrote in Node using an NPM package called Cheerio.
 
-There was not enough robust data available in a public API for me to build this project. All of the data made available in this application was gathered using a custom web scraping program that I wrote in Node using an NPM package called Cheerio.
+The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every individual URL and creates a trail object for each page, where the key-values are either textual information or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
 
-The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every single URL and creates a trail object for each page, where the key-values are either text or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
-
-[Custom Web Scraper](https://github.com/michaelfriedman/capstone-g40/blob/master/scraper/hikeScraper.js "hikeScraper.js")
+## Deployment
+This application was deployed using Heroku with the create-react-app build-pack. The `create-react-app` buildpack can be found here: [create-react-app buildpack](https://github.com/mars/create-react-app-buildpack.git). The database is hosted using the Heroku PostgreSQL addon.
 
 ## Technology Stack
 
-![React Logo](http://imgur.com/a/sIRJt "React Logo")
-* react-router
-![React Router Logo](https://camo.githubusercontent.com/f63754b8412368e820601967af6dea84312b925b/68747470733a2f2f7265616374747261696e696e672e636f6d2f72656163742d726f757465722f616e64726f69642d6368726f6d652d313434783134342e706e67 "React Router Logo")
-* Node
-![Node Logo](http://www.hexacta.com/wp-content/uploads/2015/12/node.png =100x100)
+Front End
 * React
-* react-router
+* react-router v3
+
+Server
 * Node
 * Express
+
+Database & Server Queries
 * Knex
 * PostgreSQL
-* Deployed on Heroku
 
+## APIs
+* Google Maps API
+* Cloudinary API
+* TrailQuest Restful API
 
 ## Dependencies
 * bCrypt
@@ -37,19 +49,18 @@ The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of 
 * boom
 * cookie-parser
 * react-bootstrap
-* Google Maps API
-* Cloudinary API
 * Axios
 * react-google-maps
 * react-datepicker
 
 ## Issues & Contributions
 
-________
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+To contrbute to this open source project, please fork and clone this repository, then submit a pull request.
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+## License
+SEE 'LICENSE' (MIT)
+________
+
 
 ## Table of Contents
 
