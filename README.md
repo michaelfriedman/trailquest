@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/michaelfriedman/capstone-g40.png?label=ready&title=Ready)](https://waffle.io/michaelfriedman/capstone-g40)
 # TrailQuest
 
 ## License
