@@ -4,6 +4,7 @@
 
 ## Screenshots
 ![Mobile Gif](/readme/trailquest-gif.gif)
+![Mobile Gif](/readme/trailquest-gif-2.gif)
 ![Mobile Landing](http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,w_300/v1492127812/landing-snap_lovqwp.png)
 ![Mobile Landing Below Fold](http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,w_300/v1492127910/mobile-below-fold-landing_gpviwg.png)
 ![Mobile Landing Open Modal](http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,w_300/v1492127956/mobile-landing-modal_toadg3.png)
