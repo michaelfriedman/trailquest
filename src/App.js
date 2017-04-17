@@ -8,8 +8,6 @@ import Profile from './pages/Profile';
 import Search from './pages/Search';
 import Events from './pages/Events';
 
-import './App.css';
-
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={Navigation}>
