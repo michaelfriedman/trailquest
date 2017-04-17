@@ -1,8 +1,15 @@
-[![Stories in Ready](https://badge.waffle.io/michaelfriedman/capstone-g40.svg?label=ready&title=Ready)](http://waffle.io/michaelfriedman/capstone-g40)
-
 # TrailQuest
 
+[![Stories in Ready](https://badge.waffle.io/michaelfriedman/capstone-g40.svg?label=ready&title=Ready)](http://waffle.io/michaelfriedman/capstone-g40)
+
+## Summary
+
+TrailQuest is an app for finding cool trails to hike (currently in Washington State only).  Finding good information about local trails can be tedious, so TrailQuest makes it easy. The app allows users to search for any trail in Washington by region and by description. Registered users can review trails that they have had the opportunity to hike, and share their insights with other users.
+
+The community element to the application allows for users to organize group hikes that other users can register for.
+
 ## Screenshots
+
 ![Mobile Gif](/readme/trailquest-gif-2.gif)
 ![Mobile Landing](http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,w_300/v1492127812/landing-snap_lovqwp.png)
 ![Mobile Landing Below Fold](http://res.cloudinary.com/dk5dqve4y/image/upload/c_scale,w_300/v1492127910/mobile-below-fold-landing_gpviwg.png)
@@ -28,28 +35,34 @@ There was not enough robust data available on Washington State trails available 
 The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every individual URL and creates a trail object for each page, where the key-values are either textual information or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
 
 ## Deployment
+
 This application was deployed using Heroku with the create-react-app build-pack. The `create-react-app` buildpack can be found here: [create-react-app buildpack](https://github.com/mars/create-react-app-buildpack.git). The database is hosted using the Heroku PostgreSQL addon.
 
 ## Technology Stack
 
 Front End
+
 * React
 * react-router v3
 
 Server
+
 * Node
 * Express
 
 Database & Server Queries
+
 * Knex
 * PostgreSQL
 
 ## APIs
+
 * Google Maps API
 * Cloudinary API
 * TrailQuest Restful API
 
 ## Dependencies
+
 * bCrypt
 * morgan
 * body-parser
@@ -61,9 +74,14 @@ Database & Server Queries
 * react-google-maps
 * react-datepicker
 
+## Future Plans
+
+Currently I'm building a feature that would allow users to view all the hikes in a given area marked on a Google Map, which would be based on the user's location.
+
 ## Issues & Contributions
 
 To contrbute to this open source project, please fork and clone this repository, then submit a pull request.
 
 ## License
+
 SEE 'LICENSE' (MIT)

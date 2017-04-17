@@ -27,12 +27,11 @@ class Login extends Component {
   }
 
   getEmailValidationState() {
-    if (this.state.email.length === 0) return;
+    if (!this.state.email.length) return;
     // eslint-disable-next-line no-useless-escape
-    if (this.state.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) return 'success';
-    else {
-      return 'error';
-    }
+    return this.state.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+    ? 'success'
+    : 'error';
   }
 
   getPasswordValidationState() {
