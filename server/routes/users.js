@@ -34,7 +34,7 @@ router.get('/users/id', auth, (req, res, next) => {
     .where('id', req.claim.userId)
     .first()
     .then((response) => {
-      delete response.hashed_password
+      delete response.hashed_password;
       res.send(response);
     })
     .catch((err) => {

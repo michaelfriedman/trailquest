@@ -101,7 +101,8 @@ export default class Search extends Component {
     };
     axios.post('events', createEvent)
       .then(res => {
-        console.log('Request for community events was responded to successfully.')
+        // eslint-disable-next-line no-console
+        console.log('Request for community events was responded to successfully.');
       })
       // eslint-disable-next-line no-console
       .catch(error => console.error(error));
