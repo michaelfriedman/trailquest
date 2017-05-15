@@ -15,7 +15,7 @@
 
 ## Summary
 
-TrailQuest is an app for finding cool trails to hike (currently in Washington State only).  Finding good information about local trails can be tedious, so TrailQuest makes it easy. The app allows users to search for any trail in Washington by region and by description. Registered users can review trails that they have had the opportunity to hike, and share their insights with other users.
+TrailQuest is an app for finding cool trails to hike (currently in Washington State only). Finding good information about local trails can be tedious, so TrailQuest makes it easy. The app allows users to search for any trail in Washington by region and by description. Registered users can review trails that they have had the opportunity to hike, and share their insights with other users.
 
 The community element to the application allows for users to organize group hikes that other users can register for.
 
