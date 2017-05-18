@@ -95,4 +95,4 @@ To contrbute to this open source project, please fork and clone this repository,
 
 ## License
 
-SEE 'LICENSE' (MIT)
+SEE 'LICENSE'(MIT)
