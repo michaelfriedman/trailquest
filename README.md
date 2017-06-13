@@ -87,7 +87,7 @@ Database & Server Queries
 
 ## Future Plans
 
-Currently I am building a feature that would allow users to view all the hikes in a given area marked on a Google Map, which would be based on the user's location.
+Rebuild with Redux for state management.
 
 ## Issues & Contributions
 
