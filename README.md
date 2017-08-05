@@ -43,7 +43,7 @@ The community element to the application allows for users to organize group hike
 
 There was not enough robust data available on Washington State trails available in a public API for me to build this project. All of the data made available in this application was gathered using a custom web scraping program that I wrote in Node using an NPM package called Cheerio.
 
-The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every individual URL and creates a trail object for each page, where the key-values are either textual information or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
+The scraping script 'hikeScraper.js' can be found in the 'scraper' directory of this repository. The script parses the Washington State Trails Association website where it gathers the URLs for every single hike in their database. After gathering all of the web addresses for each individual hiking trail, it then loads the HTML from every individual URL and creates a trail object for each page, where the key values are either textual information or various data attributes from DOM nodes which are displayed on the pages which have been parsed.
 
 ## Deployment
 
