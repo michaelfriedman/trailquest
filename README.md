@@ -9,7 +9,7 @@
 
 
 # TrailQuest
-## Created by: Michael Friedman
+## Developed by: Michael Friedman
 
 [![Stories in Ready](https://badge.waffle.io/michaelfriedman/capstone-g40.svg?label=ready&title=Ready)](http://waffle.io/michaelfriedman/capstone-g40)
 
