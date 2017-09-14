@@ -87,7 +87,7 @@ Database & Server Queries
 
 ## Future Plans
 
-Rebuild with Redux for state management. Rebuild as a Universal application with Next.js.
+Rebuild with Redux and Redux Sagas for state management. Rebuild as a Universal application with Next.js.
 
 ## Issues & Contributions
 
