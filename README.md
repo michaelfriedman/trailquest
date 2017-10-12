@@ -11,8 +11,6 @@
 # TrailQuest
 ## Developed by: Michael Friedman
 
-[![Stories in Ready](https://badge.waffle.io/michaelfriedman/capstone-g40.svg?label=ready&title=Ready)](http://waffle.io/michaelfriedman/capstone-g40)
-
 ## Summary
 
 TrailQuest is an app for finding cool trails to hike (currently in Washington State only). Finding good information about local trails can be tedious, so TrailQuest makes it easy. The app allows users to search for any trail in Washington by region and by description. Registered users can review trails that they have had the opportunity to hike, and share their insights with other users.
