@@ -34,7 +34,7 @@
     "express": "^4.15.2",
     "firebase": "^3.7.5",
     "jsonwebtoken": "^7.3.0",
-    "knex": "^0.19.5",
+    "knex": "^2.4.0",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.11",
     "morgan": "^1.9.1",
